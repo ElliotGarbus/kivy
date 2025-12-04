@@ -1012,7 +1012,8 @@ class Image(EventDispatcher):
         tmpfilename = self._filename
         image = ImageLoader.load(
             self._filename, keep_data=self._keep_data,
-            mipmap=self._mipmap, nocache=self._nocache)
+            mipmap=self._mipmap, nocache=self._nocache,
+            image_provider=self._image_provider)
         self._filename = tmpfilename
         # put the image into the cache if needed
         if isinstance(image, Texture):
@@ -1031,15 +1032,18 @@ class Image(EventDispatcher):
         '''
         self._filename = filename
 
-        # see if there is a available loader for it
-        loaders = [loader for loader in ImageLoader.loaders if
-                   loader.can_load_memory() and
-                   ext in loader.extensions()]
-        if not loaders:
+        image = ImageLoader._load_single(
+            filename, ext,
+            image_provider=self._image_provider,
+            rawdata=data,
+            inline=True,
+            require_memory=True,
+            nocache=self._nocache,
+            mipmap=self._mipmap,
+            keep_data=self._keep_data
+        )
+        if image is None:
             raise Exception(f'No inline loader found to load {ext}')
-        image = loaders[0](filename, ext=ext, rawdata=data, inline=True,
-                           nocache=self._nocache, mipmap=self._mipmap,
-                           keep_data=self._keep_data)
         if isinstance(image, Texture):
             self._texture = image
             self._size = image.size
