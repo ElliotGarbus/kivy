@@ -480,7 +480,7 @@ class ImageLoader(object):
         ImageLoader.loaders_by_name[name] = defcls
 
     @staticmethod
-    def _load_single(filename, ext, image_provider=None, 
+    def _load_single(filename, ext, image_provider=None,
                      rawdata=None, inline=False, require_memory=False,
                      **kwargs):
         # (internal) Load a single image with provider selection.
@@ -495,7 +495,8 @@ class ImageLoader(object):
         # :param require_memory: If True, only use loaders that support memory loading
         # :param kwargs: Additional arguments passed to the loader
         # :returns: Loaded image or None if all loaders fail (in lenient mode)
-        # :raises ValueError: If provider not found or doesn't support format (strict mode)
+        # :raises ValueError: If provider not found or doesn't support format
+        #                     (strict mode)
         # :raises Exception: If provider fails to load (strict mode)
         strict_mode = _is_strict_mode()
 
