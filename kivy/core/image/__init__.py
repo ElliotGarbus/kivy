@@ -160,6 +160,10 @@ def _is_strict_mode():
     value = os.environ.get('KIVY_PROVIDER_STRICT', '').lower()
     return value in ('1', 'true', 'yes')
 
+
+# Regex for @image_provider:providername(path) URI scheme
+_provider_uri_re = re.compile(r'^@image_provider:(\w+)\((.+)\)$')
+
 from kivy.event import EventDispatcher
 from kivy.core import core_register_libs
 from kivy.logger import Logger
@@ -683,6 +687,17 @@ class ImageLoader(object):
 
         filename = resource_find(filename)
 
+        # Handle @image_provider:providername(path) URI scheme
+        # resource_find resolves the inner path and returns the full URI
+        image_provider = kwargs.pop('image_provider', None)
+        provider_match = _provider_uri_re.match(filename) if filename else None
+        if provider_match:
+            # Extract provider and resolved path from URI
+            image_provider = provider_match.group(1)
+            filename = provider_match.group(2)
+            # Re-extract extension from resolved path
+            ext = filename.split('.')[-1].lower()
+
         # Get actual image format instead of extension if possible
         ext = guess_extension(filename) or ext
 
@@ -691,9 +706,6 @@ class ImageLoader(object):
         # sequence of images contained in the zip.
         if ext == 'zip':
             return ImageLoader.zip_loader(filename, **kwargs)
-
-        # extract requested provider (if any)
-        image_provider = kwargs.pop('image_provider', None)
 
         return ImageLoader._load_single(
             filename, ext, image_provider=image_provider, **kwargs
