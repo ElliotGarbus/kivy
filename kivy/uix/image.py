@@ -498,7 +498,8 @@ class AsyncImage(Image):
             source,
             nocache=self.nocache,
             mipmap=self.mipmap,
-            anim_delay=self.anim_delay
+            anim_delay=self.anim_delay,
+            image_provider=self.image_provider
         )
         image.bind(
             on_load=self._on_source_load,
