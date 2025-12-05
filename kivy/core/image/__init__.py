@@ -142,6 +142,79 @@ Or you can get the bytes (new in `1.11.0`):
     image.save(data, fmt="png")
     png_bytes = data.read()
 
+Provider selection
+------------------
+
+.. versionadded:: 3.0.0
+
+By default, Kivy automatically selects an image provider based on platform
+defaults and file type. You can override this to use a specific provider.
+
+Querying available providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To see which providers are available on your system::
+
+    from kivy.core.image import Image as CoreImage
+    print(CoreImage.available_providers())  # e.g., ['sdl3', 'pil', 'imageio']
+
+Using ``image_provider`` parameter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Specify a provider when loading an image::
+
+    from kivy.core.image import Image as CoreImage
+
+    # Load with PIL provider
+    img = CoreImage.load('photo.jpg', image_provider='pil')
+
+    # Or when creating an Image directly
+    img = CoreImage('photo.jpg', image_provider='sdl3')
+
+Provider URI scheme
+~~~~~~~~~~~~~~~~~~~
+
+For graphics instructions (Rectangle, BorderImage, etc.) where you cannot pass
+extra parameters, use the ``@image_provider:`` URI scheme::
+
+    @image_provider:providername(path/to/image.ext)
+
+Example in Python::
+
+    from kivy.graphics import Rectangle
+
+    with widget.canvas:
+        Rectangle(source='@image_provider:pil(images/photo.png)')
+
+Example in KV language::
+
+    <MyWidget>:
+        canvas:
+            Rectangle:
+                source: '@image_provider:sdl3(images/background.png)'
+                pos: self.pos
+                size: self.size
+
+The path inside the parentheses is resolved using :func:`~kivy.resources.resource_find`.
+
+Strict mode
+~~~~~~~~~~~
+
+By default, if a requested provider is unavailable or fails, Kivy logs a warning
+and falls back to other providers. Enable strict mode to raise exceptions instead::
+
+    import os
+    os.environ['KIVY_PROVIDER_STRICT'] = '1'
+    import kivy
+
+In strict mode:
+
+- Invalid provider names raise ``ValueError``
+- Provider load failures raise ``Exception``
+- No fallback to other providers occurs
+
+This is useful during development to catch configuration errors immediately.
+
 '''
 import os
 import re
