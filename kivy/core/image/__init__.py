@@ -215,6 +215,25 @@ In strict mode:
 
 This is useful during development to catch configuration errors immediately.
 
+Zip file image sequences
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kivy can load multiple images from a zip file as an animated sequence. When you
+load a zip file, all images inside are extracted and combined into a single
+Image object with multiple frames::
+
+    from kivy.core.image import Image as CoreImage
+    anim = CoreImage('sprites.zip')
+
+If you specify an ``image_provider``, it will be applied to **all** images
+within the zip archive::
+
+    # All images in the zip will be loaded using PIL
+    anim = CoreImage('sprites.zip', image_provider='pil')
+
+Note that in strict mode, if the specified provider cannot load any image in
+the zip, a ``ValueError`` will be raised immediately.
+
 '''
 import os
 import re
