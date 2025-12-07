@@ -132,7 +132,8 @@ class TestAudioOutputProviderParameter:
 
         provider = providers[0]
         # Test with uppercase - should not raise
-        sound = SoundLoader.load(test_audio_path, audio_output_provider=provider.upper())
+        sound = SoundLoader.load(test_audio_path,
+                                 audio_output_provider=provider.upper())
 
 
 class TestInvalidProviderHandling:
