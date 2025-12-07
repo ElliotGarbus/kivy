@@ -10,6 +10,9 @@ Tests the new provider selection capabilities added in Kivy 3.0.0:
 """
 
 import os
+import zipfile
+from pathlib import Path
+
 import pytest
 
 
@@ -390,6 +393,70 @@ class TestAsyncImageProvider:
         # Create AsyncImage with provider
         img_widget = AsyncImage(source=test_image_path, image_provider=provider)
         assert img_widget.image_provider == provider
+
+
+class TestZipImageProvider:
+    """Tests for image_provider with zip file images."""
+
+    @pytest.fixture
+    def test_zip_path(self, tmp_path):
+        """Create a temporary zip file with a test image."""
+        # Get the test image
+        test_image = Path(__file__).parent / "test_button.png"
+
+        # Create a zip file containing the image
+        zip_path = tmp_path / "test_images.zip"
+        with zipfile.ZipFile(zip_path, "w") as zf:
+            zf.write(test_image, "test_button.png")
+
+        return str(zip_path)
+
+    def test_zip_with_default_provider(self, test_zip_path, kivy_window):
+        """Loading from zip without provider should work."""
+        from kivy.core.image import Image as CoreImage
+
+        img = CoreImage(test_zip_path, nocache=True)
+        assert img is not None
+        assert img.texture is not None
+
+    def test_zip_with_explicit_provider(self, test_zip_path, kivy_window):
+        """Loading from zip with explicit provider should work."""
+        from kivy.core.image import Image as CoreImage
+
+        providers = CoreImage.available_providers()
+        if not providers:
+            pytest.skip("No image providers available")
+
+        provider = providers[0]
+        img = CoreImage(test_zip_path, image_provider=provider, nocache=True)
+        assert img is not None
+        assert img.texture is not None
+
+    def test_zip_with_invalid_provider_strict_mode(
+        self, test_zip_path, kivy_window, monkeypatch
+    ):
+        """Invalid provider with zip in strict mode should raise."""
+        monkeypatch.setenv("KIVY_PROVIDER_STRICT", "1")
+
+        from kivy.core.image import ImageLoader
+
+        with pytest.raises(ValueError):
+            ImageLoader.load(
+                test_zip_path, image_provider="nonexistent_provider_xyz"
+            )
+
+    def test_zip_with_invalid_provider_lenient_mode(
+        self, test_zip_path, kivy_window, monkeypatch
+    ):
+        """Invalid provider with zip in lenient mode should fallback."""
+        monkeypatch.delenv("KIVY_PROVIDER_STRICT", raising=False)
+
+        from kivy.core.image import ImageLoader
+
+        img = ImageLoader.load(
+            test_zip_path, image_provider="nonexistent_provider_xyz"
+        )
+        assert img is not None
 
 
 if __name__ == '__main__':

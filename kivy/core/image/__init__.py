@@ -538,6 +538,9 @@ class ImageLoader(object):
                     image_data.append(im._data[0])
                     image = im
                 # else: if not image file skip to next
+            except ValueError:
+                # Re-raise ValueError (from strict mode provider validation)
+                raise
             except Exception:
                 Logger.warning('Image: Unable to load image'
                                '<%s> in zip <%s> trying to continue...'
@@ -778,7 +781,9 @@ class ImageLoader(object):
         # will use the special zip_loader in ImageLoader. This might return a
         # sequence of images contained in the zip.
         if ext == 'zip':
-            return ImageLoader.zip_loader(filename, **kwargs)
+            return ImageLoader.zip_loader(
+                filename, image_provider=image_provider, **kwargs
+            )
 
         return ImageLoader._load_single(
             filename, ext, image_provider=image_provider, **kwargs
