@@ -63,8 +63,8 @@ jobs:
         env:
           CIBW_PLATFORM: android
           CIBW_ARCHS: "arm64_v8a x86_64"
-          # At least cp314 for kivyforge; include other supported CPythons.
-          CIBW_BUILD: "cp311-android* cp312-android* cp313-android* cp314-android*"
+          # cibuildwheel 4.1 Android runtimes exist for cp313/cp314 (not 311/312).
+          CIBW_BUILD: "cp313-android_* cp314-android_*"
           CIBW_BUILD_FRONTEND: build
           CIBW_BUILD_VERBOSITY: 1
           # Copy-only repair: do not rewrite SDL sonames (kivyforge load model).
