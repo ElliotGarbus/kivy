@@ -268,7 +268,8 @@ if platform == 'ios':
 
 if platform == 'android':
     android_data = OrderedDict()
-    root = os.getcwd()
+    # Prefer KIVY_DEPS_ROOT (CI / cross builds); fall back to cwd/dist.
+    root = KIVY_DEPS_ROOT if KIVY_DEPS_ROOT else os.getcwd()
 
     # Android uses .so files instead of frameworks
     # Assuming SDL3 libraries are in dist/libs/{ABI}/ structure
@@ -662,7 +663,7 @@ if c_options['use_sdl3'] or can_autodetect_sdl3:
 
     # if android link against the prebuilt libs in dist/libs
     if platform == 'android':
-        root = os.getcwd()
+        root = KIVY_DEPS_ROOT if KIVY_DEPS_ROOT else os.getcwd()
         android_data = plat_options['android']
         android_libs = android_data['libraries']
 
@@ -1143,6 +1144,15 @@ def determine_sdl3():
 
     if platform == "ios":
         return sdl3_flags
+
+    if platform == "android":
+        # Paths + includes already resolved via the android-prebuilt branch.
+        if sdl3_flags:
+            sdl3_flags.setdefault(
+                'libraries',
+                ['SDL3', 'SDL3_ttf', 'SDL3_image', 'SDL3_mixer'],
+            )
+            return sdl3_flags
 
     default_sdl3_path = None
 

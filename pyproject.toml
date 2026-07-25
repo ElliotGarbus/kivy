@@ -128,9 +128,9 @@ cython_exclude = ""
 python_versions = "3.11 - 3.14"
 
 [tool.cibuildwheel.android]
-# Use cp to skip the default repair (which requires API 24+ for libc++_shared.so)
-# The Android app bundles libc++_shared.so separately
-environment = { ANDROID_API_LEVEL = "21" }
+# API 24: forge-aligned android_24_* tags; also first API with RUNPATH.
+# Copy-only repair keeps SDL sonames unchanged (no auditwheel rename).
+environment = { ANDROID_API_LEVEL = "24" }
 repair-wheel-command = "cp {wheel} {dest_dir}/"
 
 [tool.coverage.run]
