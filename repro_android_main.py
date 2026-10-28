@@ -17,6 +17,7 @@ from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.logger import Logger
+from kivy.properties import StringProperty
 
 Window.softinput_mode = "below_target"
 
@@ -26,13 +27,20 @@ BoxLayout:
     padding: "20dp"
     spacing: "20dp"
 
-    Label:
-        id: status
+    BoxLayout:
         size_hint_y: None
         height: "120dp"
-        font_size: "13sp"
-        text_size: self.width, None
-        color: 1, 1, 0, 1
+        Label:
+            id: status
+            font_size: "13sp"
+            text_size: self.width, None
+            color: 1, 1, 0, 1
+        Button:
+            id: mode
+            size_hint_x: None
+            width: "110dp"
+            text: app.mode
+            on_release: app.toggle_mode()
 
     Widget:
 
@@ -70,6 +78,13 @@ def rect(w):
 
 
 class TestApp(App):
+    mode = StringProperty(Window.softinput_mode)
+
+    def toggle_mode(self):
+        self.mode = "pan" if self.mode == "below_target" else "below_target"
+        Window.softinput_mode = self.mode
+        log("MODE", self.mode)
+
     def build(self):
         self.root_widget = Builder.load_string(KV)
         self._last = None
