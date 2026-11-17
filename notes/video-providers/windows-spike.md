@@ -53,13 +53,13 @@ well (Prototype 4, below)** — the architecture is confirmed end-to-end on
 this hardware, not just the bridge in isolation. **The real
 `video_mediafoundation.pyx` provider is now built and verified in a
 running Kivy app under both GL backends** (see "Real implementation"
-below) — `glew`/`sdl3` gets true zero-copy; `angle_sdl3` currently runs
-via the CPU-copy fallback because this SDL3 build has no working way to
-expose its own in-use ANGLE device externally, a real finding the
-prototypes' self-contained design couldn't have caught. Broader hardware
-coverage (AMD, other driver generations) and finding a working
-`angle_sdl3` device accessor are the pieces still open; see "Suggested
-next steps" at the end.
+below) — zero-copy with live frame updates on every configuration
+tested: `glew`, `sdl3`, `angle_sdl3` on NVIDIA's native ES driver, and
+`angle_sdl3` on real ANGLE. The bridge follows the kind of context that
+is actually current, not the backend name (see "`angle_sdl3` is not
+always ANGLE" below). Broader hardware coverage (AMD, Intel, other
+driver generations) is the piece still open; see "Suggested next steps"
+at the end.
 
 ## Fact-finding on the current Kivy Windows graphics stack
 
@@ -628,21 +628,30 @@ selection (`kivy/core/__init__.py`, `kivy/core/video/__init__.py`) and
 `setup.py` (`c_options['use_mediafoundation']`, gated to `win32`).
 
 Verified end-to-end in a real running Kivy app (`kivy.uix.video.Video`,
-not just the provider in isolation) on this machine, under both GL
-backends:
+not just the provider in isolation) on this machine (RTX 2060, driver
+610.60), in four GL configurations. Each played the animated test clip
+and Big Buck Bunny; the rendered widget was grabbed at ~0s and ~1s:
 
-- **`glew`/`sdl3` (pip default):** true zero-copy via
-  `WGL_NV_DX_interop2`, confirmed by the texture's `colorfmt='bgra'`
-  (the zero-copy branch's marker) and a correct, correctly-oriented
-  on-screen frame.
-- **`angle_sdl3`:** falls back to CPU-copy (`colorfmt='rgba'`) — see the
-  new finding below — but still renders correctly, confirming the
-  fallback path itself (decode → `TransferVideoFrame` → staging texture
-  → `Map` → swizzle → `Texture.blit_buffer`) works end-to-end, not just
-  on paper.
-- `generate_thumbnail()` verified with a 15-call stress test (15/15,
-  ~0.45s each) after fixing two real bugs it surfaced inside a running
-  app — see "Thumbnail hang" below. (An earlier draft of this section
+| Config | GL context | Bridge | Result |
+|---|---|---|---|
+| `glew` | desktop GL 4.6, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `sdl3` | desktop GL 4.6, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `angle_sdl3` (default) | NVIDIA's native OpenGL ES 3.2, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `angle_sdl3` + `SDL_OPENGL_ES_DRIVER=1` | ANGLE ES 3.0 on D3D11, EGL | `EGL_ANGLE_d3d_texture_client_buffer` | zero-copy, frames update |
+
+Zero-copy is confirmed by the texture's `colorfmt='bgra'` (the
+zero-copy branch's marker), "frames update" by the two grabs differing
+(the animated clip's blue channel is a frame counter), and orientation
+by viewing the Big Buck Bunny grabs. No provider warnings were logged in
+any of the four. The CPU-copy fallback (decode → `TransferVideoFrame` →
+staging texture → `Map` → swizzle → `Texture.blit_buffer`) was verified
+earlier, when `angle_sdl3` still landed on it, and remains the path for
+drivers without either interop extension.
+
+`generate_thumbnail()` passed a 15-call stress test (15/15, ~0.45s
+each), and 5/5 on each of the four configurations above, after fixing
+two real bugs it surfaced inside a running app — see "Thumbnail hang"
+below. (An earlier draft of this section
   blamed a hang on "Media Foundation's own setup" when run from a bare
   script; that was a guess, and the actual cause was the first bug
   below.)
@@ -689,60 +698,71 @@ The polling waits also pump the thread's message queue now
 (`PumpAndSleep`), which an STA should do while blocking anyway. That was
 added first as a guess and is not what fixed the hang.
 
-### New finding: `angle_sdl3`'s device isn't reachable via any supported API on this SDL3 build
+### `angle_sdl3` is not always ANGLE
 
-Prototypes 2 and 3b never needed to connect to the application's
-*already-running* ANGLE instance — their whole point was proving the
-interop bridge, so they created a second, independent ANGLE EGL display
-for themselves and used it entirely self-contained. Wiring the real
-provider needs the opposite: Kivy's own GL/EGL context is already
-current and already rendering, so the provider must reach *that* exact
-in-use ANGLE device (not a fresh one — a second independent display
-would be a different, mismatched device, exactly the failure mode
-Prototype 2 confirmed). That connection turned out not to exist in this
-build:
+The first version of the provider chose the bridge from the backend
+name: EGL for `angle_sdl3`, WGL for everything else. Under `angle_sdl3`
+it then fell back to the CPU copy, and an earlier draft of this section
+explained that with three claims that turned out to be wrong: that
+ANGLE was statically linked into `SDL3.dll` with its EGL symbols kept
+private, that `SDL_EGL_GetCurrentDisplay` wasn't declared in SDL3's
+public headers, and that no supported API could reach ANGLE's device.
+The second claim came from a search that silently skipped the
+git-ignored `.venv` where the headers live: the function is declared in
+`SDL_video.h`. None of the three survived checking the GL renderer
+string.
 
-- There is no separately loadable `libEGL.dll` module in the real Kivy
-  process to find by name (confirmed by enumerating every loaded module
-  and checking for one exporting `eglGetCurrentDisplay` — none did).
-  ANGLE is evidently statically linked into `SDL3.dll` itself in this
-  `kivy_deps.sdl3==0.1.0` build, with its own `eglXxx` symbols kept
-  private.
-- SDL3 does export `SDL_EGL_GetCurrentDisplay` and
-  `SDL_EGL_GetProcAddress` from `SDL3.dll` — the architecturally correct
-  way to ask SDL for its own handles rather than guessing module names —
-  but `SDL_EGL_GetCurrentDisplay()` returns `NULL` on this build
-  regardless of when it's called, including from inside an actual
-  render `Callback` with a GL context definitively current (ruling out
-  a timing issue). Neither function is even declared in this build's
-  own public `SDL3/*.h` headers, suggesting they're present in the
-  binary for other platforms but non-functional for this Windows/ANGLE
-  configuration specifically.
+What actually happens:
 
-The provider's response is the honest one: `video_mediafoundation_implem.cpp`
-tries the SDL3 accessors first, and if ANGLE's device can't be obtained,
-falls back to an independent D3D11 device for Media Foundation to decode
-into and CPU-copy delivery for every frame — real, correct playback
-under `angle_sdl3`, just without zero-copy. This is a build/platform
-limitation worth revisiting (a newer `kivy_deps.sdl3` might expose a
-working accessor, or SDL3 might add one), not an architecture problem —
-the `EGL_ANGLE_d3d_texture_client_buffer` bridge itself is already proven
-correct by Prototypes 2 and 3b; what's missing is only a supported way to
-ask this specific SDL3 build for the device it's already using.
+- `angle_sdl3` only asks SDL3 for an OpenGL ES context. SDL's
+  `SDL_OPENGL_ES_DRIVER` hint defaults to using the driver's own ES
+  profile when it has one. NVIDIA's does, so on this machine
+  `angle_sdl3` runs on "OpenGL ES 3.2 NVIDIA" over **WGL** — not ANGLE
+  at all. `SDL_EGL_GetCurrentDisplay()` correctly returned `NULL`,
+  because there was no EGL context to report.
+- With `SDL_OPENGL_ES_DRIVER=1`, SDL loads ANGLE (`kivy_deps.angle`'s
+  `libEGL.dll`/`libGLESv2.dll`), the renderer becomes "ANGLE (NVIDIA ...
+  Direct3D11 ...)", and `SDL_EGL_GetCurrentDisplay()` returns the live
+  display. `EGL_ANGLE_device_d3d` on it returns ANGLE's real D3D11
+  device, exactly as Prototype 2 needed.
+
+So the provider now picks the bridge from the current context: EGL when
+`SDL_EGL_GetCurrentDisplay()` is non-`NULL`, WGL otherwise. Two more
+bugs only showed up once the EGL bridge was really used:
+
+- **GL calls went to the wrong library.** `glGenTextures`,
+  `glBindTexture` and `glDeleteTextures` were linked from `opengl32.dll`,
+  which only knows about WGL contexts. Under ANGLE it had no current
+  context, so `glGenTextures` silently returned 0 and the video showed
+  nothing at all. These now come from `SDL_GL_GetProcAddress`, which
+  resolves against whatever context SDL created.
+- **The texture was incomplete.** Kivy sets no sampler state on a
+  texture it only wraps by id, and GL's default minification filter
+  uses mipmaps this texture doesn't have. ANGLE follows the spec and
+  samples an incomplete texture as black; NVIDIA's WGL interop happened
+  to tolerate it. The provider now sets linear filtering and edge
+  clamping when it creates the texture, and restores Kivy's texture
+  binding afterwards.
+
+The EGL bridge also releases the surface (`eglReleaseTexImage`) before
+each `TransferVideoFrame` and binds it again after, the same shape as
+the WGL lock/unlock, because EGL rejects binding a surface that is
+already bound.
+
+Whether Kivy itself should set `SDL_OPENGL_ES_DRIVER=1` for
+`angle_sdl3` is a separate decision. The provider gets zero-copy either
+way on this hardware.
 
 ## Suggested next steps
 
-1. **Find a working way to obtain `angle_sdl3`'s live ANGLE device** —
-   check whether a newer `kivy_deps.sdl3` build exposes a functional
-   `SDL_EGL_GetCurrentDisplay`, or raise it with SDL3 upstream. Until
-   then, `angle_sdl3` genuinely works (verified above), just via
-   CPU-copy rather than zero-copy.
-2. **Re-run all prototypes on AMD / a second NVIDIA-Intel pairing** if
-   access to that hardware shows up, to size how often the CPU-copy
-   fallback actually triggers in the wild — this machine only tested one
-   specific GPU pairing and driver generation. (An Intel-only laptop is
-   lined up for this — see `run_all_prototypes.ps1`.)
-3. **Resolve the remaining paper-only risks** (4 and 5 above: codec
+1. **Re-run on AMD / Intel / a second NVIDIA-Intel pairing** if access
+   to that hardware shows up, to size how often the CPU-copy fallback
+   actually triggers in the wild — this machine only tested one specific
+   GPU and driver generation. On drivers without a native ES profile,
+   `angle_sdl3` will land on ANGLE by default, so the EGL bridge matters
+   more there than it does here. (An Intel-only laptop is lined up for
+   this — see `run_all_prototypes.ps1`.)
+2. **Resolve the remaining paper-only risks** (4 and 5 above: codec
    extension floor, `IMFMediaEngine` + HLS) — these are quick, concrete
    checks against a real `IMFMediaEngine` instance, not architectural
    unknowns.
