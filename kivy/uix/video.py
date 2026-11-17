@@ -10,6 +10,14 @@ OGV, AVI, MOV, FLV (if the correct gstreamer plugins are installed). Our
 :class:`~kivy.core.video.VideoBase` implementation is used under the
 hood.
 
+On Windows, the default Media Foundation provider plays whatever the
+system's installed decoders support. Standard MP4 (H.264 video, AAC
+audio) works out of the box; HEVC, AV1, VP9 and MPEG-2 become playable
+once Microsoft's matching video extensions are installed from the
+Microsoft Store. See
+:class:`~kivy.core.video.video_mediafoundation.VideoMediaFoundation`
+for details, including Windows "N" editions.
+
 Video loading is asynchronous - many properties are not available until
 the video is loaded (when the texture is created)::
 

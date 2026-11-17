@@ -163,13 +163,33 @@ class VideoMediaFoundation(VideoBase):
     bridge is available: Media Foundation decodes into a shared
     ``ID3D11Texture2D``, which is registered once with
     ``WGL_NV_DX_interop2`` (``glew``/``sdl3`` backends) or shared via
-    ``EGL_ANGLE_d3d_texture_client_buffer`` (``angle_sdl3``), then
+    ``EGL_ANGLE_d3d_texture_client_buffer`` (``angle_sdl3``; not yet
+    reachable with the SDL3 build Kivy currently uses, so that backend
+    gets the CPU-copy fallback described below), then
     wrapped into a :class:`~kivy.graphics.texture.Texture` with
     ``nofree=True``. If that one-time registration fails -- a GPU/driver
     gap, most commonly a laptop where the active GL context and Media
     Foundation's decode device land on different GPUs -- the provider
     falls back to a CPU copy for every frame instead of failing
     outright, logged once as a single diagnostic.
+
+    **Supported formats.** Decoding uses the Media Foundation decoders
+    installed on the system; Kivy ships none. Standard MP4 files (H.264
+    video with AAC audio) play out of the box. Other formats need
+    Microsoft's optional video extensions, installed from the Microsoft
+    Store, and are then picked up automatically with no change to the
+    app:
+
+    - HEVC (H.265): *HEVC Video Extensions*. Not free on every system;
+      some PCs come with a free manufacturer version preinstalled.
+    - AV1: *AV1 Video Extension* (free).
+    - VP9: *VP9 Video Extensions* (free).
+    - MPEG-2: *MPEG-2 Video Extension* (free).
+
+    Windows "N" and "KN" editions ship without Media Foundation. There
+    this provider fails to import and Kivy selects the next available
+    video provider, unless the user installs the Media Feature Pack
+    (Settings > Apps > Optional features).
 
     Unknown keys in ``options`` are logged as a warning at construction
     time and otherwise ignored.
