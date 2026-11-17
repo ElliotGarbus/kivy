@@ -327,6 +327,14 @@ video_providers.append(make_provider_tuple(
     'avfoundation', all_providers, 'VideoAVFoundation'
 ))
 
+# mediafoundation is the default video provider on Windows. It is
+# compiled only when c_options['use_mediafoundation'] is True in
+# setup.py, so the import naturally fails on non-Windows platforms and
+# core_select_lib falls through to a different provider.
+video_providers.append(make_provider_tuple(
+    'mediafoundation', all_providers, 'VideoMediaFoundation'
+))
+
 try:
     from kivy.lib.gstplayer import GstPlayer  # NOQA
     video_providers.append(make_provider_tuple(
