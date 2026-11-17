@@ -288,8 +288,20 @@ was scoped to find.
 | Binary added by Kivy | none | none | none | ffmpeg libs / GStreamer runtime |
 | HLS | ✅ | device/OS dependent | ⚠️ unconfirmed for `IMFMediaEngine`, needs validation | ✅ (ffmpeg demuxer) |
 | DASH | ❌ | ❌ | ❌ (would need candidate C) | ⚠️ partial |
+| Codecs | OS-provided | OS/device-provided | OS-provided: H.264/AAC in-box; HEVC, AV1, VP9, MPEG-2 via Microsoft Store video extensions (see note below) | whatever the bundled decoder supports |
 | Thumbnail generation | ✅ `AVAssetImageGenerator` | not implemented | ✅ `IMFSourceReader` can grab+seek a single frame CPU-side without playback | ✅ |
 | Known fragility | zero-copy probe can fail on non-ANGLE / exotic codec path → CPU fallback + EOS | — | under the default `glew`/`sdl3` backend, WGL interop driver support is inconsistent across GPU vendors/drivers (see risks) → needs CPU fallback, same philosophy as avfoundation's probe-and-fall-back; the `angle_sdl3` path is the more reliable one but isn't the default | — |
+
+**Windows codecs.** Media Foundation uses whatever decoders are installed,
+so format support depends on the user's system, not on Kivy. Microsoft's
+Store extensions register system-wide and are picked up automatically:
+*HEVC Video Extensions* (not free on every system; some PCs ship a free
+manufacturer version), *AV1 Video Extension*, *VP9 Video Extensions* and
+*MPEG-2 Video Extension* (free). Windows N/KN editions have no Media
+Foundation until the Media Feature Pack is installed (Settings > Apps >
+Optional features); there the provider fails to import and Kivy selects
+the next video provider. This is now in the user-facing docs: the
+`VideoMediaFoundation` docstring and the `kivy.uix.video` module intro.
 
 ## Prototype 1 results: `WGL_NV_DX_interop2` — confirmed on real hardware
 
@@ -591,11 +603,10 @@ prototype.
    context, discrete GPU for decode) on a machine configured that way,
    since this run only exercised "GL context on the GPU that also won the
    mismatch test."
-4. **Codec availability floor.** H.264 decode is in-box on all supported
-   Windows versions; HEVC and AV1 may require a free Microsoft Store
-   extension on some SKUs/Windows versions. Not a Kivy problem (zero binary
-   shipped either way), but it belongs in the capability matrix's footnotes
-   so app authors aren't surprised.
+4. **Codec availability floor. Documented** — see the "Windows codecs"
+   note under the capability matrix. H.264 is in-box; HEVC, AV1, VP9 and
+   MPEG-2 come from Microsoft Store extensions (HEVC isn't free on every
+   system). Not a Kivy problem (zero binary shipped either way).
 5. **`IMFMediaEngine` + HLS.** Couldn't confirm from documentation whether
    `.m3u8` URLs just work via `SetSource`/`SetSourceElements`, or need an
    explicit byte-stream handler registered. Five minutes pointing a real
