@@ -6,19 +6,22 @@
  * notes/video-providers/windows-spike.md): IMFMediaEngine decodes into a
  * caller-supplied ID3D11Texture2D via TransferVideoFrame; that texture is
  * then shared into GL with no CPU copy via one of two bridges, chosen at
- * runtime by which GL backend Kivy actually initialized:
+ * load() time by the kind of GL context that is actually current (not
+ * by Kivy's backend name -- "angle_sdl3" runs on the driver's native ES
+ * profile over WGL when the driver has one, and on ANGLE otherwise):
  *
- *   - WGL_NV_DX_interop2, for the "glew" / "sdl3" backends (native
- *     desktop GL via WGL -- the pip-install default).
- *   - EGL_ANGLE_d3d_texture_client_buffer, for "angle_sdl3" (ANGLE/GLES
- *     over D3D11 -- the backend Kivy's own CI actually tests). ANGLE
- *     requires the texture to be created on its OWN internal D3D11
- *     device (queried via EGL_ANGLE_device_d3d), not merely a device on
- *     the same adapter -- confirmed the hard way in Prototype 2.
+ *   - WGL_NV_DX_interop2, for any WGL context: "glew" / "sdl3" (the
+ *     pip-install default), and "angle_sdl3" on drivers with a native
+ *     ES profile such as NVIDIA's.
+ *   - EGL_ANGLE_d3d_texture_client_buffer, for an ANGLE EGL context
+ *     ("angle_sdl3" when SDL loads ANGLE). ANGLE requires the texture to
+ *     be created on its OWN internal D3D11 device (queried via
+ *     EGL_ANGLE_device_d3d), not merely a device on the same adapter --
+ *     confirmed the hard way in Prototype 2.
  *
- * If the one-time bridge registration fails (e.g. a WGL/DX interop
- * driver gap, or a GL backend that isn't angle_sdl3 despite being on
- * Windows), the player falls back to a CPU copy for every frame
+ * If the one-time bridge registration fails (e.g. a driver without
+ * WGL_NV_DX_interop2, or an EGL display that isn't ANGLE on D3D11),
+ * the player falls back to a CPU copy for every frame
  * (TransferVideoFrame -> staging texture -> Map -> swizzle -> Texture
  * upload) rather than failing outright -- matching Kivy 3.0's video
  * provider goal that secondary/fallback paths may copy through the CPU.
@@ -65,12 +68,11 @@ struct MFVideoPlayerImpl;  // defined only in video_mediafoundation_implem.cpp
 
 class VideoPlayer {
 public:
-    // gl_backend_name is cgl_get_initialized_backend_name()'s value
-    // (e.g. "glew", "sdl3", "angle_sdl3") -- decides which bridge to
-    // attempt.
-    VideoPlayer(const char *url, const char *gl_backend_name);
+    explicit VideoPlayer(const char *url);
     ~VideoPlayer();
 
+    // Must be called on the Kivy main thread with Kivy's GL context
+    // current (it inspects that context to pick the bridge).
     // Non-blocking: kicks off SetSource and returns immediately.
     // Readiness is discovered by polling hasNewFrame()/isBuffering()/
     // isEOS() from the caller's own frame-pump tick -- this class must

@@ -119,6 +119,22 @@ typedef EGLBoolean (WINAPI *PFNEGLBINDTEXIMAGEPROC)(EGLDisplay, EGLSurface, EGLi
 typedef EGLBoolean (WINAPI *PFNEGLRELEASETEXIMAGEPROC)(EGLDisplay, EGLSurface, EGLint);
 typedef EGLBoolean (WINAPI *PFNEGLDESTROYSURFACEPROC)(EGLDisplay, EGLSurface);
 
+// GL entry points this file calls, resolved through SDL_GL_GetProcAddress
+// so they always reach whatever GL implementation Kivy's context
+// actually belongs to. Calling opengl32.dll's exports directly only
+// works for a WGL context: under ANGLE (an EGL context, not WGL)
+// opengl32 has no current context, so its glGenTextures silently
+// returns 0 and the EGL bridge ends up with nothing to bind to.
+typedef void (APIENTRY *GenTexturesFn)(GLsizei, GLuint*);
+typedef void (APIENTRY *BindTextureFn)(GLenum, GLuint);
+typedef void (APIENTRY *DeleteTexturesFn)(GLsizei, const GLuint*);
+typedef void (APIENTRY *TexParameteriFn)(GLenum, GLenum, GLint);
+typedef void (APIENTRY *GetIntegervFn)(GLenum, GLint*);
+#ifndef GL_TEXTURE_BINDING_2D
+#define GL_TEXTURE_BINDING_2D 0x8069
+#endif
+typedef void* (__cdecl *SDLGLGetProcAddressFn)(const char*);
+
 // ---------------------------------------------------------------------
 // Small helpers
 // ---------------------------------------------------------------------
@@ -257,6 +273,13 @@ struct MFVideoPlayerImpl {
     bool interopOk = false;
     GLuint glTex = 0;
 
+    // Resolved in resolveGlFunctions() -- see the typedef comment above.
+    GenTexturesFn pglGenTextures = nullptr;
+    BindTextureFn pglBindTexture = nullptr;
+    DeleteTexturesFn pglDeleteTextures = nullptr;
+    TexParameteriFn pglTexParameteri = nullptr;
+    GetIntegervFn pglGetIntegerv = nullptr;
+
     // WGL-specific
     PFNWGLDXOPENDEVICENVPROC pwglDXOpenDeviceNV = nullptr;
     PFNWGLDXCLOSEDEVICENVPROC pwglDXCloseDeviceNV = nullptr;
@@ -282,6 +305,7 @@ struct MFVideoPlayerImpl {
     EGLDisplay eglDpy = nullptr;
     EGLConfig eglConfig = nullptr;
     EGLSurface eglClientBufSurf = EGL_NO_SURFACE;
+    bool eglBound = false;
 
     // CPU-copy fallback
     ID3D11Texture2D *stagingTex = nullptr;
@@ -294,11 +318,9 @@ struct MFVideoPlayerImpl {
     char lastErrorBuf[256] = {0};
     char interopNoteBuf[256] = {0};
 
-    MFVideoPlayerImpl(const char *url_, const char *glBackendName) {
+    explicit MFVideoPlayerImpl(const char *url_) : bridge(BRIDGE_WGL) {
         mf_runtime_acquire();
         url = utf8_to_wide(url_);
-        bridge = (glBackendName && strcmp(glBackendName, "angle_sdl3") == 0)
-                 ? BRIDGE_EGL : BRIDGE_WGL;
     }
 
     ~MFVideoPlayerImpl() {
@@ -331,32 +353,98 @@ struct MFVideoPlayerImpl {
                pwglDXUnregisterObjectNV && pwglDXLockObjectsNV && pwglDXUnlockObjectsNV;
     }
 
-    // Resolves EGL entry points via SDL3's OWN EGL accessors
-    // (SDL_EGL_GetCurrentDisplay / SDL_EGL_GetProcAddress), exported by
-    // SDL3.dll -- which is always loaded in-process by the time Kivy has
-    // a window. This is the architecturally correct way to reach
-    // Kivy's actual in-use ANGLE display/device: there is no separately
-    // loadable "libEGL.dll" module to find by name in this build (an
-    // earlier version of this code assumed one, by analogy with the
-    // standalone prototype, and GetModuleHandleW(L"libEGL.dll") always
-    // returned NULL in the real Kivy process -- confirmed by direct
-    // inspection, not guessed). If this still fails -- as it currently
-    // does on the kivy_deps.sdl3==0.1.0 build this was tested against,
-    // whose SDL_EGL_GetCurrentDisplay returns NULL even from inside an
-    // actual render Callback with a GL context genuinely current, and
-    // isn't even declared in that build's own public headers -- the
-    // caller (setupDeviceEgl) falls back to an independent device and
-    // CPU-copy delivery rather than producing no video at all.
+    // Picks the bridge from the GL context that is actually current,
+    // not from Kivy's backend name: "angle_sdl3" only *requests* an
+    // OpenGL ES context, and SDL3 satisfies that with the driver's own
+    // native ES profile over WGL when one exists (NVIDIA, for example),
+    // loading ANGLE only when it doesn't, or when SDL_OPENGL_ES_DRIVER=1
+    // forces it. So the same backend name can mean a WGL context (use
+    // WGL_NV_DX_interop2) or an ANGLE EGL context (use
+    // EGL_ANGLE_d3d_texture_client_buffer). SDL_EGL_GetCurrentDisplay()
+    // answers exactly that: non-NULL only when SDL's current context is
+    // an EGL one. Also resolves the few GL functions this file calls
+    // through SDL_GL_GetProcAddress so they hit that same context.
+    // Must run on the Kivy main thread with Kivy's context current.
+    void detectBridgeAndResolveGl() {
+        bridge = BRIDGE_WGL;
+        HMODULE hSDL = GetModuleHandleW(L"SDL3.dll");
+        if (hSDL) {
+            peglGetCurrentDisplay = (PFNEGLGETCURRENTDISPLAYPROC)GetProcAddress(hSDL, "SDL_EGL_GetCurrentDisplay");
+            if (peglGetCurrentDisplay && peglGetCurrentDisplay())
+                bridge = BRIDGE_EGL;
+            auto sdlGlGetProc = (SDLGLGetProcAddressFn)GetProcAddress(hSDL, "SDL_GL_GetProcAddress");
+            if (sdlGlGetProc) {
+                pglGenTextures = (GenTexturesFn)sdlGlGetProc("glGenTextures");
+                pglBindTexture = (BindTextureFn)sdlGlGetProc("glBindTexture");
+                pglDeleteTextures = (DeleteTexturesFn)sdlGlGetProc("glDeleteTextures");
+                pglTexParameteri = (TexParameteriFn)sdlGlGetProc("glTexParameteri");
+                pglGetIntegerv = (GetIntegervFn)sdlGlGetProc("glGetIntegerv");
+            }
+        }
+        // Without SDL3 (not expected in a Kivy process, but harmless),
+        // or if SDL couldn't resolve them, a WGL context can still use
+        // opengl32's own exports. An EGL context can't -- the EGL
+        // bridge then reports why and falls back to the CPU copy.
+        if (bridge == BRIDGE_WGL &&
+            (!pglGenTextures || !pglBindTexture || !pglDeleteTextures ||
+             !pglTexParameteri || !pglGetIntegerv)) {
+            pglGenTextures = glGenTextures;
+            pglBindTexture = glBindTexture;
+            pglDeleteTextures = glDeleteTextures;
+            pglTexParameteri = glTexParameteri;
+            pglGetIntegerv = glGetIntegerv;
+        }
+    }
+
+    // Creates glTex with linear filtering and edge clamping. Kivy never
+    // sets sampler state on a texture it only wraps by id, and GL's
+    // default minification filter uses mipmaps this texture doesn't
+    // have, so without this it is "incomplete" and ANGLE samples it as
+    // black. Restores whatever texture Kivy had bound, so Kivy's own
+    // view of the GL state stays correct.
+    void createGlTexture() {
+        GLint prev = 0;
+        pglGetIntegerv(GL_TEXTURE_BINDING_2D, &prev);
+        pglGenTextures(1, &glTex);
+        pglBindTexture(GL_TEXTURE_2D, glTex);
+        pglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        pglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        pglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        pglTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        pglBindTexture(GL_TEXTURE_2D, (GLuint)prev);
+    }
+
+    // eglBindTexImage attaches to whatever texture is bound, so bind
+    // glTex for the call and then put Kivy's binding back.
+    bool eglBindToGlTex() {
+        GLint prev = 0;
+        pglGetIntegerv(GL_TEXTURE_BINDING_2D, &prev);
+        pglBindTexture(GL_TEXTURE_2D, glTex);
+        bool ok = peglBindTexImage(eglDpy, eglClientBufSurf, EGL_BACK_BUFFER) != 0;
+        pglBindTexture(GL_TEXTURE_2D, (GLuint)prev);
+        return ok;
+    }
+
+    // Resolves the EGL entry points through SDL3's own accessor
+    // (SDL_EGL_GetProcAddress), so they come from the same libEGL that
+    // SDL loaded for Kivy's context, and the display queried below is
+    // the in-use one -- which is what makes EGL_ANGLE_device_d3d return
+    // ANGLE's *real* D3D11 device rather than a second, independent one.
+    // Only called once detectBridgeAndResolveGl() has seen an EGL
+    // context, so peglGetCurrentDisplay is already set.
     bool loadEglInterop() {
         HMODULE hSDL = GetModuleHandleW(L"SDL3.dll");
-        if (!hSDL) { setInteropNote("SDL3.dll not loaded in this process"); return false; }
-        auto sdlGetCurrentDisplay = (PFNEGLGETCURRENTDISPLAYPROC)GetProcAddress(hSDL, "SDL_EGL_GetCurrentDisplay");
+        if (!hSDL || !peglGetCurrentDisplay) { setInteropNote("SDL3 EGL accessors unavailable"); return false; }
         peglGetProcAddress = (PFNEGLGETPROCADDRESSPROC)GetProcAddress(hSDL, "SDL_EGL_GetProcAddress");
-        if (!sdlGetCurrentDisplay || !peglGetProcAddress) {
-            setInteropNote("SDL3.dll does not export SDL_EGL_GetCurrentDisplay/SDL_EGL_GetProcAddress");
+        if (!peglGetProcAddress) {
+            setInteropNote("SDL3.dll does not export SDL_EGL_GetProcAddress");
             return false;
         }
-        peglGetCurrentDisplay = sdlGetCurrentDisplay;
+        if (!pglGenTextures || !pglBindTexture || !pglDeleteTextures ||
+            !pglTexParameteri || !pglGetIntegerv) {
+            setInteropNote("SDL_GL_GetProcAddress could not resolve the GL texture functions");
+            return false;
+        }
         peglGetError = (PFNEGLGETERRORPROC)peglGetProcAddress("eglGetError");
         peglChooseConfig = (PFNEGLCHOOSECONFIGPROC)peglGetProcAddress("eglChooseConfig");
         peglQueryDisplayAttribEXT = (PFNEGLQUERYDISPLAYATTRIBEXTPROC)peglGetProcAddress("eglQueryDisplayAttribEXT");
@@ -454,8 +542,8 @@ struct MFVideoPlayerImpl {
                 device->GetImmediateContext(&deviceCtx);
                 ownsDevice = false;  // ANGLE owns this device; we only borrow it
             } else {
-                setInteropNote("could not obtain ANGLE's own D3D11 device via SDL3's EGL "
-                         "accessors; falling back to CPU-copy delivery");
+                setInteropNote("the EGL display does not expose a D3D11 device "
+                               "(EGL_ANGLE_device_d3d), so it is not ANGLE on D3D11");
                 eglDpy = nullptr;  // make sure probeInterop()'s EGL branch no-ops
             }
         }
@@ -514,7 +602,8 @@ struct MFVideoPlayerImpl {
     }
 
     void load() {
-        bool ok = (bridge == BRIDGE_EGL) ? setupDeviceEgl() : setupDeviceWgl();
+        detectBridgeAndResolveGl();
+        bool ok =(bridge == BRIDGE_EGL) ? setupDeviceEgl() : setupDeviceWgl();
         if (ok) ok = setupEngine();
         if (!ok) return;  // lastErrorBuf already set; engine stays NULL,
                            // every subsequent call below is then a no-op.
@@ -552,30 +641,42 @@ struct MFVideoPlayerImpl {
             if (!pwglDXOpenDeviceNV) return;  // loadWglInterop already failed
             wglDevice = pwglDXOpenDeviceNV(device);
             if (!wglDevice) { setInteropNote("wglDXOpenDeviceNV failed (adapter mismatch)"); return; }
-            glGenTextures(1, &glTex);
-            wglObj = pwglDXRegisterObjectNV(wglDevice, destTex, glTex, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
+            createGlTexture();
+            wglObj =pwglDXRegisterObjectNV(wglDevice, destTex, glTex, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
             if (!wglObj) {
                 setInteropNote("wglDXRegisterObjectNV failed");
                 pwglDXCloseDeviceNV(wglDevice);
                 wglDevice = nullptr;
-                glDeleteTextures(1, &glTex);
+                pglDeleteTextures(1, &glTex);
                 glTex = 0;
                 return;
             }
             interopOk = true;
         } else {
             if (!eglDpy || !peglCreatePbufferFromClientBuffer) return;  // setupDeviceEgl already fell back to CPU-copy
-            glGenTextures(1, &glTex);
+            createGlTexture();
+            if (!glTex) { setInteropNote("glGenTextures returned 0 on the EGL context"); return; }
             EGLint attribs[] = { EGL_TEXTURE_FORMAT, EGL_TEXTURE_RGBA,
                                  EGL_TEXTURE_TARGET, EGL_TEXTURE_2D_ATTR, EGL_NONE };
             eglClientBufSurf = peglCreatePbufferFromClientBuffer(
                 eglDpy, EGL_D3D_TEXTURE_ANGLE, (EGLClientBuffer)destTex, eglConfig, attribs);
             if (eglClientBufSurf == EGL_NO_SURFACE) {
                 setInteropNote("eglCreatePbufferFromClientBuffer failed: 0x%04X", peglGetError());
-                glDeleteTextures(1, &glTex);
+                pglDeleteTextures(1, &glTex);
                 glTex = 0;
                 return;
             }
+            // Bind once now, so a failure here still falls back to the
+            // CPU copy instead of handing Kivy an empty texture.
+            if (!eglBindToGlTex()) {
+                setInteropNote("eglBindTexImage failed: 0x%04X", peglGetError());
+                peglDestroySurface(eglDpy, eglClientBufSurf);
+                eglClientBufSurf = EGL_NO_SURFACE;
+                pglDeleteTextures(1, &glTex);
+                glTex = 0;
+                return;
+            }
+            eglBound = true;
             interopOk = true;
         }
     }
@@ -584,17 +685,27 @@ struct MFVideoPlayerImpl {
     // WGL: lock for GL access (stays locked until the next transfer, so
     // Kivy's own render pass -- which happens after this tick -- safely
     // samples it; unlocked right before the next TransferVideoFrame).
-    // EGL: no explicit lock API exists for this interop type; instead,
-    // re-call eglBindTexImage every frame, the same idiom
-    // video_avfoundation.pyx's own IOSurface zero-copy path already uses
-    // ("GL contents replaced in-place each frame via eglBindTexImage").
+    // EGL: the same shape with eglReleaseTexImage/eglBindTexImage --
+    // released right before the next TransferVideoFrame, re-bound right
+    // after it. EGL rejects binding a surface that is already bound
+    // (EGL_BAD_ACCESS), so the release is what makes the re-bind legal.
     void refreshZeroCopy() {
         if (bridge == BRIDGE_WGL) {
             pwglDXLockObjectsNV(wglDevice, 1, &wglObj);
             wglLocked = true;
-        } else {
-            glBindTexture(GL_TEXTURE_2D, glTex);
-            peglBindTexImage(eglDpy, eglClientBufSurf, EGL_BACK_BUFFER);
+        } else if (!eglBound) {
+            eglBound = eglBindToGlTex();
+        }
+    }
+
+    // Counterpart of refreshZeroCopy(), called before each transfer.
+    void releaseZeroCopy() {
+        if (!interopOk) return;
+        if (bridge == BRIDGE_WGL) {
+            if (wglLocked) { pwglDXUnlockObjectsNV(wglDevice, 1, &wglObj); wglLocked = false; }
+        } else if (eglBound) {
+            peglReleaseTexImage(eglDpy, eglClientBufSurf, EGL_BACK_BUFFER);
+            eglBound = false;
         }
     }
 
@@ -651,10 +762,7 @@ struct MFVideoPlayerImpl {
 
         if (!ensureDestTexture()) return nullptr;
 
-        if (interopOk && bridge == BRIDGE_WGL && wglLocked) {
-            pwglDXUnlockObjectsNV(wglDevice, 1, &wglObj);
-            wglLocked = false;
-        }
+        releaseZeroCopy();
 
         if (FAILED(engine->TransferVideoFrame(destTex, nullptr, nullptr, nullptr))) return nullptr;
 
@@ -696,12 +804,13 @@ struct MFVideoPlayerImpl {
             }
         } else {
             if (eglClientBufSurf != EGL_NO_SURFACE) {
-                peglReleaseTexImage(eglDpy, eglClientBufSurf, EGL_BACK_BUFFER);
+                if (eglBound) peglReleaseTexImage(eglDpy, eglClientBufSurf, EGL_BACK_BUFFER);
+                eglBound = false;
                 peglDestroySurface(eglDpy, eglClientBufSurf);
                 eglClientBufSurf = EGL_NO_SURFACE;
             }
         }
-        if (glTex) { glDeleteTextures(1, &glTex); glTex = 0; }
+        if (glTex) { pglDeleteTextures(1, &glTex); glTex = 0; }
         interopProbed = false;
         interopOk = false;
 
@@ -742,8 +851,8 @@ VideoFrame::~VideoFrame() {}
 // ---------------------------------------------------------------------
 // VideoPlayer -- thin forwarding layer onto MFVideoPlayerImpl
 // ---------------------------------------------------------------------
-VideoPlayer::VideoPlayer(const char *url, const char *gl_backend_name) {
-    impl = new MFVideoPlayerImpl(url, gl_backend_name);
+VideoPlayer::VideoPlayer(const char *url) {
+    impl = new MFVideoPlayerImpl(url);
 }
 VideoPlayer::~VideoPlayer() { delete impl; }
 

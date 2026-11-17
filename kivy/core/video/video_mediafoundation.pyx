@@ -6,11 +6,10 @@ Media Foundation Video
 Video implementation using Microsoft Media Foundation, the default video
 provider on Windows.
 
-Pixel transfer is zero-copy whenever the active GL backend's interop
-bridge registers successfully: the decoded ``ID3D11Texture2D`` is shared
-directly into GL (via ``WGL_NV_DX_interop2`` for the ``glew``/``sdl3``
-backends, or ``EGL_ANGLE_d3d_texture_client_buffer`` for ``angle_sdl3``)
-and wrapped into a :class:`~kivy.graphics.texture.Texture` with
+Pixel transfer is zero-copy whenever the GL context's interop bridge
+registers successfully: the decoded ``ID3D11Texture2D`` is shared
+directly into GL (via ``WGL_NV_DX_interop2`` for a WGL context, or
+``EGL_ANGLE_d3d_texture_client_buffer`` for an ANGLE context) and wrapped into a :class:`~kivy.graphics.texture.Texture` with
 ``nofree=True`` -- no per-frame ``memcpy``. If that one-time registration
 fails (e.g. a GPU/driver gap), the provider falls back to a CPU copy for
 every frame instead of failing outright.
@@ -33,7 +32,7 @@ cdef extern from "video_mediafoundation_implem.h":
         unsigned int gl_target
 
     cppclass VideoPlayer:
-        VideoPlayer(const char *url, const char *gl_backend_name)
+        VideoPlayer(const char *url)
 
         void load()
         void play()
@@ -64,7 +63,6 @@ cdef extern from "video_mediafoundation_implem.h":
 from cython cimport view as cyview
 from kivy.clock import Clock
 from kivy.core.video import VideoBase
-from kivy.graphics.cgl import cgl_get_initialized_backend_name
 from kivy.graphics.texture import Texture
 from kivy.logger import Logger
 
@@ -92,7 +90,7 @@ cdef _frame_to_texture(VideoFrame *frame, existing_texture):
         # the active GL backend's interop bridge. The underlying GL
         # contents are replaced in-place every frame by the native
         # layer (re-locked for WGL, re-bound via eglBindTexImage for
-        # angle_sdl3); we only need to (re-)wrap the id here if it or
+        # ANGLE); we only need to (re-)wrap the id here if it or
         # the size actually changed.
         #
         # nofree=True so Kivy's deferred glDeleteTextures never fires
@@ -160,15 +158,20 @@ class VideoMediaFoundation(VideoBase):
     '''Implementation of :class:`VideoBase` using Media Foundation on
     Windows.
 
-    Pixel transfer is zero-copy when the active GL backend's interop
-    bridge is available: Media Foundation decodes into a shared
+    Pixel transfer is zero-copy when the GL context's interop bridge is
+    available: Media Foundation decodes into a shared
     ``ID3D11Texture2D``, which is registered once with
-    ``WGL_NV_DX_interop2`` (``glew``/``sdl3`` backends) or shared via
-    ``EGL_ANGLE_d3d_texture_client_buffer`` (``angle_sdl3``; not yet
-    reachable with the SDL3 build Kivy currently uses, so that backend
-    gets the CPU-copy fallback described below), then
-    wrapped into a :class:`~kivy.graphics.texture.Texture` with
-    ``nofree=True``. If that one-time registration fails -- a GPU/driver
+    ``WGL_NV_DX_interop2`` or shared via
+    ``EGL_ANGLE_d3d_texture_client_buffer``, then wrapped into a
+    :class:`~kivy.graphics.texture.Texture` with ``nofree=True``.
+
+    The bridge follows the kind of GL context that is actually current,
+    not the ``KIVY_GL_BACKEND`` name. ``glew`` and ``sdl3`` always run
+    on WGL. ``angle_sdl3`` asks SDL for an OpenGL ES context, which SDL
+    serves from the driver's own ES profile over WGL when it has one
+    (NVIDIA does), and from ANGLE otherwise or when the
+    ``SDL_OPENGL_ES_DRIVER=1`` environment variable forces ANGLE. Both
+    kinds of context get zero-copy. If that one-time registration fails -- a GPU/driver
     gap, most commonly a laptop where the active GL context and Media
     Foundation's decode device land on different GPUs -- the provider
     falls back to a CPU copy for every frame instead of failing
@@ -256,7 +259,6 @@ class VideoMediaFoundation(VideoBase):
     def load(self):
         cdef _MFVideoStorage storage
         cdef bytes url_b
-        cdef bytes backend_b
         Logger.debug(
             'VideoMediaFoundation: Load <{}>'.format(self._filename))
         self._release_player()
@@ -265,9 +267,7 @@ class VideoMediaFoundation(VideoBase):
         storage = <_MFVideoStorage>self._storage
         url_b = self._filename.encode('utf-8') \
             if isinstance(self._filename, str) else bytes(self._filename)
-        backend_b = cgl_get_initialized_backend_name().encode('utf-8')
-        storage.player = new VideoPlayer(
-            <const char *>url_b, <const char *>backend_b)
+        storage.player = new VideoPlayer(<const char *>url_b)
         storage.player.load()
         err = storage.player.lastError()
         if err and len(err) > 0:
