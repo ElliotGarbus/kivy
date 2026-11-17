@@ -111,12 +111,14 @@ public:
                                          int w, int h);
 
     // Diagnostics for the Cython layer to log via Kivy's own Logger
-    // (this C++ layer has no logging of its own). lastError() returns
-    // an empty string if nothing has failed outright. usingCpuFallback()
-    // is only meaningful once a frame has actually been requested, since
-    // bridge registration is probed lazily on the first transferred
-    // frame.
+    // (this C++ layer has no logging of its own). lastError() is a hard
+    // failure (no playback); empty if nothing has failed. interopNote()
+    // says why zero-copy isn't in use -- expected on some backends, and
+    // only means the CPU-copy fallback. usingCpuFallback() is only
+    // meaningful once a frame has been requested, since bridge
+    // registration is probed lazily on the first transferred frame.
     const char *lastError();
+    const char *interopNote();
     bool usingCpuFallback();
 
 private:

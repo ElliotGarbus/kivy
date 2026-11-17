@@ -288,7 +288,11 @@ struct MFVideoPlayerImpl {
     std::vector<char> cpuBuf;
 
     VideoFrame outFrame;
+    // lastErrorBuf: hard failures (no playback). interopNoteBuf: why
+    // zero-copy isn't in use -- an expected condition that just means
+    // the CPU-copy fallback, not an error.
     char lastErrorBuf[256] = {0};
+    char interopNoteBuf[256] = {0};
 
     MFVideoPlayerImpl(const char *url_, const char *glBackendName) {
         mf_runtime_acquire();
@@ -306,6 +310,13 @@ struct MFVideoPlayerImpl {
         va_list args;
         va_start(args, fmt);
         vsnprintf(lastErrorBuf, sizeof(lastErrorBuf), fmt, args);
+        va_end(args);
+    }
+
+    void setInteropNote(const char *fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+        vsnprintf(interopNoteBuf, sizeof(interopNoteBuf), fmt, args);
         va_end(args);
     }
 
@@ -338,11 +349,11 @@ struct MFVideoPlayerImpl {
     // CPU-copy delivery rather than producing no video at all.
     bool loadEglInterop() {
         HMODULE hSDL = GetModuleHandleW(L"SDL3.dll");
-        if (!hSDL) { setError("SDL3.dll not loaded in this process"); return false; }
+        if (!hSDL) { setInteropNote("SDL3.dll not loaded in this process"); return false; }
         auto sdlGetCurrentDisplay = (PFNEGLGETCURRENTDISPLAYPROC)GetProcAddress(hSDL, "SDL_EGL_GetCurrentDisplay");
         peglGetProcAddress = (PFNEGLGETPROCADDRESSPROC)GetProcAddress(hSDL, "SDL_EGL_GetProcAddress");
         if (!sdlGetCurrentDisplay || !peglGetProcAddress) {
-            setError("SDL3.dll does not export SDL_EGL_GetCurrentDisplay/SDL_EGL_GetProcAddress");
+            setInteropNote("SDL3.dll does not export SDL_EGL_GetCurrentDisplay/SDL_EGL_GetProcAddress");
             return false;
         }
         peglGetCurrentDisplay = sdlGetCurrentDisplay;
@@ -357,7 +368,7 @@ struct MFVideoPlayerImpl {
         if (!peglGetError || !peglChooseConfig || !peglQueryDisplayAttribEXT ||
             !peglQueryDeviceAttribEXT || !peglCreatePbufferFromClientBuffer ||
             !peglBindTexImage || !peglReleaseTexImage || !peglDestroySurface) {
-            setError("one or more EGL entry points did not resolve via SDL_EGL_GetProcAddress");
+            setInteropNote("one or more EGL entry points did not resolve via SDL_EGL_GetProcAddress");
             return false;
         }
         return true;
@@ -411,7 +422,7 @@ struct MFVideoPlayerImpl {
 
     bool setupDeviceWgl() {
         if (!loadWglInterop()) {
-            setError("WGL_NV_DX_interop2 not available on this GL context");
+            setInteropNote("WGL_NV_DX_interop2 not available on this GL context");
             // Still create a device for MF decode; interop probing will
             // simply fail later and the CPU-copy fallback takes over.
         }
@@ -443,7 +454,7 @@ struct MFVideoPlayerImpl {
                 device->GetImmediateContext(&deviceCtx);
                 ownsDevice = false;  // ANGLE owns this device; we only borrow it
             } else {
-                setError("could not obtain ANGLE's own D3D11 device via SDL3's EGL "
+                setInteropNote("could not obtain ANGLE's own D3D11 device via SDL3's EGL "
                          "accessors; falling back to CPU-copy delivery");
                 eglDpy = nullptr;  // make sure probeInterop()'s EGL branch no-ops
             }
@@ -472,8 +483,10 @@ struct MFVideoPlayerImpl {
         };
         EGLint numConfigs = 0;
         if (!peglChooseConfig(eglDpy, cfgAttribs, &eglConfig, 1, &numConfigs) || numConfigs == 0) {
-            setError("eglChooseConfig found no matching config");
-            return false;
+            // ANGLE's device is still fine to decode into; only the
+            // zero-copy bridge is unusable, so fall back to the CPU copy.
+            setInteropNote("eglChooseConfig found no matching config");
+            eglDpy = nullptr;  // make sure probeInterop()'s EGL branch no-ops
         }
 
         return finishDeviceSetup();
@@ -538,11 +551,11 @@ struct MFVideoPlayerImpl {
         if (bridge == BRIDGE_WGL) {
             if (!pwglDXOpenDeviceNV) return;  // loadWglInterop already failed
             wglDevice = pwglDXOpenDeviceNV(device);
-            if (!wglDevice) { setError("wglDXOpenDeviceNV failed (adapter mismatch)"); return; }
+            if (!wglDevice) { setInteropNote("wglDXOpenDeviceNV failed (adapter mismatch)"); return; }
             glGenTextures(1, &glTex);
             wglObj = pwglDXRegisterObjectNV(wglDevice, destTex, glTex, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
             if (!wglObj) {
-                setError("wglDXRegisterObjectNV failed");
+                setInteropNote("wglDXRegisterObjectNV failed");
                 pwglDXCloseDeviceNV(wglDevice);
                 wglDevice = nullptr;
                 glDeleteTextures(1, &glTex);
@@ -558,7 +571,7 @@ struct MFVideoPlayerImpl {
             eglClientBufSurf = peglCreatePbufferFromClientBuffer(
                 eglDpy, EGL_D3D_TEXTURE_ANGLE, (EGLClientBuffer)destTex, eglConfig, attribs);
             if (eglClientBufSurf == EGL_NO_SURFACE) {
-                setError("eglCreatePbufferFromClientBuffer failed: 0x%04X", peglGetError());
+                setInteropNote("eglCreatePbufferFromClientBuffer failed: 0x%04X", peglGetError());
                 glDeleteTextures(1, &glTex);
                 glTex = 0;
                 return;
@@ -748,6 +761,7 @@ VideoFrame *VideoPlayer::retrieveFrame() { return impl->retrieveFrame(); }
 bool VideoPlayer::isEOS() { return impl->isEOS(); }
 bool VideoPlayer::isBuffering() { return impl->isBuffering(); }
 const char *VideoPlayer::lastError() { return impl->lastErrorBuf; }
+const char *VideoPlayer::interopNote() { return impl->interopNoteBuf; }
 bool VideoPlayer::usingCpuFallback() { return impl->interopProbed && !impl->interopOk; }
 
 // Sleeps ~ms milliseconds while pumping this thread's message queue.

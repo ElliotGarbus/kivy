@@ -53,6 +53,7 @@ cdef extern from "video_mediafoundation_implem.h":
         bint isBuffering()
 
         const char *lastError()
+        const char *interopNote()
         bint usingCpuFallback()
 
         @staticmethod
@@ -270,7 +271,7 @@ class VideoMediaFoundation(VideoBase):
         storage.player.load()
         err = storage.player.lastError()
         if err and len(err) > 0:
-            Logger.warning(
+            Logger.error(
                 'VideoMediaFoundation: setup failed: {}'.format(
                     err.decode('utf-8', 'replace')))
         storage.player.setVolume(<double>self._volume)
@@ -380,9 +381,9 @@ class VideoMediaFoundation(VideoBase):
         if not self._logged_fallback and storage.player.usingCpuFallback():
             self._logged_fallback = True
             Logger.info(
-                'VideoMediaFoundation: zero-copy GPU interop unavailable '
-                '({}); falling back to a CPU copy for every frame.'.format(
-                    storage.player.lastError().decode('utf-8', 'replace')))
+                'VideoMediaFoundation: using a CPU copy for every frame '
+                '(zero-copy unavailable: {})'.format(
+                    storage.player.interopNote().decode('utf-8', 'replace')))
 
         had_texture = self._texture is not None
         self._texture = _frame_to_texture(frame, self._texture)
