@@ -3,33 +3,20 @@
  * See video_mediafoundation_implem.h for the architecture summary and
  * why this is a genuinely separate compiled translation unit.
  *
- * All of the WGL_NV_DX_interop2 and EGL_ANGLE_d3d_texture_client_buffer
- * bridge mechanics below are adapted directly from four validated
- * throwaway prototypes (notes/video-providers/prototype/
- * {wgl_dx_interop_test,egl_angle_interop_test,mf_decode_wgl_test,
- * mf_decode_egl_test,mf_playback_test}.cpp) rather than written fresh --
- * see notes/video-providers/windows-spike.md for what each one proved.
+ * Two design rules the code below relies on:
  *
- * Two real-provider-specific differences from those prototypes, both
- * load-bearing:
- *
- *   1. Never block the calling (Kivy main) thread. The prototypes used
- *      blocking WaitForSingleObject wait-loops to drive a one-shot
- *      console run to completion; this class instead does only cheap
- *      non-blocking polls (GetReadyState/OnVideoStreamTick/isBuffering)
- *      once per hasNewFrame()/retrieveFrame() call, which the Cython
- *      layer calls once per Kivy Clock tick. generateThumbnail() is the
- *      one deliberate exception: it is a synchronous, one-shot API by
- *      design (same as the other providers' thumbnail paths), so a
+ *   1. Never block the calling (Kivy main) thread. Playback does only
+ *      cheap non-blocking polls (GetReadyState/OnVideoStreamTick/
+ *      isBuffering) once per hasNewFrame()/retrieveFrame() call, which
+ *      the Cython layer calls once per Kivy Clock tick. generateThumbnail()
+ *      is the one deliberate exception: it is a synchronous, one-shot API
+ *      by design (same as the other providers' thumbnail paths), so a
  *      short bounded blocking wait there is correct, not an oversight.
- *   2. No window/context of our own. The prototypes created their own
- *      throwaway WGL window/context (or, for EGL, their own ANGLE
- *      display) because they ran standalone. This class runs inside the
- *      real Kivy process, on the Kivy main thread, where a GL context
- *      (WGL or ANGLE/EGL, whichever Kivy itself initialized) is already
- *      current -- so GL/EGL calls here just use that context directly:
- *      no wglCreateContext, and for EGL, eglGetCurrentDisplay() instead
- *      of eglGetPlatformDisplayEXT(), which is also what makes the
+ *   2. No window/context of our own. This class runs on the Kivy main
+ *      thread, where Kivy's GL context (WGL or ANGLE/EGL) is already
+ *      current, so GL/EGL calls here use that context directly: no
+ *      wglCreateContext, and for EGL, the display SDL reports as current
+ *      rather than a newly created one. That is also what makes the
  *      EGL_ANGLE_device_d3d query return ANGLE's *real* in-use device
  *      rather than a second, independent one.
  */
@@ -56,9 +43,8 @@
 #include "video_mediafoundation_implem.h"
 
 // ---------------------------------------------------------------------
-// WGL_NV_DX_interop2 -- hand-declared, same as
-// notes/video-providers/prototype/wgl_dx_interop_test.cpp. Not shipped
-// as an official Windows SDK header (Khronos/OpenGL-registry extension).
+// WGL_NV_DX_interop2 -- hand-declared: the Windows SDK has no header for
+// this Khronos/OpenGL-registry extension.
 // ---------------------------------------------------------------------
 typedef HANDLE(WINAPI* PFNWGLDXOPENDEVICENVPROC)(void* dxDevice);
 typedef BOOL(WINAPI* PFNWGLDXCLOSEDEVICENVPROC)(HANDLE hDevice);
@@ -73,10 +59,10 @@ typedef BOOL(WINAPI* PFNWGLDXUNLOCKOBJECTSNVPROC)(HANDLE hDevice, GLint count, H
 #endif
 
 // ---------------------------------------------------------------------
-// EGL / EGL_ANGLE_d3d_texture_client_buffer -- hand-declared, same as
-// notes/video-providers/prototype/egl_angle_interop_test.cpp. GL* types
-// (GLenum, GLuint, ...) come from <GL/gl.h> above, already included for
-// the WGL path -- only the EGL-specific types need declaring here.
+// EGL / EGL_ANGLE_d3d_texture_client_buffer -- hand-declared, so the
+// build needs no EGL headers. GL* types (GLenum, GLuint, ...) come from
+// <GL/gl.h> above, already included for the WGL path -- only the
+// EGL-specific types need declaring here.
 // ---------------------------------------------------------------------
 typedef void* EGLDisplay;
 typedef void* EGLSurface;
@@ -491,7 +477,7 @@ struct MFVideoPlayerImpl {
         IDXGIAdapter1 *adapter = nullptr;
         // Adapter 0, not LUID-matched to the GL context's adapter: a
         // mismatch is detected cheaply and cleanly at the interop
-        // registration call itself (confirmed in Prototype 1), so no
+        // registration call itself (wglDXOpenDeviceNV fails), so no
         // adapter-enumeration/matching logic is needed up front -- a
         // mismatch there just means this player runs CPU-copy fallback.
         hr = factory->EnumAdapters1(0, &adapter);
@@ -519,8 +505,8 @@ struct MFVideoPlayerImpl {
     }
 
     // Attempts to obtain ANGLE's own device (required for true
-    // zero-copy -- Prototype 2 confirmed adapter-matching alone isn't
-    // enough for this bridge). If any step fails, falls back to an
+    // zero-copy: a texture from a different device on the same adapter
+    // is rejected by eglCreatePbufferFromClientBuffer). If any step fails, falls back to an
     // independent device so decode + CPU-copy delivery still works;
     // eglDpy/the EGL function pointers are left unset in that case, so
     // probeInterop()'s EGL branch cleanly no-ops rather than crashing.
@@ -558,9 +544,7 @@ struct MFVideoPlayerImpl {
         }
 
         // A valid EGLConfig is required by eglCreatePbufferFromClientBuffer
-        // to validate the pbuffer's pixel format -- same attribs Prototype
-        // 2/3b confirmed produce a working config on this driver. This is
-        // a pure query against the current display; it doesn't create or
+        // to validate the pbuffer's pixel format. This is a pure query against the current display; it doesn't create or
         // touch any live surface/context, so it's safe to do once here
         // regardless of how Kivy's own context was configured.
         EGLint cfgAttribs[] = {

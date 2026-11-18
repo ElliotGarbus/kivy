@@ -1,9 +1,7 @@
 /*
  * Video provider implementation for Windows using Media Foundation.
  *
- * Architecture, decided and validated against real hardware via four
- * throwaway prototypes under notes/video-providers/prototype/ (see
- * notes/video-providers/windows-spike.md): IMFMediaEngine decodes into a
+ * Architecture: IMFMediaEngine decodes into a
  * caller-supplied ID3D11Texture2D via TransferVideoFrame; that texture is
  * then shared into GL with no CPU copy via one of two bridges, chosen at
  * load() time by the kind of GL context that is actually current (not
@@ -16,8 +14,7 @@
  *   - EGL_ANGLE_d3d_texture_client_buffer, for an ANGLE EGL context
  *     ("angle_sdl3" when SDL loads ANGLE). ANGLE requires the texture to
  *     be created on its OWN internal D3D11 device (queried via
- *     EGL_ANGLE_device_d3d), not merely a device on the same adapter --
- *     confirmed the hard way in Prototype 2.
+ *     EGL_ANGLE_device_d3d), not merely a device on the same adapter.
  *
  * If the one-time bridge registration fails (e.g. a driver without
  * WGL_NV_DX_interop2, or an EGL display that isn't ANGLE on D3D11),
