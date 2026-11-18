@@ -19,6 +19,13 @@ Core class for reading video files and managing the video
         can pass opaque configuration through to the backend
         implementation. Each provider documents the keys it honors.
 
+    Added two providers that play video through the operating system's
+    own media framework, so no extra package is needed: ``avfoundation``
+    (:class:`~kivy.core.video.video_avfoundation.VideoAVFoundation`), the
+    default on macOS and iOS, and ``mediafoundation``
+    (:class:`~kivy.core.video.video_mediafoundation.VideoMediaFoundation`),
+    the default on Windows.
+
 .. versionchanged:: 1.10.0
     The pyglet, pygst and gi providers have been removed.
 
