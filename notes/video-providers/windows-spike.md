@@ -54,12 +54,12 @@ this hardware, not just the bridge in isolation. **The real
 `video_mediafoundation.pyx` provider is now built and verified in a
 running Kivy app under both GL backends** (see "Real implementation"
 below) — zero-copy with live frame updates on every configuration
-tested: `glew`, `sdl3`, `angle_sdl3` on NVIDIA's native ES driver, and
-`angle_sdl3` on real ANGLE. The bridge follows the kind of context that
-is actually current, not the backend name (see "`angle_sdl3` is not
-always ANGLE" below). Broader hardware coverage (AMD, Intel, other
-driver generations) is the piece still open; see "Suggested next steps"
-at the end.
+tested, on both NVIDIA (RTX 2060) and Intel (Iris Xe): `glew`, `sdl3`,
+`angle_sdl3` on the vendor's native ES driver, and `angle_sdl3` on real
+ANGLE. The bridge follows the kind of context that is actually current,
+not the backend name (see "`angle_sdl3` is not always ANGLE" below).
+AMD and a laptop with two GPUs are the hardware still open; see
+"Suggested next steps" at the end.
 
 ## Fact-finding on the current Kivy Windows graphics stack
 
@@ -628,9 +628,12 @@ selection (`kivy/core/__init__.py`, `kivy/core/video/__init__.py`) and
 `setup.py` (`c_options['use_mediafoundation']`, gated to `win32`).
 
 Verified end-to-end in a real running Kivy app (`kivy.uix.video.Video`,
-not just the provider in isolation) on this machine (RTX 2060, driver
-610.60), in four GL configurations. Each played the animated test clip
-and Big Buck Bunny; the rendered widget was grabbed at ~0s and ~1s:
+not just the provider in isolation), in four GL configurations on two
+machines. Each played the animated test clip and Big Buck Bunny; the
+rendered widget was grabbed about 0.3 s and 1.3 s after the first frame.
+
+Desktop, NVIDIA GeForce RTX 2060 (driver 610.60, DXGI adapter #0; an
+Intel UHD 630 is also enabled as #1 but drives no display):
 
 | Config | GL context | Bridge | Result |
 |---|---|---|---|
@@ -639,17 +642,37 @@ and Big Buck Bunny; the rendered widget was grabbed at ~0s and ~1s:
 | `angle_sdl3` (default) | NVIDIA's native OpenGL ES 3.2, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
 | `angle_sdl3` + `SDL_OPENGL_ES_DRIVER=1` | ANGLE ES 3.0 on D3D11, EGL | `EGL_ANGLE_d3d_texture_client_buffer` | zero-copy, frames update |
 
+Laptop, Intel Iris Xe (driver 32.0.101.7088, the only GPU), run
+2026-11-17 with the packaged check in `mf-check/` (see below):
+
+| Config | GL context | Bridge | Result |
+|---|---|---|---|
+| `glew` | desktop GL 4.6, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `sdl3` | desktop GL 4.6, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `angle_sdl3` (default) | Intel's native OpenGL ES 2.0, WGL | `WGL_NV_DX_interop2` | zero-copy, frames update |
+| `angle_sdl3` + `SDL_OPENGL_ES_DRIVER=1` | ANGLE ES 3.0 on D3D11 (Intel), EGL | `EGL_ANGLE_d3d_texture_client_buffer` | zero-copy, frames update |
+
+Thumbnails were 5/5 in every configuration on both machines (about
+0.09 s each on NVIDIA, 0.11–0.23 s on Intel). So both bridges are now
+seen working on a second vendor's driver, and Intel, like NVIDIA, runs
+`angle_sdl3` on its own ES driver unless ANGLE is forced.
+
+`mf-check/` is a kivyforge app that runs all of the above on whatever
+PC it is copied to, with no toolchain there, and zips the results
+(summary, screenshots, each run's Kivy log, GPUs in DXGI order). Its
+`pyproject.toml` says how to rebuild the Kivy wheel and clips it bundles.
+
 Zero-copy is confirmed by the texture's `colorfmt='bgra'` (the
 zero-copy branch's marker), "frames update" by the two grabs differing
 (the animated clip's blue channel is a frame counter), and orientation
 by viewing the Big Buck Bunny grabs. No provider warnings were logged in
-any of the four. The CPU-copy fallback (decode → `TransferVideoFrame` →
+any run on either machine. The CPU-copy fallback (decode → `TransferVideoFrame` →
 staging texture → `Map` → swizzle → `Texture.blit_buffer`) was verified
 earlier, when `angle_sdl3` still landed on it, and remains the path for
 drivers without either interop extension.
 
 `generate_thumbnail()` passed a 15-call stress test (15/15, ~0.45s
-each), and 5/5 on each of the four configurations above, after fixing
+each) and the per-configuration runs above, after fixing
 two real bugs it surfaced inside a running app — see "Thumbnail hang"
 below. (An earlier draft of this section
   blamed a hang on "Media Foundation's own setup" when run from a bare
@@ -718,7 +741,8 @@ What actually happens:
   `SDL_OPENGL_ES_DRIVER` hint defaults to using the driver's own ES
   profile when it has one. NVIDIA's does, so on this machine
   `angle_sdl3` runs on "OpenGL ES 3.2 NVIDIA" over **WGL** — not ANGLE
-  at all. `SDL_EGL_GetCurrentDisplay()` correctly returned `NULL`,
+  at all. Intel's does too ("OpenGL ES 2.0 - Build 32.0.101.7088" on the
+  Iris Xe laptop). `SDL_EGL_GetCurrentDisplay()` correctly returned `NULL`,
   because there was no EGL context to report.
 - With `SDL_OPENGL_ES_DRIVER=1`, SDL loads ANGLE (`kivy_deps.angle`'s
   `libEGL.dll`/`libGLESv2.dll`), the renderer becomes "ANGLE (NVIDIA ...
@@ -751,17 +775,19 @@ already bound.
 
 Whether Kivy itself should set `SDL_OPENGL_ES_DRIVER=1` for
 `angle_sdl3` is a separate decision. The provider gets zero-copy either
-way on this hardware.
+way on both NVIDIA and Intel. As things stand, ANGLE is only used where
+it is forced, or on drivers with no ES profile of their own.
 
 ## Suggested next steps
 
-1. **Re-run on AMD / Intel / a second NVIDIA-Intel pairing** if access
-   to that hardware shows up, to size how often the CPU-copy fallback
-   actually triggers in the wild — this machine only tested one specific
-   GPU and driver generation. On drivers without a native ES profile,
-   `angle_sdl3` will land on ANGLE by default, so the EGL bridge matters
-   more there than it does here. (An Intel-only laptop is lined up for
-   this — see `run_all_prototypes.ps1`.)
+1. **Run `mf-check` on AMD and on a laptop with two GPUs** if that
+   hardware shows up. NVIDIA and Intel are done (above). AMD is the
+   remaining vendor. A laptop with two GPUs is the one fallback trigger
+   still untested: Media Foundation decodes on DXGI adapter #0, and if
+   the window renders on the other GPU the interop should fail cleanly
+   to the CPU copy. On drivers without a native ES profile,
+   `angle_sdl3` lands on ANGLE by default, so the EGL bridge matters
+   more there.
 2. **Resolve the remaining paper-only risks** (4 and 5 above: codec
    extension floor, `IMFMediaEngine` + HLS) — these are quick, concrete
    checks against a real `IMFMediaEngine` instance, not architectural
