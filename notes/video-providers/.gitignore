@@ -1,0 +1,5 @@
+# Generated build output from the spike apps -- regenerate with
+# `kivyforge build`/`kivyforge package`, never worth committing.
+mf-check/build/
+mf-check/dist/
+android-exoplayer-spike/exoplayer-check-android/

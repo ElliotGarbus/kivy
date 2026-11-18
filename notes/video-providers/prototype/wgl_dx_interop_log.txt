@@ -1,0 +1,23 @@
+=== WGL_NV_DX_interop2 bridge probe ===
+GL_VENDOR:   NVIDIA Corporation
+GL_RENDERER: NVIDIA GeForce RTX 2060/PCIe/SSE2
+GL_VERSION:  4.6.0 NVIDIA 610.60
+WGL_NV_DX_interop2 entry points resolved OK.
+Adapter 0: NVIDIA GeForce RTX 2060 (VRAM=5955 MB)
+Adapter 1: Intel(R) UHD Graphics 630 (VRAM=128 MB)
+Adapter 2: Microsoft Basic Render Driver (VRAM=0 MB)
+--- Adapter 0 ---
+  [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  wglDXOpenDeviceNV OK
+  wglDXRegisterObjectNV OK
+  wglDXLockObjectsNV: OK
+  GL sees bound texture as 256x256
+  readback center pixel RGBA = 128,128,128,255 ; corner(0,0) RGBA = 0,0,128,255
+  Saved wgl_interop_adapter0.bmp for visual verification.
+--- Adapter 1 ---
+  [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  wglDXOpenDeviceNV FAILED (GetLastError=3221684274) -- this is the adapter-mismatch failure mode the spike flagged.
+--- Adapter 2 ---
+  [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  wglDXOpenDeviceNV FAILED (GetLastError=0) -- this is the adapter-mismatch failure mode the spike flagged.
+=== Done ===

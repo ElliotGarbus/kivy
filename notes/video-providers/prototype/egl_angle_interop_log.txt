@@ -1,0 +1,29 @@
+=== EGL_ANGLE_d3d_texture_client_buffer bridge probe ===
+Loaded libEGL.dll and libGLESv2.dll OK.
+EGL/GLES entry points resolved OK.
+ANGLE D3D11 EGL display initialized, version 1.5
+ANGLE's internal ID3D11Device* = 000001B31A22A710
+  ANGLE's adapter: NVIDIA GeForce RTX 2060 (LUID=00000000:0000FA02)
+eglChooseConfig(with BIND_TO_TEXTURE_RGBA) found no match -- retrying without it (diagnostic: isolates whether that attribute is the blocker).
+  found a config WITHOUT BIND_TO_TEXTURE_RGBA -- that attribute is the blocker; proceeding anyway since eglCreatePbufferFromClientBuffer is the actual bridge call under test.
+EGL config chosen OK.
+GL_VENDOR:   Google Inc. (NVIDIA)
+GL_RENDERER: ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F08) Direct3D11 vs_5_0 ps_5_0, D3D11-32.0.16.1060)
+GL_VERSION:  OpenGL ES 3.0.0 (ANGLE 2.1.24600 git hash: 8304737811a7)
+EGL/GLES setup complete (no window needed -- pbuffers are offscreen).
+  Case C adapter (different from ANGLE's): Intel(R) UHD Graphics 630 (LUID=00000000:00010B0F)
+--- Case A: ANGLE's own D3D11 device (happy path) ---
+    [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  eglCreatePbufferFromClientBuffer OK
+  eglBindTexImage OK
+  readback center pixel RGBA = 128,128,128,255 ; corner(0,0) RGBA = 0,0,128,255
+  Saved egl_interop_case0.bmp for visual verification.
+--- Case B: independent device, SAME adapter as ANGLE ---
+    [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  eglCreatePbufferFromClientBuffer FAILED -- this is the device-mismatch failure mode.
+    [egl error] after eglCreatePbufferFromClientBuffer: 0x300C
+--- Case C: independent device, DIFFERENT adapter than ANGLE ---
+    [d3d-readback] pixel(0,0) BGRA = 128,0,0,255 ; pixel(w/2,h/2) BGRA = 128,128,128,255
+  eglCreatePbufferFromClientBuffer FAILED -- this is the device-mismatch failure mode.
+    [egl error] after eglCreatePbufferFromClientBuffer: 0x300C
+=== Done ===

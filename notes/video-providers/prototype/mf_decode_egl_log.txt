@@ -1,0 +1,28 @@
+=== Prototype 3b: IMFMediaEngine decode -> EGL_ANGLE_d3d_texture_client_buffer ===
+ANGLE D3D11 EGL display initialized, version 1.5
+ANGLE's internal ID3D11Device* = 000001CF4BAEF970
+GL_RENDERER: ANGLE (NVIDIA, NVIDIA GeForce RTX 2060 (0x00001F08) Direct3D11 vs_5_0 ps_5_0, D3D11-32.0.16.1060)
+IMFDXGIDeviceManager bound to ANGLE's own device OK.
+Setting source: file:///C:/Users/ellio/PycharmProjects/KivyPRs/notes/video-providers/prototype/mf_test_clip.mp4
+  [MF event] code=1001 param1=0 param2=0
+  [MF event] code=1 param1=0 param2=0
+  [MF event] code=21 param1=0 param2=0
+  [MF event] code=10 param1=0 param2=0
+  [MF event] code=11 param1=0 param2=0
+  [MF event] code=14 param1=0 param2=0
+  [MF event] code=15 param1=0 param2=0
+Ready state reached: 4
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=8 param1=0 param2=0
+  [MF event] code=1000 param1=0 param2=0
+  [MF event] code=1009 param1=0 param2=0
+Video frame ready at pts=0
+TransferVideoFrame OK -- decoded frame is now in a texture on ANGLE's own device.
+  [d3d-readback] decoded texture: pixel(0,0) BGRA = 128,2,5,255 ; pixel(w/2,h/2) BGRA = 130,131,130,255
+eglCreatePbufferFromClientBuffer OK
+eglBindTexImage OK
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=13 param1=0 param2=0
+  readback center pixel RGBA = 130,131,130,255 ; corner(0,0) RGBA = 5,2,128,255
+Saved mf_decode_egl_result.bmp for visual verification.
+=== Done ===

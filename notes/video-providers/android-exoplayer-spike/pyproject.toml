@@ -1,0 +1,39 @@
+[project]
+name = "exoplayer-check"
+version = "0.1.0"
+description = "Spike: androidx.media3 ExoPlayer via pyjnius, rendering into a Kivy texture through a SurfaceTexture, ahead of the Kivy 3.0 Android video provider rewrite"
+requires-python = ">=3.14"
+dependencies = [
+    "kivy==2.3.1",
+    "pyjnius",
+]
+
+[tool.kivy]
+display_name = "ExoPlayer Check"
+app_dir = "src"
+entry_point = "main"
+orientation = ["portrait"]
+
+[tool.kivy.android]
+schema_version = 1
+package = "org.kivyforge.exoplayercheck"
+version_code = "auto"
+min_sdk = 24
+target_sdk = 35
+compile_sdk = 36
+kivy_generation = 2
+abis = ["x86_64", "arm64_v8a"]
+extra_index_urls = ["https://elliotgarbus.github.io/kivy-mobile-wheels/simple/"]
+
+# Kivy's wheel declares deps a bundled app can't use on Android.
+exclude = ["kivy-garden", "docutils", "pygments"]
+
+[tool.kivy.android.python]
+version = "3.14.6"
+
+# androidx.media3 ExoPlayer: the candidate Android video backend. Pulls in
+# media3-common/-datasource/-decoder/-extractor/-container transitively.
+[tool.kivy.android.gradle]
+dependencies = [
+    "androidx.media3:media3-exoplayer:1.11.1",
+]

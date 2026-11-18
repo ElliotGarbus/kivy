@@ -1,0 +1,99 @@
+=== Prototype 4: playback over time + seeking (WGL bridge) ===
+GL_RENDERER: NVIDIA GeForce RTX 2060/PCIe/SSE2
+Setting source: file:///C:/Users/ellio/PycharmProjects/KivyPRs/notes/video-providers/prototype/mf_playback_test_clip.mp4
+  [MF event] code=1001 param1=0 param2=0
+  [MF event] code=1 param1=0 param2=0
+  [MF event] code=21 param1=0 param2=0
+  [MF event] code=10 param1=0 param2=0
+  [MF event] code=11 param1=0 param2=0
+  [MF event] code=14 param1=0 param2=0
+  [MF event] code=15 param1=0 param2=0
+Ready state reached: 4
+  [MF event] code=1000 param1=0 param2=0
+  [MF event] code=1009 param1=0 param2=0
+WGL interop object registered once, reused for every frame below.
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=8 param1=0 param2=0
+--- Phase 1: playback over the whole clip ---
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=13 param1=0 param2=0
+  frame#0 pts=0.0000s expectedFrame=0 recoveredFrame=0 OK
+  frame#1 pts=0.0333s expectedFrame=1 recoveredFrame=1 OK
+  frame#2 pts=0.0667s expectedFrame=2 recoveredFrame=2 OK
+  frame#3 pts=0.1000s expectedFrame=3 recoveredFrame=3 OK
+  frame#4 pts=0.1333s expectedFrame=4 recoveredFrame=4 OK
+  frame#5 pts=0.1667s expectedFrame=5 recoveredFrame=5 OK
+  frame#6 pts=0.2000s expectedFrame=6 recoveredFrame=6 OK
+  frame#7 pts=0.2333s expectedFrame=7 recoveredFrame=7 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#8 pts=0.2667s expectedFrame=8 recoveredFrame=8 OK
+  frame#9 pts=0.3000s expectedFrame=9 recoveredFrame=9 OK
+  frame#10 pts=0.3333s expectedFrame=10 recoveredFrame=10 OK
+  frame#11 pts=0.3667s expectedFrame=11 recoveredFrame=11 OK
+  frame#12 pts=0.4000s expectedFrame=12 recoveredFrame=12 OK
+  frame#13 pts=0.4333s expectedFrame=13 recoveredFrame=14 OK
+  frame#14 pts=0.4667s expectedFrame=14 recoveredFrame=14 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#15 pts=0.5000s expectedFrame=15 recoveredFrame=15 OK
+  frame#16 pts=0.5333s expectedFrame=16 recoveredFrame=17 OK
+  frame#17 pts=0.5667s expectedFrame=17 recoveredFrame=17 OK
+  frame#18 pts=0.6000s expectedFrame=18 recoveredFrame=18 OK
+  frame#19 pts=0.6333s expectedFrame=19 recoveredFrame=19 OK
+  frame#20 pts=0.6667s expectedFrame=20 recoveredFrame=20 OK
+  frame#21 pts=0.7000s expectedFrame=21 recoveredFrame=21 OK
+  frame#22 pts=0.7333s expectedFrame=22 recoveredFrame=22 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#23 pts=0.7667s expectedFrame=23 recoveredFrame=23 OK
+  frame#24 pts=0.8000s expectedFrame=24 recoveredFrame=24 OK
+  frame#25 pts=0.8333s expectedFrame=25 recoveredFrame=25 OK
+  frame#26 pts=0.8667s expectedFrame=26 recoveredFrame=26 OK
+  frame#27 pts=0.9000s expectedFrame=27 recoveredFrame=27 OK
+  frame#28 pts=0.9333s expectedFrame=28 recoveredFrame=28 OK
+  frame#29 pts=0.9667s expectedFrame=29 recoveredFrame=29 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#30 pts=1.0000s expectedFrame=30 recoveredFrame=31 OK
+  frame#31 pts=1.0333s expectedFrame=31 recoveredFrame=31 OK
+  frame#32 pts=1.0667s expectedFrame=32 recoveredFrame=32 OK
+  frame#33 pts=1.1000s expectedFrame=33 recoveredFrame=33 OK
+  frame#34 pts=1.1333s expectedFrame=34 recoveredFrame=34 OK
+  frame#35 pts=1.1667s expectedFrame=35 recoveredFrame=35 OK
+  frame#36 pts=1.2000s expectedFrame=36 recoveredFrame=37 OK
+  frame#37 pts=1.2333s expectedFrame=37 recoveredFrame=37 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#38 pts=1.2667s expectedFrame=38 recoveredFrame=39 OK
+  frame#39 pts=1.3000s expectedFrame=39 recoveredFrame=40 OK
+  frame#40 pts=1.3333s expectedFrame=40 recoveredFrame=40 OK
+  frame#41 pts=1.3667s expectedFrame=41 recoveredFrame=42 OK
+  frame#42 pts=1.4000s expectedFrame=42 recoveredFrame=43 OK
+  frame#43 pts=1.4333s expectedFrame=43 recoveredFrame=43 OK
+  frame#44 pts=1.4667s expectedFrame=44 recoveredFrame=45 OK
+  frame#45 pts=1.5000s expectedFrame=45 recoveredFrame=46 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#46 pts=1.5333s expectedFrame=46 recoveredFrame=47 OK
+  frame#47 pts=1.5667s expectedFrame=47 recoveredFrame=48 OK
+  frame#48 pts=1.6000s expectedFrame=48 recoveredFrame=49 OK
+  frame#49 pts=1.6333s expectedFrame=49 recoveredFrame=50 OK
+  frame#50 pts=1.6667s expectedFrame=50 recoveredFrame=51 OK
+  frame#51 pts=1.7000s expectedFrame=51 recoveredFrame=52 OK
+  frame#52 pts=1.7333s expectedFrame=52 recoveredFrame=53 OK
+  frame#53 pts=1.7667s expectedFrame=53 recoveredFrame=54 OK
+  [MF event] code=18 param1=0 param2=0
+  frame#54 pts=1.8000s expectedFrame=54 recoveredFrame=55 OK
+  frame#55 pts=1.8333s expectedFrame=55 recoveredFrame=56 OK
+  frame#56 pts=1.8667s expectedFrame=56 recoveredFrame=57 OK
+  frame#57 pts=1.9000s expectedFrame=57 recoveredFrame=58 OK
+  frame#58 pts=1.9333s expectedFrame=58 recoveredFrame=59 OK
+  frame#59 pts=1.9667s expectedFrame=59 recoveredFrame=59 OK
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=19 param1=0 param2=0
+Phase 1 done: 60 frames delivered, 0 anomalies, ended=yes
+--- Phase 2: seek back to ~1.0s and confirm the delivered frame matches ---
+  [MF event] code=16 param1=0 param2=0
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=18 param1=0 param2=0
+  [MF event] code=17 param1=0 param2=0
+Seek completed (SEEKED event received).
+  [MF event] code=18 param1=0 param2=0
+Post-seek frame: pts=1.0000s recoveredFrame=31 (target was frame ~30, i.e. 1.0s)
+Seek landed correctly: recovered frame 31 is within tolerance of target 30.
+=== Done: 60 frames over playback, 0 anomalies, seek target=30 recovered=31 ===
