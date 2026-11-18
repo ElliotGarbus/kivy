@@ -1,0 +1,48 @@
+# Media Foundation video check: a self-contained kivyforge app that runs the
+# provider through every Windows GL configuration on whatever PC it is copied
+# to, and writes the results to a folder on that PC's desktop.
+#
+# Kivy comes from a wheel of this branch in wheels/ (not on PyPI). Rebuild it
+# from a clean checkout -- the in-place build tree trips setuptools' absolute
+# path check:
+#     git worktree add --detach <tmp> HEAD
+#     cd <tmp> && python -m pip wheel . --no-deps --no-build-isolation -w <here>\wheels
+# The bundled Python must match that wheel's tag (cp312 from the repo .venv).
+#
+# The clips in src/clips/ are not in git: mf_playback_test_clip.mp4 comes from
+# prototype/mf_encode_animated_clip.exe, big_buck_bunny_360_10s.mp4 from
+# test-videos.co.uk (Big_Buck_Bunny_360_10s_1MB.mp4, as thumbnail_demo.py uses).
+#
+# Then:  kivyforge lock -p windows && kivyforge package -p windows
+[project]
+name = "mf-check"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "kivy==3.0.0.dev0",
+]
+
+[tool.kivy]
+display_name = "MF Video Check"
+app_dir = "src"
+entry_point = "main"
+
+[tool.kivy.windows]
+schema_version = 1
+app_id = "Kivy.MFVideoCheck"
+archs = ["amd64"]
+find_links = ["wheels"]
+# Kivy's wheel declares these, but nothing here uses them.
+exclude = [
+    "kivy-garden",
+    "requests",
+    "certifi",
+    "charset-normalizer",
+    "idna",
+    "urllib3",
+    "docutils",
+    "pygments",
+]
+
+[tool.kivy.windows.python]
+version = "3.12.10"
