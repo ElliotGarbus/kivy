@@ -1,0 +1,79 @@
+{
+ "meta": {
+  "cgl_backend": "sdl3",
+  "sdl_video_driver": "x11",
+  "gl_platform": "glx",
+  "gst": "GStreamer 1.26.2",
+  "platform": "Linux-6.18.60+rpt-rpi-2712-aarch64-with-glibc2.41",
+  "python": "3.13.5",
+  "kivy": "3.0.0.dev0",
+  "gl": "3.1 Mesa 26.2.7-1~bpo13+0~rpt1",
+  "machine": "aarch64",
+  "gl_backend": "default",
+  "gl_release": "1"
+ },
+ "results": [
+  {
+   "clip": "hevc_2160p30.mp4",
+   "mode": "gl",
+   "frames": 38,
+   "fps": 6.4,
+   "first_frame_s": 0.596,
+   "update_ms_p50": 0.319,
+   "update_ms_p95": 0.496,
+   "cpu_pct_one_core": 101.5,
+   "error": null,
+   "decoder": "v4l2slh265dec",
+   "decoder_out": "video/x-raw, format=(string)NV12_128C8, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(Gst",
+   "glupload_in": "video/x-raw, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ff",
+   "notes": [
+    "wrapped GLX context (3.1 Mesa 26.2.7-1~bpo13+0~rpt1)"
+   ]
+  },
+  {
+   "clip": "does_not_exist.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.4,
+   "error": "Resource not found.",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  },
+  {
+   "clip": "corrupt.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 2.0,
+   "error": "This file contains no playable streams.",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  },
+  {
+   "clip": "https://no-such-host.invalid/video.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.9,
+   "error": "Internal data stream error. (streaming stopped, reason error (-5))",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  }
+ ]
+}

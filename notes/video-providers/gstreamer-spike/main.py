@@ -924,7 +924,24 @@ class SpikeApp(App):
     def _next(self, *_):
         if not self._plan:
             import kivy
-            meta = dict(gst=Gst.version_string(), platform=platform.platform(),
+            try:
+                from kivy.graphics.cgl import cgl_get_initialized_backend_name
+                cgl = cgl_get_initialized_backend_name()
+            except ImportError:
+                cgl = None
+            sdl_driver = None
+            for lib in ('libSDL3.so.0', 'libSDL2-2.0.so.0'):
+                try:
+                    sdl = ctypes.CDLL(lib)
+                    sdl.SDL_GetCurrentVideoDriver.restype = ctypes.c_char_p
+                    drv = sdl.SDL_GetCurrentVideoDriver()
+                    if drv:
+                        sdl_driver = drv.decode()
+                        break
+                except (OSError, AttributeError):
+                    pass
+            meta = dict(cgl_backend=cgl, sdl_video_driver=sdl_driver,
+                        gl_platform=_GLHost().platform,gst=Gst.version_string(), platform=platform.platform(),
                         python=platform.python_version(), kivy=kivy.__version__,
                         gl=_kivy_gl_is_es()[1], machine=platform.machine(),
                         gl_backend=os.environ.get('KIVY_GL_BACKEND', 'default'),

@@ -5,8 +5,8 @@ Spike for the Kivy 3.0 GStreamer video provider (rewrite of
 [[kivy3-video-provider-roadmap]]): primary provider on Linux and Raspberry Pi,
 optional secondary on Windows. Prototype code is in
 `notes/video-providers/gstreamer-spike/`. Notes only, never part of an upstream
-PR ([[notes-stay-out-of-upstream-pr]]). Date: 2026-11-18; Pi 5 and WSL runs
-2026-11-19.
+PR ([[notes-stay-out-of-upstream-pr]]). Date: 2026-11-18; Pi 5 and WSL runs,
+and Kivy 3.0 on the Pi, 2026-11-19.
 
 **Bottom line.**
 
@@ -41,6 +41,12 @@ PR ([[notes-stay-out-of-upstream-pr]]). Date: 2026-11-18; Pi 5 and WSL runs
    110–133%. The decoder's native format is tiled (`NV12_128C8`), so the
    NV12 + shader path and GLX both pay a CPU de-tile. The Pi 5 has no H.264
    hardware decoder: software 1080p H.264 costs about 49% of one core.
+   **Kivy 3.0 (SDL3), built on the Pi, confirms it:** the `gl` and `sdl3`
+   GL backends behave identically, and only the context type matters. EGL
+   (native Wayland, or X11 with `SDL_VIDEO_FORCE_EGL=1`) gives 4K HEVC at
+   29 fps on 13–16% CPU; GLX gives 6.5 fps. **But out of the box, Kivy 3.0 on
+   the Pi desktop gets X11 + GLX** (SDL3 chose Xwayland), so Kivy should
+   request EGL on Linux before creating its window.
 6. Stock **Pi OS Trixie desktop already ships the GStreamer runtime**
    (base/good/bad/ugly/libav/gl, all Pi-patched 1.26.2) and `python3-gi`.
    Only the `gir1.2-*` typelibs, which `gi` needs, were missing.
@@ -439,6 +445,51 @@ with `SDL_VIDEO_X11_FORCE_EGL=1`.
   pre-created shared context was registered with `GstGLDisplay.add_context()`
   and the elements found it there.
 
+### Raspberry Pi 5 with Kivy 3.0 (SDL3): `gl` vs `sdl3` backends
+
+Kivy 3.0.0.dev0 built on the Pi from `video-on-error-event` with
+`build_kivy3_linux.sh` (Kivy's own `tools/build_linux_dependencies.sh`:
+SDL3 3.4.0 with Wayland, X11 and KMSDRM; about 10 minutes on the Pi 5), then
+`run_kivy3_matrix.sh`. Results: `results/pi5-kivy3/`. Each run records the
+backend, SDL driver and context actually used (`meta` in the JSON).
+
+| `KIVY_GL_BACKEND` | SDL video | Context | H.264 1080p nv12 / gl | HEVC 1080p gl | HEVC 2160p gl | `glupload` input |
+|---|---|---|---|---|---|---|
+| `gl` | wayland | EGL | 48% / 74% | 15%, 29 fps | **16%, 29 fps** | DMABuf |
+| `gl` | x11, forced EGL | EGL | 48% / 76% | 13%, 29 fps | **14%, 29 fps** | DMABuf |
+| `gl` | x11 | GLX | 48% / 73% | 109%, 29 fps | 103%, **6.7 fps** | system memory |
+| `sdl3` | wayland | EGL | 48% / 75% | 13%, 29 fps | **16%, 29 fps** | DMABuf |
+| `sdl3` | x11, forced EGL | EGL | 48% / 75% | 13%, 29 fps | **16%, 29 fps** | DMABuf |
+| `sdl3` | x11 | GLX | 48% / 71% | 106%, 29 fps | 104%, **6.5 fps** | system memory |
+| **default (no settings)** | **x11** | **GLX** | | | 102%, **6.4 fps** | system memory |
+
+rgba and nv12 are the same in every combination (4K HEVC: 7 fps at 113–135%),
+because the hardware decoder's tiled output is de-tiled on the CPU on those
+paths.
+
+* **The GL backend doesn't matter.** `gl` (links `libGL` directly) and
+  `sdl3` (`SDL_GL_GetProcAddress`) gave the same numbers. The **context type**
+  decides: EGL imports DMABuf, GLX can't.
+* **Kivy 3.0's default on the Pi desktop is the bad case:** with nothing set,
+  it got the `sdl3` backend, SDL's **x11** driver (Xwayland) and **GLX**, even
+  though a Wayland session (labwc) was running. Kivy sets no video-driver or
+  EGL hint (`kivy/core/window/_window_sdl3.pyx`), so this is SDL3's own
+  driver preference; why SDL3 prefers X11 under labwc wasn't investigated.
+  Fix candidates (Kivy window setup, before the window and context exist, so
+  not something the video provider can do): set `SDL_HINT_VIDEO_FORCE_EGL`
+  on Linux, and/or prefer `wayland` when `WAYLAND_DISPLAY` is set.
+* **SDL3 removes the ~26 fps ceiling** seen with Kivy 2.3/SDL2: every path
+  now holds 29–29.5 fps on the 30 fps clips.
+* GL mode under native Wayland matched X11+EGL. Screenshots
+  (`shot-pi5-k3-*-gl0001.png`) are correct.
+* For software-decoded H.264, NV12 + shader stays cheaper than GL mode
+  (48% vs 71–76%), the same as with Kivy 2.3.
+* One flake: in the first matrix pass the `gl` + Wayland run produced no
+  output and no JSON; a re-run of the same command passed. Not reproduced.
+* Without GStreamer dev headers on the Pi, this Kivy build has no
+  `gstplayer` at all (its video provider fell back to `null`), which is the
+  situation the gi-free, runtime-loaded design avoids.
+
 ### Raspberry Pi 5 and WSL: pipeline, errors, streaming
 
 Same behaviour as Windows (`headless-pi5.json`, `headless-wsl.json`):
@@ -516,10 +567,13 @@ never takes the GIL.
    texture id wrapped with `nofree=True`. Use it when Kivy's context is
    desktop GL/WGL (Windows `glew`) or **EGL on Linux**. On Linux this is
    the DMABuf zero-copy path, the only usable path for 4K HEVC on the Pi 5.
-   GLX works but can't import DMABuf, so on Linux the provider should
-   want an EGL context: SDL3 on Wayland and KMSDRM is EGL; on X11 Kivy
-   should request EGL (SDL3's `SDL_HINT_VIDEO_FORCE_EGL`, as
-   `SDL_VIDEO_X11_FORCE_EGL` was for SDL2).
+   GLX works but can't import DMABuf, so on Linux Kivy's context must be
+   EGL. Kivy 3.0 doesn't get that by default (section 4b: X11 + GLX on the
+   Pi desktop), so **Kivy's SDL3 window setup should set
+   `SDL_HINT_VIDEO_FORCE_EGL` on Linux** (and/or prefer `wayland`). That's a
+   change outside the provider. The provider itself should log a warning when
+   it finds a GLX context and DMABuf decoders, because the user is then on
+   the slow path. The cgl backend (`gl` or `sdl3`) makes no difference.
 2. `nv12`: two plane textures + YUV shader → Fbo (the same idea as
    `video_android.py`'s OES shader). Use it when GL sharing isn't possible
    (ANGLE, a failed context share). It is also the cheaper choice for
@@ -545,10 +599,10 @@ to report: the real ERROR is already on the bus.
 
 ## Open questions
 
-1. **Kivy 3.0 (SDL3) on Linux and the Pi is unmeasured.** These runs used
-   Kivy 2.3.2 (SDL2). Re-run `run_linux.sh` with `KIVY_SPEC=<3.0 wheel>`
-   once a Linux/aarch64 build exists: on Wayland or KMSDRM SDL3 should give
-   EGL directly, which is the case that matters.
+1. **Why SDL3 picks X11 over Wayland on the Pi's labwc desktop**, and whether
+   forcing EGL by default on Linux has side effects (NVIDIA proprietary
+   drivers on X11, older Mesa). Kivy 3.0 on SDL3 itself is now measured on
+   the Pi (section 4b).
 2. Pi 4 (stateful `v4l2h264dec` for H.264, plus the reported Trixie
    `v4l2slh265dec` regression) and Intel/AMD VA-API on real x86 Linux weren't
    available. WSL's llvmpipe can't stand in for them.
@@ -561,9 +615,9 @@ to report: the real ERROR is already on the bus.
    upstream issue?
 6. Should `kivy[gstreamer]` on Windows include `-restricted` (MPEG-TS HLS is
    common) or leave it to the app?
-7. The ~26 fps ceiling on the Pi 5 for every path and resolution: is it
-   Kivy 2.3/SDL2 frame pacing under Xwayland? Check with Kivy 3.0 (SDL3) on
-   native Wayland, and with KMSDRM.
+7. ~~The ~26 fps ceiling on the Pi 5~~: answered. It was Kivy 2.3/SDL2;
+   Kivy 3.0/SDL3 holds 29–29.5 fps on both X11 and Wayland. KMSDRM is still
+   unmeasured.
 8. Pi OS Lite (no desktop): which GStreamer packages it lacks, and whether
    SDL3's KMSDRM EGL context shares with GstGL the same way.
 
@@ -587,8 +641,12 @@ All under `notes/video-providers/gstreamer-spike/`:
   with `--system-site-packages`, headless, gi-free, and Kivy in GLX, EGL and
   no-release passes).
 * `gl_check.sh`: a quick GLX vs EGL vs Wayland gl-mode check for one clip.
+* `build_kivy3_linux.sh SRC VENV`: builds Kivy 3.0 from a source tree against
+  Kivy's own SDL3 dependency build, on Debian/Ubuntu/Pi OS.
+* `run_kivy3_matrix.sh TAG SRC VENV`: `KIVY_GL_BACKEND` `gl`/`sdl3` × native
+  Wayland / X11 GLX / X11 forced-EGL.
 * `results/`: Windows JSON and screenshots; `results/pi5/`, `results/wsl/`
-  for the Linux runs.
+  for the Kivy 2.3.2 Linux runs; `results/pi5-kivy3/` for Kivy 3.0 on the Pi.
 
 ## Reproducing
 
