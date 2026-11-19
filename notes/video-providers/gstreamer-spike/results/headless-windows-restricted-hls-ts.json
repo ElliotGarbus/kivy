@@ -1,0 +1,366 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.28.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "machine": "AMD64"
+ },
+ "results": [
+  {
+   "case": "hls-ts",
+   "bin": "playbin",
+   "format": "RGBA",
+   "uri": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+   "first_frame_s": 1.086,
+   "frames": 637,
+   "size": [
+    1280,
+    720
+   ],
+   "duration": 634.567,
+   "position": 14.04,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "decodebin",
+    "hlsdemux",
+    "hlsdemux2",
+    "souphttpsrc",
+    "tsdemux",
+    "uridecodebin"
+   ],
+   "buffering": [
+    [
+     0.93,
+     6
+    ],
+    [
+     0.93,
+     7
+    ],
+    [
+     0.93,
+     8
+    ],
+    [
+     0.93,
+     9
+    ],
+    [
+     0.93,
+     10
+    ],
+    [
+     0.93,
+     11
+    ],
+    [
+     0.93,
+     12
+    ],
+    [
+     0.93,
+     13
+    ],
+    [
+     0.93,
+     14
+    ],
+    [
+     0.93,
+     15
+    ],
+    [
+     0.93,
+     16
+    ],
+    [
+     0.93,
+     17
+    ]
+   ],
+   "tick_ms_p50": 1.062,
+   "tick_ms_max": 15.378,
+   "copy_ms_p50": 1.044,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 59.2,
+   "events": [
+    {
+     "t": 0.014,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.014,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.014,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.201,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.235,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.267,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.267,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.934,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.934,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 1.002,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 1.002,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 1.002,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 1.086,
+     "what": "FIRST_FRAME",
+     "size": [
+      1280,
+      720
+     ],
+     "caps": "video/x-raw, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivie"
+    },
+    {
+     "t": 5.193,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 5.193,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 5.21,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 5.21,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 15.049,
+     "what": "set_state(NULL)",
+     "ms": 27.0
+    }
+   ]
+  },
+  {
+   "case": "hls-ts",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+   "first_frame_s": 0.36,
+   "frames": 674,
+   "size": [
+    1280,
+    720
+   ],
+   "duration": 634.584,
+   "position": 14.71,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "hlsdemux2",
+    "souphttpsrc",
+    "tsdemux",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.16,
+     0
+    ],
+    [
+     0.17,
+     1
+    ],
+    [
+     0.17,
+     2
+    ],
+    [
+     0.17,
+     3
+    ],
+    [
+     0.17,
+     2
+    ],
+    [
+     0.17,
+     1
+    ],
+    [
+     0.17,
+     2
+    ],
+    [
+     0.17,
+     3
+    ],
+    [
+     0.17,
+     2
+    ],
+    [
+     0.17,
+     3
+    ],
+    [
+     0.17,
+     4
+    ],
+    [
+     0.17,
+     5
+    ]
+   ],
+   "tick_ms_p50": 1.467,
+   "tick_ms_max": 5.053,
+   "copy_ms_p50": 1.259,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 45.6,
+   "events": [
+    {
+     "t": 0.002,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.07,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.122,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.156,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.156,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.156,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.309,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.309,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.31,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.36,
+     "what": "FIRST_FRAME",
+     "size": [
+      1280,
+      720
+     ],
+     "caps": "video/x-raw, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivie"
+    },
+    {
+     "t": 0.82,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 0.837,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 6 (pid 0x0101)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 1.127,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 1.143,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 5 (pid 0x0101)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 9.825,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 9.842,
+     "what": "WARNING",
+     "message": "CONTINUITY: Mismatch packet 0, stream 14 (pid 0x0101)",
+     "src": "tsdemux3"
+    },
+    {
+     "t": 15.049,
+     "what": "set_state(NULL)",
+     "ms": 33.0
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1432 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.28.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "machine": "AMD64"
+ },
+ "results": [
+  {
+   "case": "local-360p",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/big_buck_bunny_360_10s.mp4",
+   "first_frame_s": 0.722,
+   "frames": 300,
+   "size": [
+    640,
+    360
+   ],
+   "duration": 10.0,
+   "position": 10.0,
+   "eos": true,
+   "error": null,
+   "elements": [
+    "d3d12h264dec",
+    "filesrc",
+    "qtdemux",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.05,
+   "tick_ms_max": 16.873,
+   "copy_ms_p50": 0.148,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 38.5,
+   "events": [
+    {
+     "t": 0.007,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.007,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.011,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.041,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.041,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.636,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.721,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.721,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.721,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.722,
+     "what": "FIRST_FRAME",
+     "size": [
+      640,
+      360
+     ],
+     "caps": "video/x-raw, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview"
+    },
+    {
+     "t": 10.741,
+     "what": "EOS"
+    },
+    {
+     "t": 10.922,
+     "what": "set_state(NULL)",
+     "ms": 9.0
+    }
+   ]
+  },
+  {
+   "case": "local-1080p",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/test_1080p30.mp4",
+   "first_frame_s": 0.173,
+   "frames": 235,
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "position": 7.86,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "filesrc",
+    "qtdemux",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 1.68,
+   "tick_ms_max": 3.239,
+   "copy_ms_p50": 1.628,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 22.2,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.019,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.019,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.019,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.172,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.172,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.173,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.173,
+     "what": "FIRST_FRAME",
+     "size": [
+      1920,
+      1080
+     ],
+     "caps": "video/x-raw, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivi"
+    },
+    {
+     "t": 8.037,
+     "what": "set_state(NULL)",
+     "ms": 20.6
+    }
+   ]
+  },
+  {
+   "case": "local-2160p",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/test_2160p30.mp4",
+   "first_frame_s": 0.173,
+   "frames": 234,
+   "size": [
+    3840,
+    2160
+   ],
+   "duration": 10.007666666,
+   "position": 7.85,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "filesrc",
+    "qtdemux",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 1.089,
+   "tick_ms_max": 11.511,
+   "copy_ms_p50": 6.493,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 81.0,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.019,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.019,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.019,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.173,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.173,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.173,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.173,
+     "what": "FIRST_FRAME",
+     "size": [
+      3840,
+      2160
+     ],
+     "caps": "video/x-raw, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivi"
+    },
+    {
+     "t": 8.046,
+     "what": "set_state(NULL)",
+     "ms": 41.3
+    }
+   ]
+  },
+  {
+   "case": "local-vp9",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/vp9_1080p.webm",
+   "first_frame_s": 0.054,
+   "frames": 150,
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 5.000333333,
+   "position": 5.000333333,
+   "eos": true,
+   "error": null,
+   "elements": [
+    "filesrc",
+    "matroskademux",
+    "urisourcebin",
+    "vp9dec"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 1.694,
+   "tick_ms_max": 4.908,
+   "copy_ms_p50": 1.641,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 115.8,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.018,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.018,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.019,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.053,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.053,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.054,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.054,
+     "what": "FIRST_FRAME",
+     "size": [
+      1920,
+      1080
+     ],
+     "caps": "video/x-raw, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivi"
+    },
+    {
+     "t": 4.264,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 5.066,
+     "what": "EOS"
+    },
+    {
+     "t": 5.245,
+     "what": "set_state(NULL)",
+     "ms": 8.7
+    }
+   ]
+  },
+  {
+   "case": "missing-file",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/does_not_exist.mp4",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "Resource not found.",
+    "domain": "gst-resource-error-quark",
+    "code": 3,
+    "src": "filesrc4",
+    "debug": "../plugins/elements/gstfilesrc.c(586): gst_file_src_start (): /GstPlayBin3:playbin3-4/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin4/GstFileSrc:filesrc4:\nNo such file \"C:\\Users\\ellio\\PycharmProjects\\KivyPRs-video-notes\\notes\\video-providers\\gstreamer-spike\\clips\\does_not_exist.mp4\""
+   },
+   "elements": [
+    "filesrc",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 1.356,
+   "tick_ms_max": 1.356,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 8.9,
+   "events": [
+    {
+     "t": 0.003,
+     "what": "set_state(PAUSED)",
+     "ret": "failure"
+    },
+    {
+     "t": 0.004,
+     "what": "set_state(PLAYING)",
+     "ret": "failure"
+    },
+    {
+     "t": 0.005,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc4"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "Resource not found.",
+     "domain": "gst-resource-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.005,
+     "what": "ERROR",
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "domain": "gst-core-error-quark",
+     "src": "filesrc5"
+    },
+    {
+     "t": 0.176,
+     "what": "set_state(NULL)",
+     "ms": 0.1
+    }
+   ]
+  },
+  {
+   "case": "not-a-video",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/not_a_video.mp4",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "This appears to be a text file",
+    "domain": "gst-stream-error-quark",
+    "code": 5,
+    "src": "parsebin4",
+    "debug": "../gst/playback/gstparsebin.c(2447): type_found (): /GstPlayBin3:playbin3-5/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstParseBin:parsebin4:\nParseBin cannot parse plain text files"
+   },
+   "elements": [
+    "filesrc",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.324,
+   "tick_ms_max": 0.324,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 8.3,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.018,
+     "what": "ERROR",
+     "message": "This appears to be a text file",
+     "domain": "gst-stream-error-quark",
+     "src": "parsebin4"
+    },
+    {
+     "t": 0.018,
+     "what": "ERROR",
+     "message": "Internal data stream error.",
+     "domain": "gst-stream-error-quark",
+     "src": "typefind"
+    },
+    {
+     "t": 0.19,
+     "what": "set_state(NULL)",
+     "ms": 0.3
+    }
+   ]
+  },
+  {
+   "case": "corrupt",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "file:///C:/Users/ellio/PycharmProjects/KivyPRs-video-notes/notes/video-providers/gstreamer-spike/clips/corrupt.mp4",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "This file contains no playable streams.",
+    "domain": "gst-stream-error-quark",
+    "code": 9,
+    "src": "qtdemux3",
+    "debug": "../gst/isomp4/qtdemux.c(522): gst_qtdemux_post_no_playable_stream_error (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin7/GstParseBin:parsebin5/GstQTDemux:qtdemux3:\nno known streams found"
+   },
+   "elements": [
+    "filesrc",
+    "qtdemux",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.509,
+   "tick_ms_max": 0.509,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 0.0,
+   "events": [
+    {
+     "t": 0.002,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.019,
+     "what": "ERROR",
+     "message": "This file contains no playable streams.",
+     "domain": "gst-stream-error-quark",
+     "src": "qtdemux3"
+    },
+    {
+     "t": 0.019,
+     "what": "ERROR",
+     "message": "This file contains no playable streams.",
+     "domain": "gst-stream-error-quark",
+     "src": "qtdemux3"
+    },
+    {
+     "t": 0.19,
+     "what": "set_state(NULL)",
+     "ms": 0.4
+    }
+   ]
+  },
+  {
+   "case": "http-404",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://gstreamer.freedesktop.org/data/does-not-exist.mp4",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "Not Found",
+    "domain": "gst-resource-error-quark",
+    "code": 3,
+    "src": "souphttpsrc0",
+    "debug": "../ext/soup/gstsouphttpsrc.c(1933): gst_soup_http_src_parse_status (): /GstPlayBin3:playbin3-7/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin8/GstSoupHTTPSrc:souphttpsrc0:\nNot Found (404), URL: https://gstreamer.freedesktop.org/data/does-not-exist.mp4, Redirect to: (NULL)"
+   },
+   "elements": [
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.023,
+   "tick_ms_max": 0.45,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 8.5,
+   "events": [
+    {
+     "t": 0.008,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.008,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.008,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.383,
+     "what": "ERROR",
+     "message": "Not Found",
+     "domain": "gst-resource-error-quark",
+     "src": "souphttpsrc0"
+    },
+    {
+     "t": 0.383,
+     "what": "ERROR",
+     "message": "Internal data stream error.",
+     "domain": "gst-stream-error-quark",
+     "src": "souphttpsrc0"
+    },
+    {
+     "t": 0.383,
+     "what": "ERROR",
+     "message": "Stream doesn't contain enough data.",
+     "domain": "gst-stream-error-quark",
+     "src": "typefindelement8"
+    },
+    {
+     "t": 0.554,
+     "what": "set_state(NULL)",
+     "ms": 0.2
+    }
+   ]
+  },
+  {
+   "case": "dns-fail",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://no-such-host.invalid/video.mp4",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "Internal data stream error.",
+    "domain": "gst-stream-error-quark",
+    "code": 1,
+    "src": "souphttpsrc1",
+    "debug": "../libs/gst/base/gstbasesrc.c(3187): gst_base_src_loop (): /GstPlayBin3:playbin3-8/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin9/GstSoupHTTPSrc:souphttpsrc1:\nstreaming stopped, reason error (-5)"
+   },
+   "elements": [
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.527,
+   "tick_ms_max": 0.527,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 8.2,
+   "events": [
+    {
+     "t": 0.002,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.02,
+     "what": "ERROR",
+     "message": "Internal data stream error.",
+     "domain": "gst-stream-error-quark",
+     "src": "souphttpsrc1"
+    },
+    {
+     "t": 0.02,
+     "what": "ERROR",
+     "message": "Stream doesn't contain enough data.",
+     "domain": "gst-stream-error-quark",
+     "src": "typefindelement9"
+    },
+    {
+     "t": 0.192,
+     "what": "set_state(NULL)",
+     "ms": 0.3
+    }
+   ]
+  },
+  {
+   "case": "hls-ts",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "Your GStreamer installation is missing a plug-in.",
+    "domain": "gst-core-error-quark",
+    "code": 12,
+    "src": "decodebin3-9",
+    "debug": "../gst/playback/gstdecodebin3.c(3259): mq_slot_check_reconfiguration (): /GstPlayBin3:playbin3-9/GstURIDecodeBin3:uridecodebin3/GstDecodebin3:decodebin3-9:\nNo suitable plugins found"
+   },
+   "elements": [
+    "hlsdemux2",
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.24,
+     0
+    ]
+   ],
+   "tick_ms_p50": 0.029,
+   "tick_ms_max": 0.888,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 3.8,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.12,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.205,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.239,
+     "what": "MISSING_PLUGIN",
+     "detail": "missing-plugin, type=(string)decoder, detail=(caps)\"video/mpegts\\,\\ systemstream\\=\\(boolean\\)true\\,\\ packetsize\\=\\(int\\)188\", name=(string)\"MPEG-2\\ Transport\\ Stream\\ demuxer\";"
+    },
+    {
+     "t": 0.239,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.239,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.239,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.239,
+     "what": "MISSING_PLUGIN",
+     "detail": "missing-plugin, type=(string)decoder, detail=(caps)\"video/mpegts\\,\\ systemstream\\=\\(boolean\\)true\\,\\ packetsize\\=\\(int\\)188\", name=(string)\"MPEG-2\\ Transport\\ Stream\\ demuxer\", stream-id=(string)d6347"
+    },
+    {
+     "t": 0.239,
+     "what": "ERROR",
+     "message": "Your GStreamer installation is missing a plug-in.",
+     "domain": "gst-core-error-quark",
+     "src": "decodebin3-9"
+    },
+    {
+     "t": 0.257,
+     "what": "ERROR",
+     "message": "Internal data stream error.",
+     "domain": "gst-stream-error-quark",
+     "src": "hlsdemux2-0"
+    },
+    {
+     "t": 0.414,
+     "what": "set_state(NULL)",
+     "ms": 0.9
+    }
+   ]
+  },
+  {
+   "case": "hls-fmp4",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+   "first_frame_s": 1.987,
+   "frames": 610,
+   "size": [
+    960,
+    540
+   ],
+   "duration": 600.0,
+   "position": 13.07,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "hlsdemux2",
+    "qtdemux",
+    "souphttpsrc",
+    "subparse",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.53,
+     0
+    ],
+    [
+     1.1,
+     1
+    ],
+    [
+     1.1,
+     2
+    ],
+    [
+     1.1,
+     3
+    ],
+    [
+     1.1,
+     4
+    ],
+    [
+     1.1,
+     5
+    ],
+    [
+     1.1,
+     6
+    ],
+    [
+     1.1,
+     7
+    ],
+    [
+     1.1,
+     8
+    ],
+    [
+     1.1,
+     9
+    ],
+    [
+     1.1,
+     10
+    ],
+    [
+     1.1,
+     11
+    ]
+   ],
+   "tick_ms_p50": 0.611,
+   "tick_ms_max": 4.537,
+   "copy_ms_p50": 1.351,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 22.9,
+   "events": [
+    {
+     "t": 0.002,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.002,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.241,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.309,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.513,
+     "what": "STREAM_COLLECTION",
+     "n": 3
+    },
+    {
+     "t": 0.514,
+     "what": "STREAM_COLLECTION",
+     "n": 3
+    },
+    {
+     "t": 0.53,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.53,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 1.97,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 1.97,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 1.971,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 1.987,
+     "what": "FIRST_FRAME",
+     "size": [
+      960,
+      540
+     ],
+     "caps": "video/x-raw, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview"
+    },
+    {
+     "t": 15.044,
+     "what": "set_state(NULL)",
+     "ms": 32.5
+    }
+   ]
+  },
+  {
+   "case": "dash",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+   "first_frame_s": 0.582,
+   "frames": 433,
+   "size": [
+    320,
+    180
+   ],
+   "duration": 634.566,
+   "position": 14.45,
+   "eos": false,
+   "error": null,
+   "elements": [
+    "avdec_aac",
+    "d3d12h264dec",
+    "dashdemux2",
+    "qtdemux",
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.33,
+     0
+    ],
+    [
+     0.46,
+     1
+    ],
+    [
+     0.46,
+     2
+    ],
+    [
+     0.46,
+     3
+    ],
+    [
+     0.46,
+     4
+    ],
+    [
+     0.46,
+     5
+    ],
+    [
+     0.46,
+     6
+    ],
+    [
+     0.46,
+     7
+    ],
+    [
+     0.46,
+     8
+    ],
+    [
+     0.46,
+     9
+    ],
+    [
+     0.46,
+     10
+    ],
+    [
+     0.46,
+     11
+    ]
+   ],
+   "tick_ms_p50": 0.105,
+   "tick_ms_max": 30.426,
+   "copy_ms_p50": 0.498,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 40.3,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.137,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.155,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.155,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.155,
+     "what": "STREAM_COLLECTION",
+     "n": 2
+    },
+    {
+     "t": 0.155,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.462,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.581,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.581,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.582,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.582,
+     "what": "FIRST_FRAME",
+     "size": [
+      320,
+      180
+     ],
+     "caps": "video/x-raw, width=(int)320, height=(int)180, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview"
+    },
+    {
+     "t": 15.069,
+     "what": "set_state(NULL)",
+     "ms": 58.5
+    }
+   ]
+  },
+  {
+   "case": "hls-404",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "https://test-streams.mux.dev/no-such-stream/master.m3u8",
+   "first_frame_s": null,
+   "frames": 0,
+   "size": null,
+   "duration": null,
+   "position": null,
+   "eos": false,
+   "error": {
+    "message": "Not Found",
+    "domain": "gst-resource-error-quark",
+    "code": 3,
+    "src": "souphttpsrc5",
+    "debug": "../ext/soup/gstsouphttpsrc.c(1933): gst_soup_http_src_parse_status (): /GstPlayBin3:playbin3-12/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin13/GstSoupHTTPSrc:souphttpsrc5:\nNot Found (404), URL: https://test-streams.mux.dev/no-such-stream/master.m3u8, Redirect to: (NULL)"
+   },
+   "elements": [
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [],
+   "tick_ms_p50": 0.029,
+   "tick_ms_max": 0.508,
+   "copy_ms_p50": null,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 0.0,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.172,
+     "what": "ERROR",
+     "message": "Not Found",
+     "domain": "gst-resource-error-quark",
+     "src": "souphttpsrc5"
+    },
+    {
+     "t": 0.172,
+     "what": "ERROR",
+     "message": "Internal data stream error.",
+     "domain": "gst-stream-error-quark",
+     "src": "souphttpsrc5"
+    },
+    {
+     "t": 0.172,
+     "what": "ERROR",
+     "message": "Stream doesn't contain enough data.",
+     "domain": "gst-stream-error-quark",
+     "src": "typefindelement13"
+    },
+    {
+     "t": 0.344,
+     "what": "set_state(NULL)",
+     "ms": 0.3
+    }
+   ]
+  },
+  {
+   "case": "hls-server-dies",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "http://127.0.0.1:61551/index.m3u8",
+   "first_frame_s": 0.292,
+   "frames": 600,
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "position": 20.0,
+   "eos": true,
+   "error": null,
+   "elements": [
+    "d3d12h264dec",
+    "hlsdemux2",
+    "qtdemux",
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.22,
+     0
+    ],
+    [
+     0.22,
+     1
+    ],
+    [
+     0.22,
+     2
+    ],
+    [
+     0.22,
+     1
+    ],
+    [
+     0.22,
+     0
+    ],
+    [
+     0.24,
+     1
+    ],
+    [
+     0.24,
+     2
+    ],
+    [
+     0.24,
+     1
+    ],
+    [
+     0.24,
+     0
+    ],
+    [
+     0.24,
+     1
+    ],
+    [
+     0.24,
+     0
+    ],
+    [
+     0.24,
+     1
+    ]
+   ],
+   "tick_ms_p50": 1.682,
+   "tick_ms_max": 14.779,
+   "copy_ms_p50": 1.598,
+   "server_killed_at": 6.0,
+   "cpu_pct_one_core": 11.7,
+   "events": [
+    {
+     "t": 0.001,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.001,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.155,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.155,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.223,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.223,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.224,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.224,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.292,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.292,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.292,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.292,
+     "what": "FIRST_FRAME",
+     "size": [
+      1920,
+      1080
+     ],
+     "caps": "video/x-raw, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivi"
+    },
+    {
+     "t": 6.007,
+     "what": "SERVER_KILLED"
+    },
+    {
+     "t": 20.286,
+     "what": "EOS"
+    },
+    {
+     "t": 20.465,
+     "what": "set_state(NULL)",
+     "ms": 7.7
+    }
+   ]
+  }
+ ]
+}

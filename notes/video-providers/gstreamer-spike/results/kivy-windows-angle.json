@@ -1,0 +1,118 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.28.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "gl_backend": "angle_sdl3"
+ },
+ "results": [
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "rgba",
+   "frames": 160,
+   "fps": 27.0,
+   "first_frame_s": 0.605,
+   "update_ms_p50": 0.408,
+   "update_ms_p95": 0.567,
+   "cpu_pct_one_core": 82.8,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "nv12",
+   "frames": 176,
+   "fps": 29.3,
+   "first_frame_s": 0.17,
+   "update_ms_p50": 0.442,
+   "update_ms_p95": 0.576,
+   "cpu_pct_one_core": 11.7,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "gl",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.3,
+   "error": "gst-gl-context-error-quark: An opengl3 context created but the required ES2 compatibility was not found (0)",
+   "notes": []
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "rgba",
+   "frames": 173,
+   "fps": 28.8,
+   "first_frame_s": 0.281,
+   "update_ms_p50": 16.223,
+   "update_ms_p95": 18.729,
+   "cpu_pct_one_core": 125.6,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "nv12",
+   "frames": 175,
+   "fps": 29.2,
+   "first_frame_s": 0.212,
+   "update_ms_p50": 8.592,
+   "update_ms_p95": 10.998,
+   "cpu_pct_one_core": 47.1,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "gl",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.6,
+   "error": "gst-gl-context-error-quark: An opengl3 context created but the required ES2 compatibility was not found (0)",
+   "notes": []
+  },
+  {
+   "clip": "does_not_exist.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.6,
+   "error": "Resource not found.",
+   "notes": []
+  },
+  {
+   "clip": "corrupt.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 0.0,
+   "error": "This file contains no playable streams.",
+   "notes": []
+  },
+  {
+   "clip": "https://no-such-host.invalid/video.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 0.5,
+   "error": "Internal data stream error. (streaming stopped, reason error (-5))",
+   "notes": []
+  }
+ ]
+}

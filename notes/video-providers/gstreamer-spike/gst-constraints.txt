@@ -1,0 +1,11 @@
+gstreamer-bundle==1.28.7
+gstreamer-cli==1.28.7
+gstreamer-ext-runtime==1.28.7
+gstreamer-gtk==1.28.7
+gstreamer-libs==1.28.7
+gstreamer-plugins==1.28.7
+gstreamer-plugins-gpl==1.28.7
+gstreamer-plugins-gpl-restricted==1.28.7
+gstreamer-plugins-libs==1.28.7
+gstreamer-plugins-restricted==1.28.7
+gstreamer-python==1.28.7

@@ -1,0 +1,180 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.28.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "machine": "AMD64"
+ },
+ "results": [
+  {
+   "case": "hls-server-dies",
+   "bin": "playbin3",
+   "format": "RGBA",
+   "uri": "http://127.0.0.1:52457/index.m3u8",
+   "first_frame_s": 0.913,
+   "frames": 168,
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "position": 5.6,
+   "eos": false,
+   "error": {
+    "message": "Couldn't download fragments",
+    "domain": "gst-resource-error-quark",
+    "code": 3,
+    "src": "hlsdemux2-0",
+    "debug": "Fragment downloading has failed consecutive times"
+   },
+   "elements": [
+    "d3d12h264dec",
+    "hlsdemux2",
+    "qtdemux",
+    "souphttpsrc",
+    "urisourcebin"
+   ],
+   "buffering": [
+    [
+     0.25,
+     0
+    ],
+    [
+     0.25,
+     1
+    ],
+    [
+     0.25,
+     2
+    ],
+    [
+     0.25,
+     1
+    ],
+    [
+     0.25,
+     0
+    ],
+    [
+     0.32,
+     1
+    ],
+    [
+     0.32,
+     0
+    ],
+    [
+     0.32,
+     1
+    ],
+    [
+     0.32,
+     0
+    ],
+    [
+     0.32,
+     1
+    ],
+    [
+     0.32,
+     2
+    ],
+    [
+     0.32,
+     1
+    ]
+   ],
+   "tick_ms_p50": 0.027,
+   "tick_ms_max": 4.974,
+   "copy_ms_p50": 2.135,
+   "server_killed_at": 4.01,
+   "cpu_pct_one_core": 25.3,
+   "events": [
+    {
+     "t": 0.009,
+     "what": "set_state(PAUSED)",
+     "ret": "async"
+    },
+    {
+     "t": 0.009,
+     "what": "set_state(PLAYING)",
+     "ret": "async"
+    },
+    {
+     "t": 0.01,
+     "what": "STATE",
+     "old": "null",
+     "new": "ready"
+    },
+    {
+     "t": 0.179,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.179,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.252,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.252,
+     "what": "STREAM_COLLECTION",
+     "n": 1
+    },
+    {
+     "t": 0.252,
+     "what": "STREAMS_SELECTED"
+    },
+    {
+     "t": 0.252,
+     "what": "DURATION_CHANGED"
+    },
+    {
+     "t": 0.912,
+     "what": "STATE",
+     "old": "ready",
+     "new": "paused"
+    },
+    {
+     "t": 0.912,
+     "what": "ASYNC_DONE"
+    },
+    {
+     "t": 0.913,
+     "what": "STATE",
+     "old": "paused",
+     "new": "playing"
+    },
+    {
+     "t": 0.913,
+     "what": "FIRST_FRAME",
+     "size": [
+      1920,
+      1080
+     ],
+     "caps": "video/x-raw, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivi"
+    },
+    {
+     "t": 4.007,
+     "what": "SERVER_KILLED"
+    },
+    {
+     "t": 10.248,
+     "what": "ERROR",
+     "message": "Couldn't download fragments",
+     "domain": "gst-resource-error-quark",
+     "src": "hlsdemux2-0"
+    },
+    {
+     "t": 10.429,
+     "what": "set_state(NULL)",
+     "ms": 9.3
+    }
+   ],
+   "error_after_kill_s": 6.24
+  }
+ ]
+}

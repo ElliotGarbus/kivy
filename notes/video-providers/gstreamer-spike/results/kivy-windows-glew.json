@@ -1,0 +1,160 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.28.7",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10",
+  "gl_backend": "default"
+ },
+ "results": [
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "rgba",
+   "frames": 158,
+   "fps": 26.6,
+   "first_frame_s": 0.672,
+   "update_ms_p50": 0.396,
+   "update_ms_p95": 0.638,
+   "cpu_pct_one_core": 78.0,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "nv12",
+   "frames": 177,
+   "fps": 29.5,
+   "first_frame_s": 0.1,
+   "update_ms_p50": 0.423,
+   "update_ms_p95": 0.633,
+   "cpu_pct_one_core": 9.9,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "mode": "gl",
+   "frames": 174,
+   "fps": 29.3,
+   "first_frame_s": 0.188,
+   "update_ms_p50": 0.239,
+   "update_ms_p95": 0.44,
+   "cpu_pct_one_core": 12.1,
+   "error": null,
+   "notes": [
+    "wrapped WGL context, GL 4.6"
+   ]
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "mode": "rgba",
+   "frames": 176,
+   "fps": 29.4,
+   "first_frame_s": 0.178,
+   "update_ms_p50": 3.609,
+   "update_ms_p95": 4.425,
+   "cpu_pct_one_core": 30.0,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "mode": "nv12",
+   "frames": 177,
+   "fps": 29.5,
+   "first_frame_s": 0.147,
+   "update_ms_p50": 1.975,
+   "update_ms_p95": 2.776,
+   "cpu_pct_one_core": 21.1,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "mode": "gl",
+   "frames": 175,
+   "fps": 29.4,
+   "first_frame_s": 0.206,
+   "update_ms_p50": 0.261,
+   "update_ms_p95": 0.432,
+   "cpu_pct_one_core": 14.7,
+   "error": null,
+   "notes": [
+    "wrapped WGL context, GL 4.6"
+   ]
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "rgba",
+   "frames": 175,
+   "fps": 29.2,
+   "first_frame_s": 0.217,
+   "update_ms_p50": 15.6,
+   "update_ms_p95": 18.081,
+   "cpu_pct_one_core": 124.8,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "nv12",
+   "frames": 176,
+   "fps": 29.3,
+   "first_frame_s": 0.191,
+   "update_ms_p50": 7.497,
+   "update_ms_p95": 8.756,
+   "cpu_pct_one_core": 40.3,
+   "error": null,
+   "notes": []
+  },
+  {
+   "clip": "test_2160p30.mp4",
+   "mode": "gl",
+   "frames": 174,
+   "fps": 29.2,
+   "first_frame_s": 0.23,
+   "update_ms_p50": 0.247,
+   "update_ms_p95": 0.452,
+   "cpu_pct_one_core": 15.2,
+   "error": null,
+   "notes": [
+    "wrapped WGL context, GL 4.6"
+   ]
+  },
+  {
+   "clip": "does_not_exist.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 3.1,
+   "error": "Resource not found.",
+   "notes": []
+  },
+  {
+   "clip": "corrupt.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 2.1,
+   "error": "This file contains no playable streams.",
+   "notes": []
+  },
+  {
+   "clip": "https://no-such-host.invalid/video.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.0,
+   "error": "Internal data stream error. (streaming stopped, reason error (-5))",
+   "notes": []
+  }
+ ]
+}

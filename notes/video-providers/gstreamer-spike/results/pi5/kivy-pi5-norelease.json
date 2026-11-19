@@ -1,0 +1,77 @@
+{
+ "meta": {
+  "gst": "GStreamer 1.26.2",
+  "platform": "Linux-6.18.60+rpt-rpi-2712-aarch64-with-glibc2.41",
+  "python": "3.13.5",
+  "kivy": "2.3.2",
+  "gl": "3.1 Mesa 26.2.7-1~bpo13+0~rpt1",
+  "machine": "aarch64",
+  "gl_backend": "default",
+  "gl_release": "0"
+ },
+ "results": [
+  {
+   "clip": "hevc_1080p30.mp4",
+   "mode": "gl",
+   "frames": 155,
+   "fps": 26.0,
+   "first_frame_s": 0.247,
+   "update_ms_p50": 0.291,
+   "update_ms_p95": 0.437,
+   "cpu_pct_one_core": 12.0,
+   "error": null,
+   "decoder": "v4l2slh265dec",
+   "decoder_out": "video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivie",
+   "glupload_in": "video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multivie",
+   "notes": [
+    "wrapped EGL context (3.1 Mesa 26.2.7-1~bpo13+0~rpt1)",
+    "shared context created WITHOUT release"
+   ]
+  },
+  {
+   "clip": "does_not_exist.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.8,
+   "error": "Resource not found.",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  },
+  {
+   "clip": "corrupt.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.9,
+   "error": "This file contains no playable streams.",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  },
+  {
+   "clip": "https://no-such-host.invalid/video.mp4",
+   "mode": "rgba",
+   "frames": 0,
+   "fps": 0.0,
+   "first_frame_s": null,
+   "update_ms_p50": null,
+   "update_ms_p95": null,
+   "cpu_pct_one_core": 1.5,
+   "error": "Internal data stream error. (streaming stopped, reason error (-5))",
+   "decoder": null,
+   "decoder_out": null,
+   "glupload_in": null,
+   "notes": []
+  }
+ ]
+}

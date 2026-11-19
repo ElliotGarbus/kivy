@@ -1,0 +1,141 @@
+== host
+Linux DESKTOP-KAH7BP5 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 26.04 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+Python 3.14.4
+
+XDG_SESSION_TYPE= WAYLAND_DISPLAY=wayland-0 DISPLAY=:0
+== gstreamer
+gst-inspect-1.0 version 1.28.2
+GStreamer 1.28.2
+  playbin3: yes
+  appsink: yes
+  glupload: yes
+  glcolorconvert: yes
+  hlsdemux2: yes
+  dashdemux2: yes
+  tsdemux: yes
+  avdec_h264: yes
+  avdec_h265: yes
+  v4l2h264dec: -
+  v4l2slh264dec: -
+  v4l2slh265dec: -
+  v4l2h265dec: -
+  vah264dec: -
+  vah265dec: -
+  d3d12h264dec: -
+
+gi 3.56.2 GStreamer 1.28.2
+== clips
+keep test_1080p30.mp4
+keep test_2160p30.mp4
+keep hevc_1080p30.mp4
+keep hevc_2160p30.mp4
+done
+== headless (playbin3)
+GStreamer 1.28.2 Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.43 Python 3.14.4
+local-360p       playbin3  RGBA  first=0.437s frames=300 size=(640, 360) eos=True cpu=9.8% tick_p50=0.079ms copy_p50=0.133ms
+    elements: filesrc, nvh264dec, qtdemux, urisourcebin
+local-1080p      playbin3  RGBA  first=0.394s frames=207 size=(1920, 1080) eos=False cpu=31.7% tick_p50=0.046ms copy_p50=0.879ms
+    elements: avdec_aac, filesrc, nvh264dec, qtdemux, urisourcebin
+local-2160p      playbin3  RGBA  first=0.309s frames=223 size=(3840, 2160) eos=False cpu=94.6% tick_p50=0.052ms copy_p50=3.384ms
+    elements: avdec_aac, filesrc, nvh264dec, qtdemux, urisourcebin
+local-vp9        playbin3  RGBA  first=0.072s frames=150 size=(1920, 1080) eos=True cpu=80.2% tick_p50=0.292ms copy_p50=0.839ms
+    elements: filesrc, matroskademux, urisourcebin, vp9dec
+local-hevc-1080p playbin3  RGBA  first=0.226s frames=210 size=(1920, 1080) eos=False cpu=27.5% tick_p50=0.043ms copy_p50=0.792ms
+    elements: avdec_aac, filesrc, nvh265dec, qtdemux, urisourcebin
+local-hevc-2160p playbin3  RGBA  first=0.259s frames=222 size=(3840, 2160) eos=False cpu=91.9% tick_p50=0.061ms copy_p50=3.606ms
+    elements: avdec_aac, filesrc, nvh265dec, qtdemux, urisourcebin
+missing-file     playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=1.9% tick_p50=0.647ms copy_p50=Nonems
+    elements: filesrc, urisourcebin
+    ERROR [gst-resource-error-quark:3] from filesrc6: Resource not found.
+not-a-video      playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=5.3% tick_p50=0.109ms copy_p50=Nonems
+    elements: filesrc, urisourcebin
+    ERROR [gst-stream-error-quark:5] from parsebin6: This appears to be a text file
+corrupt          playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=2.1% tick_p50=0.343ms copy_p50=Nonems
+    elements: filesrc, qtdemux, urisourcebin
+    ERROR [gst-stream-error-quark:9] from qtdemux5: This file contains no playable streams.
+http-404         playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=14.7% tick_p50=0.029ms copy_p50=Nonems
+    elements: souphttpsrc, urisourcebin
+    ERROR [gst-resource-error-quark:3] from souphttpsrc0: Not Found
+dns-fail         playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=1.4% tick_p50=0.212ms copy_p50=Nonems
+    elements: souphttpsrc, urisourcebin
+    ERROR [gst-stream-error-quark:1] from souphttpsrc1: Internal data stream error.
+hls-ts           playbin3  RGBA  first=0.706s frames=796 size=(1280, 720) eos=False cpu=45.0% tick_p50=0.54ms copy_p50=0.488ms
+    elements: avdec_aac, hlsdemux2, nvh264dec, souphttpsrc, tsdemux, urisourcebin
+    buffering: [(0.32, 0), (0.34, 1), (0.34, 2), (0.34, 3), (0.34, 4), (0.34, 5), (0.34, 4), (0.34, 5), (0.34, 4), (0.35, 5), (0.35, 6), (0.35, 7)]
+     {'t': 3.919, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)', 'src': 'tsdemux1'}
+     {'t': 3.987, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 6 (pid 0x0101)', 'src': 'tsdemux1'}
+     {'t': 5.552, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102)', 'src': 'tsdemux1'}
+     {'t': 5.619, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 5 (pid 0x0101)', 'src': 'tsdemux1'}
+     {'t': 10.381, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)', 'src': 'tsdemux1'}
+     {'t': 10.448, 'what': 'WARNING', 'message': 'CONTINUITY: Mismatch packet 0, stream 14 (pid 0x0101)', 'src': 'tsdemux1'}
+hls-fmp4         playbin3  RGBA  first=1.063s frames=781 size=(960, 540) eos=False cpu=48.4% tick_p50=0.725ms copy_p50=0.702ms
+    elements: avdec_aac, hlsdemux2, nvh264dec, qtdemux, souphttpsrc, subparse, urisourcebin
+    buffering: [(0.29, 0), (0.73, 1), (0.73, 2), (0.73, 3), (0.73, 4), (0.73, 5), (0.73, 6), (0.73, 7), (0.73, 8), (0.73, 9), (0.73, 10), (0.73, 11)]
+dash             playbin3  RGBA  first=0.575s frames=404 size=(320, 180) eos=False cpu=33.9% tick_p50=0.089ms copy_p50=0.372ms
+    elements: avdec_aac, dashdemux2, nvh264dec, qtdemux, souphttpsrc, urisourcebin
+    buffering: [(0.37, 0), (0.37, 1), (0.37, 2), (0.37, 3), (0.37, 4), (0.37, 5), (0.37, 6), (0.37, 7), (0.37, 8), (0.37, 9), (0.37, 10), (0.37, 11)]
+hls-404          playbin3  RGBA  first=Nones frames=0 size=None eos=False cpu=1.4% tick_p50=0.03ms copy_p50=Nonems
+    elements: souphttpsrc, urisourcebin
+    ERROR [gst-resource-error-quark:3] from souphttpsrc5: Not Found
+hls-server-dies  playbin3  RGBA  first=0.254s frames=120 size=(1920, 1080) eos=False cpu=30.9% tick_p50=0.238ms copy_p50=0.837ms
+    elements: hlsdemux2, nvh264dec, souphttpsrc, tsdemux, urisourcebin
+    buffering: [(0.07, 0), (0.15, 1), (0.15, 0), (0.24, 1), (0.24, 0), (0.3, 1), (0.3, 0), (0.3, 1), (0.3, 0), (0.47, 1), (0.47, 0), (0.56, 1)]
+    ERROR [gst-resource-error-quark:3] from hlsdemux2-2: Couldn't download fragments
+    error arrived 0.05s after the server died
+wrote results/headless-wsl.json
+== no-gi (ctypes)
+no-gi: GStreamer 1.28.2
+frames=146 pos=5.04s dur=20.00s eos=False error=None tick_p50=33us
+no-gi: GStreamer 1.28.2
+frames=144 pos=4.93s dur=20.00s eos=False error=None tick_p50=36us
+== kivy
+-- default GL context (SDL2 on X11 = GLX)
+Traceback (most recent call last):
+OSError: libmtdev.so.1: cannot open shared object file: No such file or directory
+[INFO   ] [GL          ] OpenGL version <b'4.5 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3'>
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'rgba', 'frames': 149, 'fps': 24.9, 'first_frame_s': 0.44, 'update_ms_p50': 0.33, 'update_ms_p95': 0.669, 'cpu_pct_one_core': 76.7, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'nv12', 'frames': 153, 'fps': 25.5, 'first_frame_s': 0.254, 'update_ms_p50': 0.369, 'update_ms_p95': 0.512, 'cpu_pct_one_core': 91.1, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'gl', 'frames': 151, 'fps': 25.5, 'first_frame_s': 0.393, 'update_ms_p50': 0.516, 'update_ms_p95': 1.474, 'cpu_pct_one_core': 87.8, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)640, heigh
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'rgba', 'frames': 150, 'fps': 25.0, 'first_frame_s': 0.235, 'update_ms_p50': 1.537, 'update_ms_p95': 2.367, 'cpu_pct_one_core': 95.0, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'nv12', 'frames': 149, 'fps': 24.8, 'first_frame_s': 0.197, 'update_ms_p50': 1.103, 'update_ms_p95': 2.888, 'cpu_pct_one_core': 170.9, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'gl', 'frames': 148, 'fps': 24.8, 'first_frame_s': 0.383, 'update_ms_p50': 0.536, 'update_ms_p95': 4.978, 'cpu_pct_one_core': 181.3, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'rgba', 'frames': 153, 'fps': 25.6, 'first_frame_s': 0.236, 'update_ms_p50': 1.633, 'update_ms_p95': 2.433, 'cpu_pct_one_core': 92.3, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'nv12', 'frames': 144, 'fps': 24.0, 'first_frame_s': 0.196, 'update_ms_p50': 1.788, 'update_ms_p95': 4.098, 'cpu_pct_one_core': 291.8, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'gl', 'frames': 145, 'fps': 24.4, 'first_frame_s': 0.308, 'update_ms_p50': 0.594, 'update_ms_p95': 5.964, 'cpu_pct_one_core': 233.7, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'rgba', 'frames': 148, 'fps': 24.7, 'first_frame_s': 0.327, 'update_ms_p50': 6.87, 'update_ms_p95': 10.72, 'cpu_pct_one_core': 166.8, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'nv12', 'frames': 135, 'fps': 22.5, 'first_frame_s': 0.255, 'update_ms_p50': 4.475, 'update_ms_p95': 12.658, 'cpu_pct_one_core': 465.5, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'gl', 'frames': 136, 'fps': 22.8, 'first_frame_s': 0.493, 'update_ms_p50': 0.598, 'update_ms_p95': 19.68, 'cpu_pct_one_core': 497.4, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2
+[INFO   ] [GstSpike    ] RESULT {'clip': 'does_not_exist.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 3.5, 'error': 'Resource not found.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'corrupt.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 3.9, 'error': 'This file contains no playable streams.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'https://no-such-host.invalid/video.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 4.2, 'error': 'Internal data stream error. (streaming stopped, reason error (-5))', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+-- SDL on X11 forced to EGL (DMABuf import needs EGL)
+Traceback (most recent call last):
+OSError: libmtdev.so.1: cannot open shared object file: No such file or directory
+[INFO   ] [GL          ] OpenGL version <b'4.5 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3'>
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'rgba', 'frames': 149, 'fps': 25.0, 'first_frame_s': 0.393, 'update_ms_p50': 0.363, 'update_ms_p95': 0.869, 'cpu_pct_one_core': 79.3, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'nv12', 'frames': 156, 'fps': 26.1, 'first_frame_s': 0.227, 'update_ms_p50': 0.391, 'update_ms_p95': 0.659, 'cpu_pct_one_core': 93.1, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'big_buck_bunny_360_10s.mp4', 'mode': 'gl', 'frames': 149, 'fps': 25.0, 'first_frame_s': 0.377, 'update_ms_p50': 0.551, 'update_ms_p95': 1.316, 'cpu_pct_one_core': 90.5, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMul', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)640, heigh
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'rgba', 'frames': 147, 'fps': 24.5, 'first_frame_s': 0.27, 'update_ms_p50': 1.71, 'update_ms_p95': 4.34, 'cpu_pct_one_core': 105.9, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'nv12', 'frames': 148, 'fps': 24.7, 'first_frame_s': 0.199, 'update_ms_p50': 1.584, 'update_ms_p95': 4.225, 'cpu_pct_one_core': 208.7, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'test_1080p30.mp4', 'mode': 'gl', 'frames': 145, 'fps': 24.3, 'first_frame_s': 0.376, 'update_ms_p50': 0.546, 'update_ms_p95': 3.906, 'cpu_pct_one_core': 204.5, 'error': None, 'decoder': 'nvh264dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'rgba', 'frames': 152, 'fps': 25.4, 'first_frame_s': 0.229, 'update_ms_p50': 1.783, 'update_ms_p95': 2.839, 'cpu_pct_one_core': 97.3, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'nv12', 'frames': 148, 'fps': 24.7, 'first_frame_s': 0.23, 'update_ms_p50': 1.083, 'update_ms_p95': 2.37, 'cpu_pct_one_core': 172.2, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'gl', 'frames': 149, 'fps': 25.0, 'first_frame_s': 0.31, 'update_ms_p50': 0.52, 'update_ms_p95': 1.941, 'cpu_pct_one_core': 181.9, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)108
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'rgba', 'frames': 149, 'fps': 24.8, 'first_frame_s': 0.338, 'update_ms_p50': 7.447, 'update_ms_p95': 13.033, 'cpu_pct_one_core': 178.1, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'nv12', 'frames': 145, 'fps': 24.2, 'first_frame_s': 0.269, 'update_ms_p50': 5.031, 'update_ms_p95': 9.509, 'cpu_pct_one_core': 461.5, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_2160p30.mp4', 'mode': 'gl', 'frames': 123, 'fps': 20.6, 'first_frame_s': 0.397, 'update_ms_p50': 0.645, 'update_ms_p95': 13.056, 'cpu_pct_one_core': 496.2, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)3840, height=(int)
+[INFO   ] [GstSpike    ] RESULT {'clip': 'does_not_exist.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 3.5, 'error': 'Resource not found.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'corrupt.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 2.0, 'error': 'This file contains no playable streams.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'https://no-such-host.invalid/video.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 2.5, 'error': 'Internal data stream error. (streaming stopped, reason error (-5))', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+-- EGL gl mode without releasing Kivy's context (open question 2)
+Traceback (most recent call last):
+OSError: libmtdev.so.1: cannot open shared object file: No such file or directory
+[INFO   ] [GL          ] OpenGL version <b'4.5 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3'>
+[INFO   ] [GstSpike    ] RESULT {'clip': 'hevc_1080p30.mp4', 'mode': 'gl', 'frames': 143, 'fps': 24.0, 'first_frame_s': 0.594, 'update_ms_p50': 0.521, 'update_ms_p95': 2.204, 'cpu_pct_one_core': 192.9, 'error': None, 'decoder': 'nvh265dec', 'decoder_out': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoM', 'glupload_in': 'video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1
+[INFO   ] [GstSpike    ] RESULT {'clip': 'does_not_exist.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 3.2, 'error': 'Resource not found.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'corrupt.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 2.8, 'error': 'This file contains no playable streams.', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+[INFO   ] [GstSpike    ] RESULT {'clip': 'https://no-such-host.invalid/video.mp4', 'mode': 'rgba', 'frames': 0, 'fps': 0.0, 'first_frame_s': None, 'update_ms_p50': None, 'update_ms_p95': None, 'cpu_pct_one_core': 2.7, 'error': 'Internal data stream error. (streaming stopped, reason error (-5))', 'decoder': None, 'decoder_out': None, 'glupload_in': None, 'notes': []}
+== done: results/*wsl*
