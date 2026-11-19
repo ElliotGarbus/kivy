@@ -68,6 +68,33 @@ Screenshots: `android-provider-check/evidence/`.
    `VideoBase`'s own keyword arguments. The AVFoundation and Media Foundation
    providers have the same check and the same false warning; not fixed here.
 
+## Release build with R8 (2026-11-18)
+
+Run once kivyforge could add keep rules (kivyforge #240, on `main` after
+v0.1.2; the editable install here was at `main`'s tree). `pyproject.toml` now
+sets `[tool.kivy.android.build_settings] minify = true`, and
+`VARIANT=release ./run_check.sh SERIAL ABI` builds with
+`kivyforge run -p android --release`, which runs `:app:minifyReleaseWithR8` and
+signs with the debug key. Pixel 8a, arm64_v8a, same wheels and clips as above.
+
+| Config | Result |
+|---|---|
+| `minify = true`, no `[tool.kivy.android.proguard]` | `doctor` WARNs ("minify is on and the app ships gradle dependencies, but ... declares no keep rules"). The build succeeds; the dex has no `androidx/media3` classes (`ExoPlayer$Builder`, `MediaItem` absent; `org.jnius` kept by kivyforge's baseline). **7 of 9 fail**: every video fires `on_error` with the missing-dependency message, and nothing crashes. `provider` passes, and `thumbnail` passes because it uses the platform's `MediaMetadataRetriever`, not Media3. |
+| `keep = ["-keep class androidx.media3.** { *; }"]` | **9 of 9 pass**, the same `on_error` messages as the debug runs, the picture upright (`evidence/pixel8a_release_r8_h264.png`). The generated `proguard-rules.pro` holds the rule under `# [tool.kivy.android.proguard].keep`; the dex has the Media3 classes again (one `classes.dex`, 3.9 MB against 0.98 MB without the rule). |
+
+So the one keep rule the docs give is enough: pyjnius's proxies for the
+provider's `PythonJavaClass` Runnable, and the framework classes it uses
+(`SurfaceTexture`, `Surface`, `Handler`, `MediaMetadataRetriever`), need
+nothing more.
+
+**The missing-dependency message misleads under R8.** It says "Add the Maven
+dependency androidx.media3:media3-exoplayer", but here the dependency is in
+the build and R8 removed it. The message should also name the R8 keep rule.
+
+Summaries: `evidence/pixel8a_release_r8_summary.txt`,
+`evidence/pixel8a_release_r8_norule_summary.txt`. Not repeated on the
+emulator, and `rules_files` wasn't tried (kivyforge's own run covers it).
+
 ## Harness lessons (test app only)
 
 - Android's stdout redirect logs each `write()` as its own logcat line, and
@@ -77,12 +104,9 @@ Screenshots: `android-provider-check/evidence/`.
 
 ## Not covered
 
-- An APK without the Media3 dependency on a device. The missing-dependency
-  `on_error` is covered by the unit tests (`autoclass` raising `JavaException`).
-- A release build with R8: kivyforge's `[tool.kivy.android.proguard]` is
-  specified but not implemented, and its guidance is to leave `minify` off for
-  apps that reach Java from Python. The docs say the same and give the keep
-  rule for toolchains that do run R8.
+- An APK built without the Media3 dependency. The R8 run without a keep rule
+  takes the same path on a device (no Media3 classes in the dex), and the
+  missing-dependency `on_error` fired as designed.
 - Buildozer / python-for-android builds, HEVC, 60 fps, DASH, `content://` from a
   real provider (only the not-found case), API 24, long playback and memory.
 - A GL context loss on resume: neither device lost it, so the surface rebuild

@@ -1,0 +1,26 @@
+VCHECK CASE_START provider
+VCHECK CASE_OK provider
+VCHECK CASE_START h264
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL h264 timed out waiting for on_load
+VCHECK CASE_START rotated
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL rotated timed out waiting for on_load
+VCHECK CASE_START loop
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL loop timed out waiting for on_load
+VCHECK CASE_START errors
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL errors corrupt: message 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_START http
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL http timed out waiting for on_load
+VCHECK CASE_START hls
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL hls timed out waiting for on_load
+VCHECK CASE_START thumbnail
+VCHECK CASE_OK thumbnail
+VCHECK CASE_START pause_resume
+VCHECK ON_ERROR 'androidx.media3 ExoPlayer is not in this app. Add the Maven dependency androidx.media3:media3-exoplayer to the Android build; see "Playing video" in the Android packaging guide.'
+VCHECK CASE_FAIL pause_resume timed out waiting for on_load
+VCHECK DONE pass=2 fail=7

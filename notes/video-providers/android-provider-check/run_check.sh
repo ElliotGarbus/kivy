@@ -3,25 +3,41 @@
 # SHOT and ACTION requests, then save logcat, screenshots and a summary.
 #
 #   ./run_check.sh SERIAL [ABI]      (ABI: arm64_v8a, the default, or x86_64)
+#   VARIANT=release ./run_check.sh SERIAL [ABI]
+#
+# The release variant runs R8 (pyproject.toml turns minify on) and is signed
+# with the debug key, since no release signing is configured.
 #
 # Run make_clips.py and make_wheels.py, and `kivyforge lock -p android`, first.
 set -euo pipefail
 
 SERIAL=$1
 ABI=${2:-arm64_v8a}
+VARIANT=${VARIANT:-debug}
 ADB=${ADB:-/c/Android/Sdk/platform-tools/adb.exe}
 PKG=org.kivyforge.videoprovidercheck
 ACTIVITY=org.kivy.android.PythonActivity
 TIMEOUT=${TIMEOUT:-420}
 
 cd "$(dirname "$0")"
-OUT=results/$SERIAL
+OUT=results/$SERIAL-$VARIANT
 rm -rf "$OUT"
 mkdir -p "$OUT"
 adb() { "$ADB" -s "$SERIAL" "$@"; }
 
-kivyforge build -p android --debug --abi "$ABI"
-adb install -r -g android-provider-check-android/app/build/outputs/apk/debug/app-debug.apk
+if [ "$VARIANT" = release ]; then
+    # Start from no app data, never from the other variant's.
+    adb uninstall "$PKG" > /dev/null 2>&1 || true
+    # Gradle's daemon can still hold classes.dex from an earlier release build.
+    (cd android-provider-check-android 2>/dev/null && ./gradlew --stop > /dev/null 2>&1) || true
+    # `run --release` builds the release variant (R8 included), installs and
+    # launches it; the check restarts it below from a clean start.
+    kivyforge run -p android --release --serial "$SERIAL" --abi "$ABI" --no-follow > "$OUT/run.txt" 2>&1 \
+        || { tail -40 "$OUT/run.txt"; exit 1; }
+else
+    kivyforge build -p android --debug --abi "$ABI"
+    adb install -r -g android-provider-check-android/app/build/outputs/apk/debug/app-debug.apk
+fi
 adb shell am force-stop "$PKG"
 adb logcat -c
 adb logcat -v time > "$OUT/logcat.txt" &

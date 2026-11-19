@@ -40,3 +40,11 @@ dependencies = [
     "androidx.media3:media3-exoplayer:1.11.1",
     "androidx.media3:media3-exoplayer-hls:1.11.1",
 ]
+
+# R8 runs on release builds only (`VARIANT=release ./run_check.sh`). Python
+# reaches Media3 through pyjnius, which R8 can't see, so Media3 is kept whole.
+[tool.kivy.android.build_settings]
+minify = true
+
+[tool.kivy.android.proguard]
+keep = ["-keep class androidx.media3.** { *; }"]
