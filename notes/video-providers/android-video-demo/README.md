@@ -40,3 +40,22 @@ upright, the portrait clip turned, position and duration advancing, no
 1280x720, TS 400x300, both HLS 1920x1080, DASH H.264/HEVC/VP9 1918x856
 (adaptive, settled at the top rendition), DASH 60 fps 1920x1080. Screenshots in
 `evidence/`.
+
+### Release build with R8
+
+`kivyforge run -p android --release --device` (signed with the debug key; no
+release key is configured). `doctor` passes "R8 keep rules", Gradle runs
+`:app:minifyReleaseWithR8`, and the generated `proguard-rules.pro` carries the
+Media3 rule under `# [tool.kivy.android.proguard].keep`. The release dex still
+has `ExoPlayer$Builder`, `HlsMediaSource` and `DashMediaSource`.
+
+All 12 sources played again on the Pixel 8a, with the same texture sizes and
+no `on_error` (`evidence/pixel8a_release_r8.png`).
+
+| | Debug | Release (R8) |
+|---|---|---|
+| APK | 41.8 MB | 28.3 MB |
+| Dex | 16.6 MB in 6 files | 4.0 MB in 1 file |
+
+The APK difference is not all R8: the release variant also byte-compiles the
+Python and strips its source.
