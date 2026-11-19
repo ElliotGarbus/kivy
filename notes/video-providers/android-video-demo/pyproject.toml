@@ -1,0 +1,51 @@
+[project]
+name = "android-video-demo"
+version = "0.1.0"
+description = "Plays several video formats through Kivy's Media3 ExoPlayer video provider"
+requires-python = ">=3.14"
+dependencies = [
+    # The wheels in wheels/ are the published dev202611051750 build with the
+    # android-exoplayer-video branch's Python overlaid; see prepare.py.
+    "kivy==3.0.0.dev202611051750",
+    "pyjnius",
+]
+
+[tool.kivy]
+display_name = "Kivy Video Demo"
+app_dir = "src"
+entry_point = "main"
+orientation = ["portrait"]
+
+[tool.kivy.android]
+schema_version = 1
+package = "org.kivy.videodemo"
+min_sdk = 24
+target_sdk = 35
+# Media3 1.11 requires compiling against API 36.
+compile_sdk = 36
+kivy_generation = 3
+abis = ["arm64_v8a", "x86_64"]
+extra_index_urls = ["https://elliotgarbus.github.io/kivy-mobile-wheels/simple/"]
+find_links = ["wheels"]
+exclude = ["kivy-garden", "docutils", "pygments"]
+
+[tool.kivy.android.python]
+version = "3.14.6"
+
+[tool.kivy.android.permissions]
+uses = ["INTERNET"]
+
+[tool.kivy.android.gradle]
+dependencies = [
+    "androidx.media3:media3-exoplayer:1.11.1",
+    "androidx.media3:media3-exoplayer-hls:1.11.1",
+    "androidx.media3:media3-exoplayer-dash:1.11.1",
+]
+
+# R8 runs on release builds only. Python reaches Media3 through pyjnius,
+# which R8 can't see, so Media3 is kept whole.
+[tool.kivy.android.build_settings]
+minify = true
+
+[tool.kivy.android.proguard]
+keep = ["-keep class androidx.media3.** { *; }"]
