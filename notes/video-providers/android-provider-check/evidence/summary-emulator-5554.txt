@@ -1,0 +1,46 @@
+VCHECK CASE_START provider
+VCHECK INFO provider VideoAndroid
+VCHECK CASE_OK provider
+VCHECK CASE_START h264
+VCHECK INFO h264 texture (640, 360) duration 10.0
+VCHECK INFO h264 transform [1.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0]
+VCHECK INFO h264 fbo Rectangle (0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0)
+VCHECK SHOT h264
+VCHECK CASE_OK h264
+VCHECK CASE_START rotated
+VCHECK INFO rot90 texture (360, 640)
+VCHECK SHOT rot90
+VCHECK CASE_OK rotated
+VCHECK CASE_START loop
+VCHECK CASE_OK loop
+VCHECK CASE_START errors
+[ERROR  ] [VideoAndroid] </data/user/0/org.kivyforge.videoprovidercheck/files/_python_bundle/app/clips/corrupt.mp4>: ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED: Source error (None of the available extractors (FragmentedMp4Extractor, Mp4Extractor, FlvExtractor, FlacExtractor, WavExtractor, AmrExtractor, PsExtractor, OggExtractor, TsExtractor, MatroskaExtractor, AdtsExtractor, Ac3Extractor, Ac4Extractor, Mp3Extractor, AviExtractor, JpegExtractor, PngExtractor, WebpExtractor, BmpExtractor, HeifExtractor, AvifExtractor) could read the stream. {contentIsMalformed=false, dataType=1}
+VCHECK ON_ERROR 'ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED: Source error (None of the available extractors (FragmentedMp4Extractor, Mp4Extractor, FlvExtractor, FlacExtractor, WavExtractor, AmrExtractor, PsExtractor, OggExtractor, TsExtractor, MatroskaExtractor, AdtsExtractor, Ac3Extractor, Ac4Extractor, Mp3Extractor, AviExtractor, JpegExtractor, PngExtractor, WebpExtractor, BmpExtractor, HeifExtractor, AvifExtractor) could read the stream. {contentIsMalformed=false, dataType=1}\nsniff failures: [NoDeclaredBrand, NoDeclaredBrand])'
+VCHECK INFO error corrupt ['ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED: Source error (None of the available extractors (FragmentedMp4Extractor, Mp4Extractor, FlvExtractor, FlacExtractor, WavExtractor, AmrExtractor, PsExtractor, OggExtractor, TsExtractor, MatroskaExtractor, AdtsExtractor, Ac3Extractor, Ac4Extractor, Mp3Extractor, AviExtractor, JpegExtractor, PngExtractor, WebpExtractor, BmpExtractor, HeifExtractor, AvifExtractor) could read the stream. {contentIsMalformed=false, dataType=1}\nsniff failures: [NoDeclaredBrand, NoDeclaredBrand])']
+[ERROR  ] [VideoAndroid] <content://org.kivyforge.nosuchprovider/video.mp4>: ERROR_CODE_IO_FILE_NOT_FOUND: Source error (java.io.FileNotFoundException: No content provider: content://org.kivyforge.nosuchprovider/video.mp4)
+VCHECK ON_ERROR 'ERROR_CODE_IO_FILE_NOT_FOUND: Source error (java.io.FileNotFoundException: No content provider: content://org.kivyforge.nosuchprovider/video.mp4)'
+VCHECK INFO error content ['ERROR_CODE_IO_FILE_NOT_FOUND: Source error (java.io.FileNotFoundException: No content provider: content://org.kivyforge.nosuchprovider/video.mp4)']
+[ERROR  ] [VideoAndroid] <https://storage.googleapis.com/exoplayer-test-media-0/kivy-no-such-file.mp4>: ERROR_CODE_IO_BAD_HTTP_STATUS: Source error (Response code: 403)
+VCHECK ON_ERROR 'ERROR_CODE_IO_BAD_HTTP_STATUS: Source error (Response code: 403)'
+VCHECK INFO error http403 ['ERROR_CODE_IO_BAD_HTTP_STATUS: Source error (Response code: 403)']
+VCHECK ON_ERROR 'file not found: /data/user/0/org.kivyforge.videoprovidercheck/files/_python_bundle/app/clips/no-such-clip.mp4'
+VCHECK INFO error missing ['file not found: /data/user/0/org.kivyforge.videoprovidercheck/files/_python_bundle/app/clips/no-such-clip.mp4']
+VCHECK CASE_OK errors
+VCHECK CASE_START http
+VCHECK INFO http texture (320, 180)
+VCHECK CASE_OK http
+VCHECK CASE_START hls
+VCHECK INFO hls texture (1920, 1080)
+VCHECK SHOT hls
+VCHECK CASE_OK hls
+VCHECK CASE_START thumbnail
+VCHECK INFO thumbnail (320, 180)
+VCHECK SHOT thumbnail
+[WARNING] [VideoAndroid] could not make a thumbnail of </data/user/0/org.kivyforge.videoprovidercheck/files/_python_bundle/app/clips/no-such-clip.mp4>: JVM exception occurred: java.lang.IllegalArgumentException: /data/user/0/org.kivyforge.videoprovidercheck/files/_python_bundle/app/clips/no-such-clip.mp4 does not exist
+VCHECK CASE_OK thumbnail
+VCHECK CASE_START pause_resume
+VCHECK ACTION background
+VCHECK INFO app resumed
+VCHECK SHOT resumed
+VCHECK CASE_OK pause_resume
+VCHECK DONE pass=9 fail=0
