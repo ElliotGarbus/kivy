@@ -1,0 +1,23 @@
+[WARNING] [Kivy        ] KIVY_DESKTOP_PATH_ID not set. If your application targets desktop platforms, set it to provide a user-friendly application name for directories. See https://kivy.org/doc/stable/guide/environment.html
+[INFO   ] [Logger      ] Record log in /home/edgarbus/.kivy/logs/kivy_26-11-20_39.txt
+[INFO   ] [Kivy        ] v3.0.0.dev0
+[INFO   ] [Kivy        ] Installed at "/home/edgarbus/kivy3-gst-venv/lib/python3.13/site-packages/kivy/__init__.py"
+[INFO   ] [Python      ] v3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]
+[INFO   ] [Python      ] Interpreter at "/home/edgarbus/kivy3-gst-venv/bin/python"
+[INFO   ] [Logger      ] Purge log fired. Processing...
+[INFO   ] [Logger      ] Purge finished!
+[INFO   ] [Factory     ] 199 symbols loaded
+[INFO   ] [Image       ] Providers: img_tex, img_dds, img_sdl3, img_pil, img_thorvg_svg (img_ffpyplayer ignored)
+[INFO   ] [Window      ] Provider: sdl3
+[INFO   ] [Window      ] Activate GLES2/ANGLE context
+[INFO   ] [Window      ] Activate GLES2/ANGLE context
+[INFO   ] [GL          ] Using the "OpenGL" graphics system
+[INFO   ] [Window      ] Provider: x11(['window_sdl3'] ignored)
+FBConfig selected:
+Doublebuffer: Yes
+Red Bits: 8, Green Bits: 8, Blue Bits: 8, Alpha Bits: 8, Depth Bits: 24, Stencil Bits: 8
+X Error of failed request:  BadAccess (attempt to access private resource denied)
+  Major opcode of failed request:  149 (GLX)
+  Minor opcode of failed request:  26 (X_GLXMakeContextCurrent)
+  Serial number of failed request:  43
+  Current serial number in output stream:  43

@@ -1,0 +1,29 @@
+KMSDRM check for the GStreamer video provider (spike 5)
+=======================================================
+
+Paste these into a terminal on the Pi (the desktop terminal or an SSH
+session; either works).
+
+What happens: the desktop closes for about a minute while the check plays
+video full-screen with no desktop (4K HEVC and 1080p H.264, three render
+paths), then the desktop comes back by itself. If you pasted into a desktop
+terminal, that window closes with the desktop; log in again when it returns.
+
+The check runs as a short background service, so closing the terminal
+doesn't stop it.
+
+1. Start it (asks for your password once):
+
+sudo systemd-run --unit=kivy-kmsdrm-check bash /home/edgarbus/gstreamer-spike/kms_all.sh
+
+2. Optional, to watch it (from SSH; Ctrl+C stops watching, not the check):
+
+journalctl -fu kivy-kmsdrm-check
+
+3. When the desktop is back, check it finished:
+
+cat ~/gstreamer-spike/results/pi5-spike5/kms_all.log
+
+If the desktop doesn't come back after 6 minutes:
+
+sudo systemctl start lightdm

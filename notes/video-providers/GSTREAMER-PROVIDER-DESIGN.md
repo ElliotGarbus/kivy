@@ -347,10 +347,15 @@ A GLX context can share textures but can't import DMABuf (**source**,
 because on desktop GPUs it remains the cheapest path, and the provider logs a
 warning when the decoder could have produced DMABuf.
 
-One known cost: for software-decoded video on the Pi 5, `nv12` beats `gl`
-(48% vs 71–76% at 1080p). Choosing per stream, by what the decoder outputs,
-would fix that. It needs a sink that decides at caps time and is **unproven**:
-spike 4. Until then `auto` is a per-context choice.
+Per stream, on Linux (**proven**, spike 4): for software-decoded video on
+the Pi 5, `nv12` beats `gl` (40% vs 66% of a core at 1080p H.264). So `auto`
+starts on `gl` and, at the first preroll, reads the decoder's output caps:
+plain system memory (`video/x-raw`) rebuilds the pipeline once on `nv12`;
+DMABuf, GL or other GPU memory stays on `gl`. Both best cases are met (4K
+HEVC 8%, 1080p H.264 40%) at the cost of 0.1–0.2 s more before the first
+frame of a software-decoded stream. No caps-time switching sink: it would
+need callbacks on GStreamer's threads. Windows keeps `gl`, which was as cheap
+or cheaper there.
 
 ### D7. The GL path
 
@@ -360,8 +365,7 @@ Setup, once per `load()`, on Kivy's thread:
    (`eglGetCurrentContext`/`eglGetCurrentDisplay`, `glXGetCurrentContext`,
    `wglGetCurrentContext`), so it works with any Kivy window provider.
 2. Create the matching `GstGLDisplay`: `gst_gl_display_egl_new_with_egl_display()`
-   for every EGL case (**proven** on Wayland and X11 with EGL; KMSDRM is
-   spike 5),
+   for every EGL case (**proven** on Wayland, X11 with EGL and KMSDRM),
    `gst_gl_display_x11_new_with_display()` for GLX,
    `gst_gl_display_new()` for WGL.
 3. Wrap Kivy's context with `gst_gl_context_new_wrapped()`, passing the
@@ -753,7 +757,10 @@ own rendering. **Spike 8 is done for Windows** (a kivyforge bundle plays
 local, HLS and DASH over HTTPS; size, first launch, registry and licences
 measured); the Pi half proved python-build-standalone loads the system
 GStreamer cleanly, and a real AppImage waits for a manylinux aarch64 wheel
-from CI.
+from CI. **Spike 4 is done** (per-stream re-plan adopted into D6). **Spike 5
+is done except GLES:** under KMSDRM (no desktop) the Pi 5 gets the same
+zero-copy result as under Wayland (4K HEVC 30 fps, 8%); Kivy 3 can't create
+a GLES context on Linux today, so the GLES branch is untested.
 
 | # | Question | Method | Done when |
 |---|---|---|---|

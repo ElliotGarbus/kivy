@@ -360,6 +360,65 @@ The `Video` widget (not the provider) logs `Image: Not found <url>` for every
 stream: with no `preview`, `Video.texture_update()` passes `source` to
 `set_texture_from_resource()`. Upstream widget issue for all providers.
 
+## Spike 4: render path per stream (2026-11-20)
+
+No sink that switches branches on the caps event: that needs a pad probe or
+signal callback on a streaming thread, which the design avoids. Instead
+`auto` re-plans once: on Linux it starts on the GL path; at the first
+preroll (`ASYNC_DONE`) the provider reads the decoder's output caps
+(`describe()`), and if they are plain `video/x-raw` (system memory, a
+software decoder) it tears the pipeline down and rebuilds it on the nv12
+path. DMABuf, GL or other GPU memory stays on GL. A seek requested before the
+first preroll waits for the new pipeline. Windows doesn't re-plan: there
+`gl` was as cheap as or cheaper than `nv12` for system-memory frames
+(1080p 15% vs 14%, 4K HEVC 20% vs 29%).
+
+Pi 5, Wayland/EGL, `provider_check.py` with `auto`, `gl` and `nv12`
+(`results/pi5-spike4/`), 6 s of playback, CPU in % of one core:
+
+| Clip (decoder) | `auto` became | `auto` | `gl` | `nv12` | load to first frame (auto / gl / nv12) |
+|---|---|---|---|---|---|
+| 4K HEVC (`v4l2slh265dec`, DMABuf) | gl | 30 fps, 8.0% | 30 fps, 7.5% | 7.3 fps, 89.5% | 0.29 / 0.18 / 0.38 s |
+| 1080p H.264 (`avdec_h264`) | nv12 | 29.8 fps, 40.3% | 30 fps, 65.8% | 29.8 fps, 38.0% | 0.21 / 0.13 / 0.08 s |
+| 360p H.264 | nv12 | 12.1% | 24.6% | 12.3% | 0.13 / 0.10 / 0.05 s |
+| 1080p VP9 (`vp9dec`) | nv12 | 25.2 fps, 134.5% | 21.3 fps, 172.2% | 25.1 fps, 134.2% | 0.28 / 0.17 / 0.09 s |
+
+`auto` now gets both best cases the spike asked for (HEVC at 8%, H.264 at
+40%); the price is a second preroll for software-decoded streams, 0.1–0.2 s
+more before the first frame. Paused seeks and looping pass on every row.
+Adopted into D6. The rule is measured on the Pi only; x86 Linux (the Intel
+laptop, spike 6) should confirm it.
+
+## Spike 5: GLES context, KMSDRM (2026-11-20)
+
+**GLES.** On Linux, Kivy 3.0's SDL3 window only asks for a GLES context
+with `KIVY_GL_BACKEND=angle_sdl3`. On the Pi 5 (Wayland, and X11 with EGL)
+that window fails to open, with no error logged (kivy/kivy#9539 adds the
+`SDL_Init` check that would say why), Kivy falls back to its legacy `x11`
+window, and that dies with an X `BadAccess` in `X_GLXMakeContextCurrent`.
+So no Kivy 3 configuration on Linux produces a GLES context today; every Pi
+run so far wrapped desktop GL 3.1 (Mesa V3D) as `opengl,opengl3`. The
+provider's GLES branch (`GLShare(gles=True)`, API `gles2`) stays untested
+until Kivy can create one. A Kivy limitation, not the provider's.
+
+**KMSDRM: works, same as Wayland.** Run with the desktop stopped
+(`kms_all.sh`, started with `sudo systemd-run` so it outlived the session;
+the check itself ran as the normal user, which got the display through the
+`video` group). SDL3's `kmsdrm` backend gave Kivy an EGL context with desktop
+GL 3.1 (V3D 7.1), and the provider shared it (`results/pi5-spike5/kmsdrm.json`):
+
+| Clip | `auto` became | `auto` | `gl` | `nv12` |
+|---|---|---|---|---|
+| 4K HEVC (`v4l2slh265dec`) | gl, DMABuf into `glupload` | 30.1 fps, 8.1% | 30.1 fps, 7.3% | 7.3 fps, 89.3% |
+| 1080p H.264 (`avdec_h264`) | nv12 | 30.0 fps, 41.3% | 30.1 fps, 66.6% | 30.0 fps, 39.5% |
+
+First frame without playing, paused seeks, the 50-seek burst (3–5 pipeline
+seeks), looping and stop all pass; colours read back the same as under
+Wayland. So the zero-copy path doesn't depend on a compositor: a kiosk-style
+Pi app without a desktop gets it too.
+
+Spike 5 is done apart from GLES, which waits for Kivy (above).
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`
