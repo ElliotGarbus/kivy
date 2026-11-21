@@ -471,6 +471,48 @@ SSH.
 Not covered: AV1 (no VA AV1 decoder in this driver build), AMD and NVIDIA
 (spike 6's other half), Intel software decoding.
 
+## Spike 7: GStreamer 1.22 and 1.24 (2026-11-21)
+
+Podman containers in WSL2: `debian:12` (GStreamer 1.22.0, Python 3.11.2) and
+`ubuntu:24.04` (GStreamer 1.24.2, Python 3.12.3), each with the distro's
+`gstreamer1.0-plugins-base/-good/-bad/-libav/-gl`. Only the `_gstplayer`
+extension was compiled (Kivy's graphics weren't), so no window tests: the
+headless cases, the window-free tests (`test_gstplayer_policy.py` and
+`GstPlayerCoreTestCase`, with `kivy.tests` stubbed) and the loader's view of
+the GL entry points. Results in `results/spike7/`.
+
+| | Debian 12, 1.22.0 | Ubuntu 24.04, 1.24.2 |
+|---|---|---|
+| loads, version check, message-layout self-test | pass | pass |
+| `has_gl()` (GL library and 1.24's `gst_gl_display_ensure_context`) | False: `auto` uses nv12 | True |
+| first-run init (fresh registry) | 0.35 s | 0.32 s |
+| headless cases | all as on 1.26/1.28 | all, except HLS fMP4 (below) |
+| window-free tests | 82 passed | 82 passed |
+
+Every case matched the newer versions: local H.264/HEVC/VP9, missing,
+non-video and corrupt files, `Not Found (HTTP 404)`, the connection-failure
+text, HLS TS, DASH, and the dead HLS server (error 0.04–0.05 s later).
+
+**So the floors stand: 1.22 on Linux and the Pi (CPU path), 1.24 for the GL
+path.** The provisional decision (D15) is now final; Debian 12 and Pi OS
+Bookworm keep a working provider without the zero-copy path.
+
+Two things seen only in containers without sound:
+
+* **Ubuntu 24.04: `openalsink` aborts the process.** `autoaudiosink` chose
+  OpenAL Soft, which aborted (exit 134) when it couldn't reach PipeWire;
+  `gst-launch-1.0 playbin3` hung the same way, so it isn't Kivy's code. With
+  `GST_PLUGIN_FEATURE_RANK=openalsink:NONE` everything passed. A desktop has
+  PipeWire, so this matters for headless machines (kiosks, CI). Kivy's CI
+  test clips have no audio track, so no audio sink is created there.
+* **Ubuntu 24.04: Apple's fMP4 HLS stream showed no frames, no error.** Same
+  symptom as the Windows 1.28.7 subtitle/`wasapi2sink` stall, but with no
+  working audio output here this run can't tell which; Debian 12 played it.
+  Needs a run on a real 24.04 desktop.
+
+Not done: the Windows half (the official 1.24 installer against the
+Windows floor).
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`
