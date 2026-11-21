@@ -599,16 +599,23 @@ Windows specifics the provider handles itself:
   plugin allowlist cuts the scan to 1.2–1.7 s and the plugins from 166 MB to
   12 MB (spike 8; pruning is kivyforge's).
 * Licences: the wheels' metadata is an AND-list of component licences and
-  no licence texts are shipped (spike 8); kivyforge needs them from upstream.
+  no licence texts are shipped (spike 8). **Decided: the notices are the app
+  developer's job**, not kivyforge's: what must ship depends on where and how
+  the app is distributed, on the restricted set and on pruning, and there are
+  no texts to copy reliably. Kivy's licensing guide says so and points to
+  cerbero's recipes for each component's licence; which components are GPL
+  is still to ask upstream.
 
-kivyforge work (separate repo, tracked there):
+kivyforge needs **no changes** for the first release: spike 8 bundled the
+wheels from `kivy[gstreamer]` as is (the lock already pins exact versions),
+and the AppImage carries no GLib. Improvements, tracked in kivyforge:
 
-* **Windows:** support the four `gstreamer_*` wheels as an optional component,
-  with exact-version locking; an optional plugin allowlist; LGPL notices
-  collected into the bundle.
-* **Linux and Pi:** bundle nothing. Declare GStreamer as a host requirement
-  with a doctor check and a per-distro install hint, and check at build time
-  that the AppImage carries no GLib of its own. **Unproven**: spike 8.
+* **Windows:** an optional plugin allowlist (ElliotGarbus/kivyforge#245).
+* **Linux and Pi:** bundle nothing. A `doctor` check for the host's GStreamer
+  with a per-distro install hint, a build-time check that the AppImage
+  carries no GLib or GStreamer of its own, and the host requirement in the
+  docs (ElliotGarbus/kivyforge#246). A real AppImage run is still to do
+  (spike 8).
 
 ## 9. Build changes
 
@@ -728,11 +735,11 @@ Hardware plan (decided): release isn't blocked on hardware we don't have.
 | `doc/sources/guide/environment.rst` | `KIVY_GSTREAMER_ROOT`; `KIVY_VIDEO` values per platform; a pointer to GStreamer's own variables |
 | `doc/sources/installation/installation-linux.rst`, `installation-rpi.rst` | the runtime packages for video, per distro; no `-dev` packages needed any more |
 | `doc/sources/gettingstarted/installation.rst`, `doc/sources/installation/installation-windows.rst` | `kivy[gstreamer]`, `kivy[gstreamer-restricted]` and what each installs; that `full` leaves out the restricted set, with the `kivy[full,gstreamer-restricted]` line; Media Foundation is the default |
-| `doc/sources/guide/licensing.rst` | GStreamer is LGPL; what the Windows wheels contain (FFmpeg decoders; the separate restricted set); what that means for a shipped app |
+| `doc/sources/guide/licensing.rst` | GStreamer is LGPL; what the Windows wheels contain (FFmpeg decoders; the separate restricted set); that the notices are the developer's to provide, with no licence texts in the wheels and cerbero's recipes as the source; nothing to ship on Linux |
 | `doc/sources/migration.rst` | `kivy_deps.gstreamer` is gone; extras changed; GStreamer minimum (1.22 on Linux, 1.24 on Windows); `on_error` instead of silent failure; `kivy.lib.gstplayer` internals changed; GStreamer audio now comes after SDL3 |
 | `doc/sources/guide/packaging-windows.rst`, `packaging-osx.rst` | remove or correct the GStreamer instructions that assume `kivy_deps.gstreamer` |
 | `doc/sources/changelog.rst` | the usual entry |
-| kivyforge docs | enabling GStreamer on Windows; the Linux and Pi host requirement |
+| kivyforge docs | enabling GStreamer on Windows; the Linux and Pi host requirement (ElliotGarbus/kivyforge#246) |
 
 ## 12. Delivery
 
@@ -743,8 +750,8 @@ Hardware plan (decided): release isn't blocked on hardware we don't have.
 | 2 | PR A: runtime loader, new `GstPlayer` core, `VideoGstplayer` on the `nv12` path, errors, buffering, seeking, thumbnails, audio port, `setup.py` and CI changes, unit and integration tests | spikes 1 and 3 |
 | 3 | PR B: the `gl` path and path selection, render tests | PR A, spike 2 |
 | 4 | PR C: extras, installation, licensing and migration docs, PyInstaller hook cleanup | PR A |
-| 5 | kivyforge: Windows component, Linux host check | PR A, spike 8 |
-| 6 | Community test app (kivyforge AppImage), sent to testers with Intel, AMD, NVIDIA and Pi 4 hardware | PR B, step 5 |
+| 5 | kivyforge improvements, not needed for the release: plugin allowlist (kivyforge#245), Linux host check (kivyforge#246) | PR A, spike 8 |
+| 6 | Community test app (kivyforge AppImage), sent to testers with Intel, AMD, NVIDIA and Pi 4 hardware | PR B, a manylinux Kivy 3 wheel |
 | 7 | Hardware matrix and fixes | PR B, step 6 |
 
 PR A is useful by itself: it gives every Linux and Pi wheel a working
