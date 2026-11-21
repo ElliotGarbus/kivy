@@ -1,0 +1,2968 @@
+{
+ "meta": {
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4",
+  "machine": "x86_64",
+  "import_s": 0.021,
+  "runtime": [
+   [
+    1,
+    28,
+    2,
+    0
+   ],
+   "/usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so.0",
+   "system"
+  ],
+  "has_gl": true,
+  "gi_imported": false,
+  "init_start_ms": 0.396,
+  "init_status": [
+   "ok",
+   null
+  ],
+  "init_s": 1.589,
+  "ui_ticks_during_init": 95,
+  "ui_max_gap_ms": 17.0,
+  "fresh_registry": true,
+  "elements": {
+   "playbin3": true,
+   "glupload": true,
+   "tsdemux": true,
+   "hlsdemux2": true,
+   "dashdemux2": true,
+   "souphttpsrc": true,
+   "avdec_h264": true,
+   "avdec_h265": true,
+   "v4l2slh265dec": false,
+   "vah264dec": false,
+   "d3d11h264dec": false,
+   "d3d12h264dec": false,
+   "nvh264dec": true
+  }
+ },
+ "results": [
+  {
+   "case": "local-360p",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/big_buck_bunny_360_10s.mp4",
+   "frames": 300,
+   "first_frame_s": 0.338,
+   "eos": true,
+   "error": null,
+   "size": [
+    640,
+    360
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": null,
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 10.0,
+   "duration": 10.0,
+   "teardown_ms": 61.6,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 6.2,
+   "tick_ms_p50": 0.016,
+   "tick_ms_max": 0.287
+  },
+  {
+   "case": "local-1080p",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/test_1080p30.mp4",
+   "frames": 197,
+   "first_frame_s": 0.253,
+   "eos": false,
+   "error": null,
+   "size": [
+    1920,
+    1080
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 7.34966,
+   "duration": 20.0,
+   "teardown_ms": 89.3,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 10.8,
+   "tick_ms_p50": 0.012,
+   "tick_ms_max": 0.17
+  },
+  {
+   "case": "local-2160p",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/test_2160p30.mp4",
+   "frames": 198,
+   "first_frame_s": 0.236,
+   "eos": false,
+   "error": null,
+   "size": [
+    3840,
+    2160
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 7.437984,
+   "duration": 10.007666666,
+   "teardown_ms": 79.4,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 20.5,
+   "tick_ms_p50": 0.014,
+   "tick_ms_max": 7.606
+  },
+  {
+   "case": "local-vp9",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/vp9_1080p.webm",
+   "frames": 150,
+   "first_frame_s": 0.052,
+   "eos": true,
+   "error": null,
+   "size": [
+    1920,
+    1080
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "describe": {
+    "decoder": "vp9dec",
+    "decoder_caps": "video/x-raw, format=(string)Y444_12LE, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 5.000333333,
+   "duration": 5.000333333,
+   "teardown_ms": 6.5,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 58.6,
+   "tick_ms_p50": 0.019,
+   "tick_ms_max": 0.215
+  },
+  {
+   "case": "local-hevc-1080p",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/hevc_1080p30.mp4",
+   "frames": 196,
+   "first_frame_s": 0.253,
+   "eos": false,
+   "error": null,
+   "size": [
+    1920,
+    1080
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "describe": {
+    "decoder": "nvh265dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 7.34446,
+   "duration": 20.0,
+   "teardown_ms": 62.6,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 11.7,
+   "tick_ms_p50": 0.014,
+   "tick_ms_max": 0.82
+  },
+  {
+   "case": "local-hevc-2160p",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/hevc_2160p30.mp4",
+   "frames": 199,
+   "first_frame_s": 0.219,
+   "eos": false,
+   "error": null,
+   "size": [
+    3840,
+    2160
+   ],
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "describe": {
+    "decoder": "nvh265dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 7.476156,
+   "duration": 10.007666666,
+   "teardown_ms": 73.1,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 19.6,
+   "tick_ms_p50": 0.015,
+   "tick_ms_max": 7.333
+  },
+  {
+   "case": "missing-file",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/does_not_exist.mp4",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "Resource not found.",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 0,
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Resource not found.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../plugins/elements/gstfilesrc.c(585): gst_file_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nNo such file \"/home/elliot/gstreamer-spike/clips/does_not_exist.mp4\"",
+     "t": 0.001
+    },
+    {
+     "kind": "state-change",
+     "domain": "core",
+     "code": 4,
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../libs/gst/base/gstbasesrc.c(3623): gst_base_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nFailed to start",
+     "t": 0.001
+    },
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Resource not found.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../plugins/elements/gstfilesrc.c(585): gst_file_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nNo such file \"/home/elliot/gstreamer-spike/clips/does_not_exist.mp4\"",
+     "t": 0.001
+    },
+    {
+     "kind": "state-change",
+     "domain": "core",
+     "code": 4,
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../libs/gst/base/gstbasesrc.c(3623): gst_base_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nFailed to start",
+     "t": 0.001
+    },
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Resource not found.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../plugins/elements/gstfilesrc.c(585): gst_file_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nNo such file \"/home/elliot/gstreamer-spike/clips/does_not_exist.mp4\"",
+     "t": 0.001
+    },
+    {
+     "kind": "state-change",
+     "domain": "core",
+     "code": 4,
+     "message": "GStreamer error: state change failed and some element failed to post a proper error message with the reason for the failure.",
+     "http": 0,
+     "src": "filesrc6",
+     "debug": "../libs/gst/base/gstbasesrc.c(3623): gst_base_src_start (): /GstPlayBin3:playbin3-6/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin6/GstFileSrc:filesrc6:\nFailed to start",
+     "t": 0.001
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 0.2,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 1.4,
+   "tick_ms_p50": 0.01,
+   "tick_ms_max": 0.154
+  },
+  {
+   "case": "not-a-video",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/not_a_video.mp4",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "This appears to be a text file",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 5,
+     "message": "This appears to be a text file",
+     "http": 0,
+     "src": "parsebin6",
+     "debug": "../gst/playback/gstparsebin.c(2445): type_found (): /GstPlayBin3:playbin3-7/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin7/GstParseBin:parsebin6:\nParseBin cannot parse plain text files",
+     "t": 0.017
+    },
+    {
+     "kind": "stream-failed",
+     "domain": "stream",
+     "code": 1,
+     "message": "Internal data stream error.",
+     "http": 0,
+     "src": "typefind",
+     "debug": "../plugins/elements/gsttypefindelement.c(1257): gst_type_find_element_loop (): /GstPlayBin3:playbin3-7/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin7/GstParseBin:parsebin6/GstTypeFindElement:typefind:\nstreaming stopped, reason not-linked (-1)",
+     "t": 0.017
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 0.5,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 3.3,
+   "tick_ms_p50": 0.009,
+   "tick_ms_max": 0.076
+  },
+  {
+   "case": "corrupt",
+   "sink": "nv12",
+   "uri": "file:///home/elliot/gstreamer-spike/clips/corrupt.mp4",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "This file contains no playable streams.",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 9,
+     "message": "This file contains no playable streams.",
+     "http": 0,
+     "src": "qtdemux5",
+     "debug": "../gst/isomp4/qtdemux.c(520): gst_qtdemux_post_no_playable_stream_error (): /GstPlayBin3:playbin3-8/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin8/GstParseBin:parsebin7/GstQTDemux:qtdemux5:\nno known streams found",
+     "t": 0.018
+    },
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 9,
+     "message": "This file contains no playable streams.",
+     "http": 0,
+     "src": "qtdemux5",
+     "debug": "../gst/isomp4/qtdemux.c(520): gst_qtdemux_post_no_playable_stream_error (): /GstPlayBin3:playbin3-8/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin8/GstParseBin:parsebin7/GstQTDemux:qtdemux5:\nno known streams found",
+     "t": 0.018
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 0.7,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 2.4,
+   "tick_ms_p50": 0.011,
+   "tick_ms_max": 0.113
+  },
+  {
+   "case": "http-404",
+   "sink": "nv12",
+   "uri": "https://gstreamer.freedesktop.org/data/does-not-exist.mp4",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "Not Found (HTTP 404)",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Not Found",
+     "http": 404,
+     "src": "souphttpsrc0",
+     "debug": "../ext/soup/gstsouphttpsrc.c(1843): gst_soup_http_src_parse_status (): /GstPlayBin3:playbin3-9/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin9/GstSoupHTTPSrc:souphttpsrc0:\nNot Found (404), URL: https://gstreamer.freedesktop.org/data/does-not-exist.mp4, Redirect to: (NULL)",
+     "t": 0.121
+    },
+    {
+     "kind": "stream-failed",
+     "domain": "stream",
+     "code": 1,
+     "message": "Internal data stream error.",
+     "http": 0,
+     "src": "souphttpsrc0",
+     "debug": "../libs/gst/base/gstbasesrc.c(3187): gst_base_src_loop (): /GstPlayBin3:playbin3-9/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin9/GstSoupHTTPSrc:souphttpsrc0:\nstreaming stopped, reason error (-5)",
+     "t": 0.121
+    },
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 4,
+     "message": "Stream doesn't contain enough data.",
+     "http": 0,
+     "src": "typefindelement9",
+     "debug": "../plugins/elements/gsttypefindelement.c(1012): gst_type_find_element_chain_do_typefinding (): /GstPlayBin3:playbin3-9/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin9/GstTypeFindElement:typefindelement9:\nCan't typefind stream",
+     "t": 0.121
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 0.8,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 13.1,
+   "tick_ms_p50": 0.01,
+   "tick_ms_max": 0.085
+  },
+  {
+   "case": "dns-fail",
+   "sink": "nv12",
+   "uri": "https://no-such-host.invalid/video.mp4",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "Internal data stream error. (streaming stopped, reason error (-5))",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "raw_errors": [
+    {
+     "kind": "stream-failed",
+     "domain": "stream",
+     "code": 1,
+     "message": "Internal data stream error.",
+     "http": 0,
+     "src": "souphttpsrc1",
+     "debug": "../libs/gst/base/gstbasesrc.c(3187): gst_base_src_loop (): /GstPlayBin3:playbin3-10/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin10/GstSoupHTTPSrc:souphttpsrc1:\nstreaming stopped, reason error (-5)",
+     "t": 0.018
+    },
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 4,
+     "message": "Stream doesn't contain enough data.",
+     "http": 0,
+     "src": "typefindelement10",
+     "debug": "../plugins/elements/gsttypefindelement.c(1012): gst_type_find_element_chain_do_typefinding (): /GstPlayBin3:playbin3-10/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin10/GstTypeFindElement:typefindelement10:\nCan't typefind stream",
+     "t": 0.018
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 0.6,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 1.7,
+   "tick_ms_p50": 0.01,
+   "tick_ms_max": 0.079
+  },
+  {
+   "case": "hls-ts",
+   "sink": "nv12",
+   "uri": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+   "frames": 780,
+   "first_frame_s": 0.589,
+   "eos": false,
+   "error": null,
+   "size": [
+    1280,
+    720
+   ],
+   "buffering": [
+    [
+     0.22,
+     0
+    ],
+    [
+     0.22,
+     1
+    ],
+    [
+     0.22,
+     2
+    ],
+    [
+     0.22,
+     3
+    ],
+    [
+     0.22,
+     4
+    ],
+    [
+     0.22,
+     5
+    ],
+    [
+     0.22,
+     6
+    ],
+    [
+     0.22,
+     5
+    ],
+    [
+     0.22,
+     6
+    ],
+    [
+     0.22,
+     5
+    ],
+    [
+     0.22,
+     4
+    ],
+    [
+     0.22,
+     5
+    ],
+    [
+     0.22,
+     4
+    ],
+    [
+     0.22,
+     5
+    ],
+    [
+     0.22,
+     6
+    ],
+    [
+     0.22,
+     7
+    ],
+    [
+     0.22,
+     8
+    ],
+    [
+     0.22,
+     9
+    ],
+    [
+     0.22,
+     10
+    ],
+    [
+     0.22,
+     11
+    ],
+    [
+     0.25,
+     12
+    ],
+    [
+     0.25,
+     13
+    ],
+    [
+     0.25,
+     14
+    ],
+    [
+     0.25,
+     15
+    ],
+    [
+     0.25,
+     16
+    ],
+    [
+     0.25,
+     17
+    ],
+    [
+     0.25,
+     18
+    ],
+    [
+     0.25,
+     19
+    ],
+    [
+     0.25,
+     20
+    ],
+    [
+     0.25,
+     21
+    ],
+    [
+     0.25,
+     22
+    ],
+    [
+     0.25,
+     23
+    ],
+    [
+     0.25,
+     24
+    ],
+    [
+     0.25,
+     25
+    ],
+    [
+     0.25,
+     26
+    ],
+    [
+     0.25,
+     27
+    ],
+    [
+     0.25,
+     28
+    ],
+    [
+     0.25,
+     29
+    ],
+    [
+     0.25,
+     30
+    ],
+    [
+     0.25,
+     31
+    ],
+    [
+     0.25,
+     32
+    ],
+    [
+     0.25,
+     33
+    ],
+    [
+     0.25,
+     34
+    ],
+    [
+     0.25,
+     35
+    ],
+    [
+     0.25,
+     36
+    ],
+    [
+     0.25,
+     37
+    ],
+    [
+     0.25,
+     38
+    ],
+    [
+     0.25,
+     39
+    ],
+    [
+     0.25,
+     40
+    ],
+    [
+     0.25,
+     41
+    ],
+    [
+     0.27,
+     42
+    ],
+    [
+     0.27,
+     43
+    ],
+    [
+     0.27,
+     44
+    ],
+    [
+     0.27,
+     45
+    ],
+    [
+     0.27,
+     46
+    ],
+    [
+     0.27,
+     47
+    ],
+    [
+     0.27,
+     48
+    ],
+    [
+     0.27,
+     49
+    ],
+    [
+     0.27,
+     50
+    ],
+    [
+     0.27,
+     51
+    ],
+    [
+     0.27,
+     52
+    ],
+    [
+     0.27,
+     53
+    ],
+    [
+     0.27,
+     54
+    ],
+    [
+     0.27,
+     55
+    ],
+    [
+     0.27,
+     56
+    ],
+    [
+     0.27,
+     57
+    ],
+    [
+     0.27,
+     58
+    ],
+    [
+     0.27,
+     59
+    ],
+    [
+     0.27,
+     60
+    ],
+    [
+     0.29,
+     61
+    ],
+    [
+     0.29,
+     62
+    ],
+    [
+     0.29,
+     63
+    ],
+    [
+     0.29,
+     64
+    ],
+    [
+     0.29,
+     65
+    ],
+    [
+     0.29,
+     66
+    ],
+    [
+     0.29,
+     67
+    ],
+    [
+     0.29,
+     68
+    ],
+    [
+     0.29,
+     69
+    ],
+    [
+     0.29,
+     70
+    ],
+    [
+     0.29,
+     71
+    ],
+    [
+     0.3,
+     72
+    ],
+    [
+     0.3,
+     73
+    ],
+    [
+     0.3,
+     74
+    ],
+    [
+     0.3,
+     75
+    ],
+    [
+     0.3,
+     76
+    ],
+    [
+     0.3,
+     77
+    ],
+    [
+     0.3,
+     78
+    ],
+    [
+     0.3,
+     79
+    ],
+    [
+     0.3,
+     80
+    ],
+    [
+     0.3,
+     81
+    ],
+    [
+     0.3,
+     82
+    ],
+    [
+     0.3,
+     83
+    ],
+    [
+     0.3,
+     84
+    ],
+    [
+     0.3,
+     85
+    ],
+    [
+     0.32,
+     86
+    ],
+    [
+     0.32,
+     87
+    ],
+    [
+     0.32,
+     88
+    ],
+    [
+     0.32,
+     89
+    ],
+    [
+     0.34,
+     90
+    ],
+    [
+     0.34,
+     91
+    ],
+    [
+     0.34,
+     92
+    ],
+    [
+     0.34,
+     93
+    ],
+    [
+     0.34,
+     94
+    ],
+    [
+     0.34,
+     95
+    ],
+    [
+     0.34,
+     96
+    ],
+    [
+     0.4,
+     95
+    ],
+    [
+     0.59,
+     94
+    ],
+    [
+     0.61,
+     93
+    ],
+    [
+     0.67,
+     94
+    ],
+    [
+     0.67,
+     95
+    ],
+    [
+     0.67,
+     96
+    ],
+    [
+     0.67,
+     97
+    ],
+    [
+     0.67,
+     96
+    ],
+    [
+     0.69,
+     97
+    ],
+    [
+     0.69,
+     98
+    ],
+    [
+     0.69,
+     99
+    ],
+    [
+     0.69,
+     100
+    ]
+   ],
+   "warnings": [
+    "CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)",
+    "CONTINUITY: Mismatch packet 0, stream 6 (pid 0x0101)",
+    "CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102)",
+    "CONTINUITY: Mismatch packet 0, stream 5 (pid 0x0101)",
+    "CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102)",
+    "CONTINUITY: Mismatch packet 0, stream 14 (pid 0x0101)"
+   ],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": null,
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1",
+    "glupload_caps": null
+   },
+   "position": 14.380389,
+   "duration": 634.584,
+   "teardown_ms": 73.9,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 21.9,
+   "tick_ms_p50": 0.028,
+   "tick_ms_max": 0.289
+  },
+  {
+   "case": "hls-fmp4",
+   "sink": "nv12",
+   "uri": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+   "frames": 797,
+   "first_frame_s": 0.691,
+   "eos": false,
+   "error": null,
+   "size": [
+    960,
+    540
+   ],
+   "buffering": [
+    [
+     0.22,
+     0
+    ],
+    [
+     0.35,
+     1
+    ],
+    [
+     0.35,
+     2
+    ],
+    [
+     0.35,
+     3
+    ],
+    [
+     0.35,
+     4
+    ],
+    [
+     0.35,
+     5
+    ],
+    [
+     0.35,
+     6
+    ],
+    [
+     0.35,
+     7
+    ],
+    [
+     0.35,
+     8
+    ],
+    [
+     0.35,
+     9
+    ],
+    [
+     0.35,
+     10
+    ],
+    [
+     0.35,
+     11
+    ],
+    [
+     0.35,
+     12
+    ],
+    [
+     0.35,
+     13
+    ],
+    [
+     0.35,
+     14
+    ],
+    [
+     0.35,
+     15
+    ],
+    [
+     0.35,
+     16
+    ],
+    [
+     0.35,
+     15
+    ],
+    [
+     0.35,
+     14
+    ],
+    [
+     0.35,
+     13
+    ],
+    [
+     0.35,
+     14
+    ],
+    [
+     0.35,
+     15
+    ],
+    [
+     0.35,
+     16
+    ],
+    [
+     0.35,
+     17
+    ],
+    [
+     0.35,
+     18
+    ],
+    [
+     0.35,
+     19
+    ],
+    [
+     0.35,
+     20
+    ],
+    [
+     0.35,
+     21
+    ],
+    [
+     0.35,
+     22
+    ],
+    [
+     0.35,
+     23
+    ],
+    [
+     0.35,
+     24
+    ],
+    [
+     0.35,
+     25
+    ],
+    [
+     0.35,
+     26
+    ],
+    [
+     0.35,
+     27
+    ],
+    [
+     0.35,
+     28
+    ],
+    [
+     0.35,
+     29
+    ],
+    [
+     0.35,
+     30
+    ],
+    [
+     0.35,
+     31
+    ],
+    [
+     0.35,
+     32
+    ],
+    [
+     0.35,
+     33
+    ],
+    [
+     0.35,
+     34
+    ],
+    [
+     0.35,
+     35
+    ],
+    [
+     0.35,
+     36
+    ],
+    [
+     0.35,
+     37
+    ],
+    [
+     0.35,
+     38
+    ],
+    [
+     0.35,
+     39
+    ],
+    [
+     0.35,
+     40
+    ],
+    [
+     0.35,
+     41
+    ],
+    [
+     0.35,
+     42
+    ],
+    [
+     0.35,
+     43
+    ],
+    [
+     0.35,
+     44
+    ],
+    [
+     0.35,
+     45
+    ],
+    [
+     0.35,
+     46
+    ],
+    [
+     0.35,
+     47
+    ],
+    [
+     0.35,
+     48
+    ],
+    [
+     0.35,
+     49
+    ],
+    [
+     0.35,
+     50
+    ],
+    [
+     0.37,
+     60
+    ],
+    [
+     0.37,
+     63
+    ],
+    [
+     0.44,
+     64
+    ],
+    [
+     0.44,
+     65
+    ],
+    [
+     0.44,
+     66
+    ],
+    [
+     0.44,
+     67
+    ],
+    [
+     0.44,
+     68
+    ],
+    [
+     0.44,
+     69
+    ],
+    [
+     0.46,
+     70
+    ],
+    [
+     0.46,
+     71
+    ],
+    [
+     0.47,
+     72
+    ],
+    [
+     0.47,
+     73
+    ],
+    [
+     0.47,
+     74
+    ],
+    [
+     0.47,
+     75
+    ],
+    [
+     0.47,
+     76
+    ],
+    [
+     0.47,
+     77
+    ],
+    [
+     0.47,
+     78
+    ],
+    [
+     0.49,
+     79
+    ],
+    [
+     0.49,
+     80
+    ],
+    [
+     0.49,
+     81
+    ],
+    [
+     0.49,
+     80
+    ],
+    [
+     0.49,
+     81
+    ],
+    [
+     0.51,
+     82
+    ],
+    [
+     0.51,
+     83
+    ],
+    [
+     0.51,
+     84
+    ],
+    [
+     0.52,
+     85
+    ],
+    [
+     0.52,
+     86
+    ],
+    [
+     0.52,
+     87
+    ],
+    [
+     0.52,
+     88
+    ],
+    [
+     0.52,
+     89
+    ],
+    [
+     0.54,
+     88
+    ],
+    [
+     0.54,
+     89
+    ],
+    [
+     0.54,
+     88
+    ],
+    [
+     0.54,
+     89
+    ],
+    [
+     0.54,
+     90
+    ],
+    [
+     0.54,
+     91
+    ],
+    [
+     0.56,
+     92
+    ],
+    [
+     0.56,
+     93
+    ],
+    [
+     0.56,
+     94
+    ],
+    [
+     0.56,
+     95
+    ],
+    [
+     0.56,
+     96
+    ],
+    [
+     0.56,
+     97
+    ],
+    [
+     0.56,
+     98
+    ],
+    [
+     0.57,
+     99
+    ],
+    [
+     0.57,
+     100
+    ]
+   ],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": null,
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1",
+    "glupload_caps": null
+   },
+   "position": 14.279918,
+   "duration": 600.0,
+   "teardown_ms": 76.7,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 21.8,
+   "tick_ms_p50": 0.028,
+   "tick_ms_max": 1.008
+  },
+  {
+   "case": "dash",
+   "sink": "nv12",
+   "uri": "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+   "frames": 385,
+   "first_frame_s": 0.521,
+   "eos": false,
+   "error": null,
+   "size": [
+    320,
+    180
+   ],
+   "buffering": [
+    [
+     0.3,
+     0
+    ],
+    [
+     0.34,
+     1
+    ],
+    [
+     0.34,
+     2
+    ],
+    [
+     0.34,
+     3
+    ],
+    [
+     0.34,
+     4
+    ],
+    [
+     0.34,
+     5
+    ],
+    [
+     0.34,
+     6
+    ],
+    [
+     0.34,
+     7
+    ],
+    [
+     0.34,
+     8
+    ],
+    [
+     0.34,
+     9
+    ],
+    [
+     0.34,
+     10
+    ],
+    [
+     0.34,
+     11
+    ],
+    [
+     0.34,
+     12
+    ],
+    [
+     0.34,
+     13
+    ],
+    [
+     0.34,
+     14
+    ],
+    [
+     0.34,
+     15
+    ],
+    [
+     0.34,
+     16
+    ],
+    [
+     0.34,
+     17
+    ],
+    [
+     0.34,
+     18
+    ],
+    [
+     0.34,
+     19
+    ],
+    [
+     0.34,
+     20
+    ],
+    [
+     0.34,
+     21
+    ],
+    [
+     0.34,
+     22
+    ],
+    [
+     0.34,
+     23
+    ],
+    [
+     0.34,
+     24
+    ],
+    [
+     0.34,
+     25
+    ],
+    [
+     0.34,
+     26
+    ],
+    [
+     0.34,
+     27
+    ],
+    [
+     0.34,
+     28
+    ],
+    [
+     0.34,
+     29
+    ],
+    [
+     0.34,
+     30
+    ],
+    [
+     0.34,
+     31
+    ],
+    [
+     0.34,
+     32
+    ],
+    [
+     0.34,
+     33
+    ],
+    [
+     0.34,
+     34
+    ],
+    [
+     0.34,
+     35
+    ],
+    [
+     0.34,
+     36
+    ],
+    [
+     0.34,
+     37
+    ],
+    [
+     0.34,
+     38
+    ],
+    [
+     0.34,
+     39
+    ],
+    [
+     0.34,
+     38
+    ],
+    [
+     0.34,
+     37
+    ],
+    [
+     0.34,
+     36
+    ],
+    [
+     0.39,
+     37
+    ],
+    [
+     0.4,
+     38
+    ],
+    [
+     0.4,
+     39
+    ],
+    [
+     0.4,
+     40
+    ],
+    [
+     0.42,
+     41
+    ],
+    [
+     0.42,
+     42
+    ],
+    [
+     0.44,
+     43
+    ],
+    [
+     0.45,
+     44
+    ],
+    [
+     0.45,
+     45
+    ],
+    [
+     0.45,
+     46
+    ],
+    [
+     0.45,
+     47
+    ],
+    [
+     0.45,
+     48
+    ],
+    [
+     0.45,
+     49
+    ],
+    [
+     0.45,
+     50
+    ],
+    [
+     0.45,
+     51
+    ],
+    [
+     0.47,
+     52
+    ],
+    [
+     0.47,
+     53
+    ],
+    [
+     0.47,
+     54
+    ],
+    [
+     0.47,
+     55
+    ],
+    [
+     0.47,
+     56
+    ],
+    [
+     0.47,
+     57
+    ],
+    [
+     0.47,
+     58
+    ],
+    [
+     0.47,
+     59
+    ],
+    [
+     0.47,
+     60
+    ],
+    [
+     0.47,
+     61
+    ],
+    [
+     0.49,
+     62
+    ],
+    [
+     0.49,
+     63
+    ],
+    [
+     0.49,
+     64
+    ],
+    [
+     0.49,
+     65
+    ],
+    [
+     0.49,
+     66
+    ],
+    [
+     0.49,
+     67
+    ],
+    [
+     0.49,
+     68
+    ],
+    [
+     0.49,
+     69
+    ],
+    [
+     0.49,
+     70
+    ],
+    [
+     0.49,
+     71
+    ],
+    [
+     0.49,
+     72
+    ],
+    [
+     0.49,
+     73
+    ],
+    [
+     0.5,
+     72
+    ],
+    [
+     0.5,
+     73
+    ],
+    [
+     0.5,
+     74
+    ],
+    [
+     0.52,
+     73
+    ],
+    [
+     0.55,
+     74
+    ],
+    [
+     0.55,
+     75
+    ],
+    [
+     0.57,
+     76
+    ],
+    [
+     0.57,
+     77
+    ],
+    [
+     0.57,
+     78
+    ],
+    [
+     0.57,
+     79
+    ],
+    [
+     0.57,
+     80
+    ],
+    [
+     0.59,
+     81
+    ],
+    [
+     0.59,
+     82
+    ],
+    [
+     0.59,
+     83
+    ],
+    [
+     0.61,
+     84
+    ],
+    [
+     0.61,
+     85
+    ],
+    [
+     0.61,
+     86
+    ],
+    [
+     0.61,
+     87
+    ],
+    [
+     0.61,
+     88
+    ],
+    [
+     0.66,
+     89
+    ],
+    [
+     0.66,
+     90
+    ],
+    [
+     0.66,
+     91
+    ],
+    [
+     0.66,
+     92
+    ],
+    [
+     0.66,
+     93
+    ],
+    [
+     0.66,
+     94
+    ],
+    [
+     0.66,
+     95
+    ],
+    [
+     0.66,
+     96
+    ],
+    [
+     0.66,
+     97
+    ],
+    [
+     0.69,
+     98
+    ],
+    [
+     0.69,
+     97
+    ],
+    [
+     0.69,
+     98
+    ],
+    [
+     0.69,
+     99
+    ],
+    [
+     0.69,
+     100
+    ]
+   ],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": null,
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 14.294907,
+   "duration": 634.566,
+   "teardown_ms": 68.4,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 19.1,
+   "tick_ms_p50": 0.017,
+   "tick_ms_max": 0.374
+  },
+  {
+   "case": "hls-404",
+   "sink": "nv12",
+   "uri": "https://test-streams.mux.dev/no-such-stream/master.m3u8",
+   "frames": 0,
+   "first_frame_s": null,
+   "eos": false,
+   "error": "Not Found (HTTP 404)",
+   "size": null,
+   "buffering": [],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Not Found",
+     "http": 404,
+     "src": "souphttpsrc5",
+     "debug": "../ext/soup/gstsouphttpsrc.c(1843): gst_soup_http_src_parse_status (): /GstPlayBin3:playbin3-14/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin14/GstSoupHTTPSrc:souphttpsrc5:\nNot Found (404), URL: https://test-streams.mux.dev/no-such-stream/master.m3u8, Redirect to: (NULL)",
+     "t": 0.186
+    },
+    {
+     "kind": "stream-failed",
+     "domain": "stream",
+     "code": 1,
+     "message": "Internal data stream error.",
+     "http": 0,
+     "src": "souphttpsrc5",
+     "debug": "../libs/gst/base/gstbasesrc.c(3187): gst_base_src_loop (): /GstPlayBin3:playbin3-14/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin14/GstSoupHTTPSrc:souphttpsrc5:\nstreaming stopped, reason error (-5)",
+     "t": 0.186
+    },
+    {
+     "kind": "other",
+     "domain": "stream",
+     "code": 4,
+     "message": "Stream doesn't contain enough data.",
+     "http": 0,
+     "src": "typefindelement14",
+     "debug": "../plugins/elements/gsttypefindelement.c(1012): gst_type_find_element_chain_do_typefinding (): /GstPlayBin3:playbin3-14/GstURIDecodeBin3:uridecodebin3/GstURISourceBin:urisourcebin14/GstTypeFindElement:typefindelement14:\nCan't typefind stream",
+     "t": 0.186
+    }
+   ],
+   "describe": {
+    "decoder": null,
+    "decoder_caps": null,
+    "glupload_caps": null
+   },
+   "position": -1.0,
+   "duration": -1.0,
+   "teardown_ms": 2.3,
+   "server_killed_at": null,
+   "cpu_pct_one_core": 2.3,
+   "tick_ms_p50": 0.01,
+   "tick_ms_max": 0.05
+  },
+  {
+   "case": "hls-server-dies",
+   "sink": "nv12",
+   "uri": "http://127.0.0.1:49627/index.m3u8",
+   "frames": 120,
+   "first_frame_s": 0.237,
+   "eos": false,
+   "error": "Couldn't download fragments",
+   "size": [
+    1920,
+    1080
+   ],
+   "buffering": [
+    [
+     0.07,
+     0
+    ],
+    [
+     0.07,
+     1
+    ],
+    [
+     0.07,
+     2
+    ],
+    [
+     0.07,
+     1
+    ],
+    [
+     0.07,
+     0
+    ],
+    [
+     0.15,
+     1
+    ],
+    [
+     0.15,
+     2
+    ],
+    [
+     0.15,
+     1
+    ],
+    [
+     0.15,
+     2
+    ],
+    [
+     0.15,
+     3
+    ],
+    [
+     0.15,
+     2
+    ],
+    [
+     0.15,
+     1
+    ],
+    [
+     0.15,
+     0
+    ],
+    [
+     0.24,
+     1
+    ],
+    [
+     0.24,
+     0
+    ],
+    [
+     0.32,
+     1
+    ],
+    [
+     0.32,
+     2
+    ],
+    [
+     0.32,
+     3
+    ],
+    [
+     0.32,
+     2
+    ],
+    [
+     0.32,
+     1
+    ],
+    [
+     0.32,
+     0
+    ],
+    [
+     0.39,
+     1
+    ],
+    [
+     0.39,
+     0
+    ],
+    [
+     0.39,
+     1
+    ],
+    [
+     0.39,
+     0
+    ],
+    [
+     0.56,
+     1
+    ],
+    [
+     0.56,
+     0
+    ],
+    [
+     0.64,
+     1
+    ],
+    [
+     0.64,
+     0
+    ],
+    [
+     0.64,
+     1
+    ],
+    [
+     0.64,
+     2
+    ],
+    [
+     0.64,
+     1
+    ],
+    [
+     0.67,
+     0
+    ],
+    [
+     0.73,
+     1
+    ],
+    [
+     0.73,
+     2
+    ],
+    [
+     0.73,
+     3
+    ],
+    [
+     0.74,
+     2
+    ],
+    [
+     0.78,
+     1
+    ],
+    [
+     0.81,
+     2
+    ],
+    [
+     0.81,
+     3
+    ],
+    [
+     0.81,
+     4
+    ],
+    [
+     0.81,
+     3
+    ],
+    [
+     0.88,
+     2
+    ],
+    [
+     0.88,
+     3
+    ],
+    [
+     0.88,
+     4
+    ],
+    [
+     0.92,
+     3
+    ],
+    [
+     0.97,
+     4
+    ],
+    [
+     0.97,
+     5
+    ],
+    [
+     0.97,
+     6
+    ],
+    [
+     0.98,
+     5
+    ],
+    [
+     1.02,
+     4
+    ],
+    [
+     1.05,
+     3
+    ],
+    [
+     1.05,
+     4
+    ],
+    [
+     1.05,
+     5
+    ],
+    [
+     1.05,
+     6
+    ],
+    [
+     1.05,
+     7
+    ],
+    [
+     1.08,
+     6
+    ],
+    [
+     1.12,
+     5
+    ],
+    [
+     1.14,
+     6
+    ],
+    [
+     1.14,
+     7
+    ],
+    [
+     1.14,
+     8
+    ],
+    [
+     1.15,
+     7
+    ],
+    [
+     1.2,
+     6
+    ],
+    [
+     1.22,
+     7
+    ],
+    [
+     1.22,
+     8
+    ],
+    [
+     1.24,
+     7
+    ],
+    [
+     1.3,
+     8
+    ],
+    [
+     1.3,
+     9
+    ],
+    [
+     1.3,
+     10
+    ],
+    [
+     1.3,
+     9
+    ],
+    [
+     1.34,
+     8
+    ],
+    [
+     1.37,
+     7
+    ],
+    [
+     1.39,
+     8
+    ],
+    [
+     1.39,
+     9
+    ],
+    [
+     1.39,
+     10
+    ],
+    [
+     1.4,
+     9
+    ],
+    [
+     1.44,
+     8
+    ],
+    [
+     1.47,
+     9
+    ],
+    [
+     1.47,
+     10
+    ],
+    [
+     1.47,
+     11
+    ],
+    [
+     1.47,
+     10
+    ],
+    [
+     1.54,
+     9
+    ],
+    [
+     1.56,
+     10
+    ],
+    [
+     1.56,
+     11
+    ],
+    [
+     1.56,
+     12
+    ],
+    [
+     1.57,
+     11
+    ],
+    [
+     1.61,
+     10
+    ],
+    [
+     1.64,
+     11
+    ],
+    [
+     1.64,
+     12
+    ],
+    [
+     1.64,
+     13
+    ],
+    [
+     1.64,
+     14
+    ],
+    [
+     1.64,
+     13
+    ],
+    [
+     1.67,
+     12
+    ],
+    [
+     1.71,
+     11
+    ],
+    [
+     1.71,
+     12
+    ],
+    [
+     1.71,
+     13
+    ],
+    [
+     1.71,
+     14
+    ],
+    [
+     1.74,
+     13
+    ],
+    [
+     1.77,
+     12
+    ],
+    [
+     1.79,
+     13
+    ],
+    [
+     1.79,
+     14
+    ],
+    [
+     1.79,
+     15
+    ],
+    [
+     1.81,
+     14
+    ],
+    [
+     1.88,
+     13
+    ],
+    [
+     1.88,
+     14
+    ],
+    [
+     1.88,
+     15
+    ],
+    [
+     1.91,
+     14
+    ],
+    [
+     1.96,
+     15
+    ],
+    [
+     1.96,
+     16
+    ],
+    [
+     1.96,
+     17
+    ],
+    [
+     1.98,
+     16
+    ],
+    [
+     2.01,
+     17
+    ],
+    [
+     2.01,
+     16
+    ],
+    [
+     2.04,
+     15
+    ],
+    [
+     2.04,
+     16
+    ],
+    [
+     2.08,
+     15
+    ],
+    [
+     2.11,
+     14
+    ],
+    [
+     2.13,
+     15
+    ],
+    [
+     2.13,
+     16
+    ],
+    [
+     2.13,
+     17
+    ],
+    [
+     2.18,
+     16
+    ],
+    [
+     2.21,
+     15
+    ],
+    [
+     2.21,
+     16
+    ],
+    [
+     2.21,
+     17
+    ],
+    [
+     2.21,
+     18
+    ],
+    [
+     2.25,
+     17
+    ],
+    [
+     2.3,
+     18
+    ],
+    [
+     2.3,
+     19
+    ],
+    [
+     2.3,
+     20
+    ],
+    [
+     2.31,
+     19
+    ],
+    [
+     2.35,
+     18
+    ],
+    [
+     2.38,
+     17
+    ],
+    [
+     2.38,
+     18
+    ],
+    [
+     2.38,
+     19
+    ],
+    [
+     2.38,
+     20
+    ],
+    [
+     2.38,
+     21
+    ],
+    [
+     2.42,
+     20
+    ],
+    [
+     2.45,
+     19
+    ],
+    [
+     2.47,
+     20
+    ],
+    [
+     2.47,
+     21
+    ],
+    [
+     2.52,
+     20
+    ],
+    [
+     2.55,
+     21
+    ],
+    [
+     2.55,
+     22
+    ],
+    [
+     2.55,
+     23
+    ],
+    [
+     2.55,
+     22
+    ],
+    [
+     2.58,
+     21
+    ],
+    [
+     2.62,
+     22
+    ],
+    [
+     2.62,
+     23
+    ],
+    [
+     2.65,
+     22
+    ],
+    [
+     2.67,
+     21
+    ],
+    [
+     2.7,
+     22
+    ],
+    [
+     2.7,
+     23
+    ],
+    [
+     2.7,
+     24
+    ],
+    [
+     2.74,
+     23
+    ],
+    [
+     2.77,
+     22
+    ],
+    [
+     2.79,
+     23
+    ],
+    [
+     2.79,
+     24
+    ],
+    [
+     2.79,
+     25
+    ],
+    [
+     2.8,
+     24
+    ],
+    [
+     2.87,
+     25
+    ],
+    [
+     2.87,
+     26
+    ],
+    [
+     2.87,
+     25
+    ],
+    [
+     2.9,
+     24
+    ],
+    [
+     2.95,
+     25
+    ],
+    [
+     2.95,
+     26
+    ],
+    [
+     2.95,
+     27
+    ],
+    [
+     2.97,
+     26
+    ],
+    [
+     3.04,
+     27
+    ],
+    [
+     3.04,
+     28
+    ],
+    [
+     3.04,
+     29
+    ],
+    [
+     3.07,
+     28
+    ],
+    [
+     3.07,
+     27
+    ],
+    [
+     3.11,
+     26
+    ],
+    [
+     3.12,
+     27
+    ],
+    [
+     3.12,
+     28
+    ],
+    [
+     3.17,
+     27
+    ],
+    [
+     3.21,
+     28
+    ],
+    [
+     3.21,
+     29
+    ],
+    [
+     3.21,
+     30
+    ],
+    [
+     3.21,
+     29
+    ],
+    [
+     3.24,
+     28
+    ],
+    [
+     3.29,
+     29
+    ],
+    [
+     3.29,
+     30
+    ],
+    [
+     3.29,
+     31
+    ],
+    [
+     3.31,
+     30
+    ],
+    [
+     3.34,
+     29
+    ],
+    [
+     3.37,
+     30
+    ],
+    [
+     3.37,
+     31
+    ],
+    [
+     3.41,
+     30
+    ],
+    [
+     3.44,
+     29
+    ],
+    [
+     3.44,
+     30
+    ],
+    [
+     3.44,
+     31
+    ],
+    [
+     3.44,
+     32
+    ],
+    [
+     3.48,
+     31
+    ],
+    [
+     3.53,
+     32
+    ],
+    [
+     3.53,
+     33
+    ],
+    [
+     3.53,
+     34
+    ],
+    [
+     3.54,
+     33
+    ],
+    [
+     3.58,
+     32
+    ],
+    [
+     3.61,
+     31
+    ],
+    [
+     3.61,
+     32
+    ],
+    [
+     3.61,
+     33
+    ],
+    [
+     3.61,
+     34
+    ],
+    [
+     3.61,
+     35
+    ],
+    [
+     3.65,
+     34
+    ],
+    [
+     3.68,
+     33
+    ],
+    [
+     3.7,
+     34
+    ],
+    [
+     3.7,
+     35
+    ],
+    [
+     3.7,
+     36
+    ],
+    [
+     3.71,
+     35
+    ],
+    [
+     3.78,
+     34
+    ],
+    [
+     3.78,
+     35
+    ],
+    [
+     3.78,
+     36
+    ],
+    [
+     3.81,
+     35
+    ],
+    [
+     3.87,
+     36
+    ],
+    [
+     3.87,
+     37
+    ],
+    [
+     3.87,
+     38
+    ],
+    [
+     3.88,
+     37
+    ],
+    [
+     3.92,
+     36
+    ],
+    [
+     3.95,
+     35
+    ],
+    [
+     3.95,
+     36
+    ],
+    [
+     3.95,
+     37
+    ],
+    [
+     3.95,
+     38
+    ],
+    [
+     4.05,
+     37
+    ],
+    [
+     4.08,
+     36
+    ],
+    [
+     4.12,
+     35
+    ],
+    [
+     4.19,
+     34
+    ],
+    [
+     4.2,
+     33
+    ]
+   ],
+   "warnings": [],
+   "missing": [],
+   "set_state": 2,
+   "format": "NV12",
+   "colorimetry": "bt709",
+   "raw_errors": [
+    {
+     "kind": "other",
+     "domain": "resource",
+     "code": 3,
+     "message": "Couldn't download fragments",
+     "http": 0,
+     "src": "hlsdemux2-2",
+     "debug": "Fragment downloading has failed consecutive times",
+     "t": 4.051
+    }
+   ],
+   "error_after_kill_s": 0.05,
+   "describe": {
+    "decoder": "nvh264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "position": 3.967800819,
+   "duration": 20.0,
+   "teardown_ms": 59.2,
+   "server_killed_at": 4.0,
+   "cpu_pct_one_core": 10.7,
+   "tick_ms_p50": 0.029,
+   "tick_ms_max": 1.681
+  }
+ ]
+}

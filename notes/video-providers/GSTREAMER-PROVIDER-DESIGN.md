@@ -215,9 +215,13 @@ Safety checks at import, all cheap and all before `gst_init`:
 
 * every required symbol resolved, else the import fails and Kivy selects the
   next provider, exactly as when the module is missing today;
-* `gst_version()` at or above the floor (D15);
-* a struct self-test: create an EOS message with `gst_message_new_eos()` and
-  check the mirrored struct reads `GST_MESSAGE_EOS` back.
+* `gst_version()` at or above the floor (D15).
+
+After `gst_init` (on the worker, D2), a struct self-test creates an EOS
+message with `gst_message_new_eos()` and checks the mirrored struct reads
+`GST_MESSAGE_EOS` back; a failure is reported as an initialization error.
+(Moved from import in spike 1: creating a message before initialization
+isn't something to rely on.)
 
 `libgstgl` and `libgstpbutils` are optional. Without the first there is no GL
 path; without the second, missing-plugin errors use the generic text.
@@ -229,8 +233,9 @@ Library lookup order:
 | Linux, Pi | `KIVY_GSTREAMER_ROOT` if set; else `libgstreamer-1.0.so.0` through the normal loader search |
 | Windows | `KIVY_GSTREAMER_ROOT` if set; else the `gstreamer_libs` wheel (its `gstreamer_env()` gives the DLL directories; the loader registers them with `os.add_dll_directory`, which the wheel's `.pth` doesn't do); else the official installer's root environment variable; else `PATH`. Both `gstreamer-1.0-0.dll` (MSVC) and `libgstreamer-1.0-0.dll` (MinGW) names |
 
-The loader logs the path and version it picked, once. **Unproven** as C and
-Cython (the spike used `ctypes` for the same calls): spike 1.
+The loader logs the path and version it picked, once. **Proven** in spike 1
+(`GSTREAMER-CORE-SPIKES.md`) on the Windows wheels, Pi OS Trixie and Ubuntu
+26.04.
 
 ### D2. Initialization off the UI thread
 
@@ -245,7 +250,8 @@ wheels (**proven**). To keep that off Kivy's thread:
 
 While this runs, `buffering` is `True` if the app has asked to play, which is
 what the `buffering` contract already says about "the initial pre-playback
-wait". **Unproven**: spike 1.
+wait". **Proven** (spike 1): first-run init took 3.4–13 s on Windows, 5 s on
+the Pi and 1.6 s on WSL2, and a 60 Hz loop never waited more than 20 ms.
 
 ### D3. Pipeline
 
@@ -257,12 +263,14 @@ wait". **Unproven**: spike 1.
 | `video-sink` | the sink bin from D6–D8 |
 | `audio-sink` | unset: `playbin3` uses `autoaudiosink` |
 | `volume` | from `VideoBase.volume` |
-| `flags` | `video`, `audio`, `soft-volume`, `buffering`, `deinterlace`; plus `force-sw-decoders` when the option asks for it. Not `text` (the spike saw a subtitle parser instantiated for HLS) and not `soft-colorbalance` |
+| `flags` | `video`, `audio`, `soft-volume`, `buffering`, `deinterlace`; plus `force-sw-decoders` when the option asks for it. Not `soft-colorbalance`. `text` off on Linux (an overlay would be blended on the CPU), **on on Windows**: with it off, a stream with a subtitle track stalled with the 1.28.7 wheels (spike 3) |
 
 `playsink` inserts a software converter chain when `soft-colorbalance` is set
 and the sink has no colour-balance interface (**source**). The spike ran with
-the default flags and DMABuf still passed through, so dropping
-`soft-colorbalance` and `text` is **unproven**: spike 3 checks it.
+the default flags and DMABuf still passed through; with the reduced flags it
+still does (**proven**, spike 3). `playbin3` selects a subtitle stream even
+with `text` off; a `select-streams` event for audio and video only had no
+visible effect on Windows and is left for later.
 
 `appsink` settings: `emit-signals=false`, `max-buffers=1`, `drop=true`,
 `sync=true`, `enable-last-sample=false`, `qos=true`. `qos` lets decoders skip
@@ -398,7 +406,8 @@ Video sink: `appsink` with caps `video/x-raw, format=NV12`. Per frame:
    the video texture. `Fbo.ask_update()` is needed every frame.
 
 The shader's matrix and range come from the caps' `colorimetry` field
-(BT.601 or BT.709, limited or full range), not from the frame height as in
+(BT.601, BT.709 or BT.2020, limited or full range; chroma centred on 128/255,
+not 0.5, which put R and B one level high in spike 3), not from the frame height as in
 the spike. **Unproven**: spike 9.
 
 ### D9. Errors
@@ -543,6 +552,13 @@ providers happens after the video work, not as part of it.
 | Codec licensing | the base `gstreamer-plugins` wheel already contains gst-libav (FFmpeg decoders); MPEG-TS, needed for most HLS, is in the separate `gstreamer-plugins-restricted` wheel, which only `kivy[gstreamer-restricted]` installs | the distro's and user's choice | Pi OS ships libav |
 
 Windows specifics the provider handles itself:
+
+* The wheels' environment. Their `.pth` comes from `gstreamer-meta`, which
+  the `gstreamer` extra doesn't install, so the loader applies
+  `gstreamer_libs.gstreamer_env()` itself: `PATH`, the `GST_PLUGIN_*`,
+  `GST_REGISTRY_1_0` (never over a user value), `GIO_EXTRA_MODULES` and
+  `XDG_*`. `GIO_EXTRA_MODULES` carries the TLS backend: without it every
+  `https://` URI failed (**proven**, spike 1).
 
 * Exact pins. Upstream's meta-packages use `~=`, and pip assembled a mixed
   1.28.7 / 1.28.8 install on the first try; 1.28.8 and 1.28.9 were published
@@ -706,6 +722,8 @@ zero-copy path. The remaining spikes run alongside steps 2 to 4.
 ## 13. Spikes for the open technical questions
 
 The first three decide the shape of the core and should run before PR A.
+**Spikes 1 to 3 are done** (2026-11-20, `GSTREAMER-CORE-SPIKES.md`): all three
+answered yes, on Windows, the Pi 5 and WSL2.
 
 | # | Question | Method | Done when |
 |---|---|---|---|
@@ -748,6 +766,8 @@ Made with the user on 2026-11-19.
 | Upstream's Windows wheels are published incomplete or mixed | exact pins in the extra; kivyforge locks; pin only versions with a complete set |
 | The official wheels' licence metadata lists `GPL-2.0-or-later` and `LGPL-3.0-only` among component licences | possibly dual-licensed components; confirm in spike 8 before `full` ships them |
 | Two GStreamer copies in one process on Windows (wheels and an installer) | the loader takes the first match in a fixed order and logs it; `KIVY_GSTREAMER_ROOT` overrides |
+| Windows 1.28.7 wheels: an HLS stream whose demuxer is missing (TS without the restricted set) aborts the process in libsoup at teardown; reproduced with PyGObject too (spike 1) | report upstream; document `kivy[gstreamer-restricted]` for HLS TS on Windows until fixed |
+| Windows 1.28.7 wheels: a subtitle track stalls playback with `text` off and `wasapi2sink` (spike 3) | `text` kept on, on Windows only; report upstream; stream selection later |
 | An app also uses PyGObject and GStreamer directly | same `libgstreamer` in the process; `gst_init` is idempotent; nothing in this design owns a GLib main loop |
 | Crashes at interpreter exit with streaming threads alive | keep today's `atexit` hook that sets every pipeline to NULL |
 | Distro GStreamer lacks a codec (Fedora without RPM Fusion) | missing-plugin errors name the missing decoder through `on_error`; documented |

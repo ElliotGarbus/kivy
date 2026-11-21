@@ -1,0 +1,126 @@
+[WARNING] [Kivy        ] KIVY_DESKTOP_PATH_ID not set. If your application targets desktop platforms, set it to provide a user-friendly application name for directories. See https://kivy.org/doc/stable/guide/environment.html
+[INFO   ] [Logger      ] Record log in /home/edgarbus/.kivy/logs/kivy_26-11-20_10.txt
+[INFO   ] [Kivy        ] v3.0.0.dev0
+[INFO   ] [Kivy        ] Installed at "/home/edgarbus/kivy3-gst-venv/lib/python3.13/site-packages/kivy/__init__.py"
+[INFO   ] [Python      ] v3.13.5 (main, Aug 10 2026, 12:06:59) [GCC 14.2.0]
+[INFO   ] [Python      ] Interpreter at "/home/edgarbus/kivy3-gst-venv/bin/python"
+[INFO   ] [Logger      ] Purge log fired. Processing...
+[INFO   ] [Logger      ] Purge finished!
+[INFO   ] [Factory     ] 199 symbols loaded
+[INFO   ] [Image       ] Providers: img_tex, img_dds, img_sdl3, img_pil, img_thorvg_svg (img_ffpyplayer ignored)
+[INFO   ] [Window      ] Provider: sdl3
+[INFO   ] [GL          ] Using the "OpenGL" graphics system
+[INFO   ] [GL          ] Backend used <sdl3>
+[INFO   ] [GL          ] OpenGL version <b'3.1 Mesa 26.2.7-1~bpo13+0~rpt1'>
+[INFO   ] [GL          ] OpenGL vendor <b'Broadcom'>
+[INFO   ] [GL          ] OpenGL renderer <b'V3D 7.1.10.2'>
+[INFO   ] [GL          ] OpenGL parsed version: 3, 1
+[INFO   ] [GL          ] Shading version <b'1.40'>
+[INFO   ] [GL          ] Texture max size <4096>
+[INFO   ] [GL          ] Texture max units <24>
+[INFO   ] [Window      ] auto add sdl3 input provider
+[ERROR  ] [Base        ] No event listeners have been created
+[ERROR  ] [Base        ] Application will leave
+[INFO   ] [GL          ] Using the "OpenGL" graphics system
+[INFO   ] [GL          ] Backend used <sdl3>
+[INFO   ] [GL          ] OpenGL version <b'3.1 Mesa 26.2.7-1~bpo13+0~rpt1'>
+[INFO   ] [GL          ] OpenGL vendor <b'Broadcom'>
+[INFO   ] [GL          ] OpenGL renderer <b'V3D 7.1.10.2'>
+[INFO   ] [GL          ] OpenGL parsed version: 3, 1
+[INFO   ] [GL          ] Shading version <b'1.40'>
+[INFO   ] [GL          ] Texture max size <4096>
+[INFO   ] [GL          ] Texture max units <24>
+[INFO   ] [Window      ] auto add sdl3 input provider
+[INFO   ] [Window      ] virtual keyboard not allowed, single mode, not docked
+[INFO   ] [VideoGstplayer] GStreamer 1.26.2 from system (/lib/aarch64-linux-gnu/libgstreamer-1.0.so.0)
+[INFO   ] [Video       ] Provider: gstplayer(['video_avfoundation', 'video_mediafoundation'] ignored)
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+WARNING: running xinput against an Xwayland server. See the xinput man page for details.
+[INFO   ] [ProbeSysfs  ] device match: /dev/input/event8
+[INFO   ] [MTD         ] Read event from </dev/input/event8>
+[INFO   ] [Base        ] Start application main loop
+[INFO   ] [MTD         ] </dev/input/event8> range position X is 0 - 1024
+[INFO   ] [MTD         ] </dev/input/event8> range position Y is 0 - 600
+[INFO   ] [MTD         ] </dev/input/event8> range touch major is 0 - 600
+[INFO   ] [MTD         ] </dev/input/event8> range touch minor is 0 - 600
+[INFO   ] [MTD         ] </dev/input/event8> range pressure is 0 - 255
+[INFO   ] [MTD         ] </dev/input/event8> axes inversion: X is 0, Y is 0
+[INFO   ] [MTD         ] </dev/input/event8> rotation set to 0
+[INFO   ] [WindowSDL   ] Window pixel size changed
+[INFO   ] [WindowSDL   ] Window pixel size changed
+[INFO   ] [WindowSDL   ] Window pixel size changed
+[DEBUG  ] Importing BlpImagePlugin
+[DEBUG  ] Importing BmpImagePlugin
+[DEBUG  ] Importing BufrStubImagePlugin
+[DEBUG  ] Importing CurImagePlugin
+[DEBUG  ] Importing DcxImagePlugin
+[DEBUG  ] Importing DdsImagePlugin
+[DEBUG  ] Importing EpsImagePlugin
+[DEBUG  ] Importing FitsImagePlugin
+[DEBUG  ] Importing FliImagePlugin
+[DEBUG  ] Importing FpxImagePlugin
+[DEBUG  ] Importing FtexImagePlugin
+[DEBUG  ] Importing GbrImagePlugin
+[DEBUG  ] Importing GifImagePlugin
+[DEBUG  ] Importing GribStubImagePlugin
+[DEBUG  ] Importing Hdf5StubImagePlugin
+[DEBUG  ] Importing IcnsImagePlugin
+[DEBUG  ] Importing IcoImagePlugin
+[DEBUG  ] Importing ImImagePlugin
+[DEBUG  ] Importing ImtImagePlugin
+[DEBUG  ] Importing IptcImagePlugin
+[DEBUG  ] Importing JpegImagePlugin
+[DEBUG  ] Importing Jpeg2KImagePlugin
+[DEBUG  ] Importing McIdasImagePlugin
+[DEBUG  ] Importing MicImagePlugin
+[DEBUG  ] Importing MpegImagePlugin
+[DEBUG  ] Importing MpoImagePlugin
+[DEBUG  ] Importing MspImagePlugin
+[DEBUG  ] Importing PalmImagePlugin
+[DEBUG  ] Importing PcdImagePlugin
+[DEBUG  ] Importing PcxImagePlugin
+[DEBUG  ] Importing PdfImagePlugin
+[DEBUG  ] Importing PixarImagePlugin
+[DEBUG  ] Importing PngImagePlugin
+[DEBUG  ] Importing PpmImagePlugin
+[DEBUG  ] Importing PsdImagePlugin
+[DEBUG  ] Importing QoiImagePlugin
+[DEBUG  ] Importing SgiImagePlugin
+[DEBUG  ] Importing SpiderImagePlugin
+[DEBUG  ] Importing SunImagePlugin
+[DEBUG  ] Importing TgaImagePlugin
+[DEBUG  ] Importing TiffImagePlugin
+[DEBUG  ] Importing WebPImagePlugin
+[DEBUG  ] Importing WmfImagePlugin
+[DEBUG  ] Importing XbmImagePlugin
+[DEBUG  ] Importing XpmImagePlugin
+[DEBUG  ] Importing XVThumbImagePlugin
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/hevc_2160p30.mp4>: render path gl (EGL, opengl,opengl3), decoder v4l2slh265dec, decoder output video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, drm-format=(string)NV12:0x0700000000000004, glupload input video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, drm-format=(string)NV12:0x0700000000000004
+[INFO   ] [GL          ] NPOT texture support is available
+[INFO   ] [Check       ] {"clip": "hevc_2160p30.mp4", "path": "gl", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.778, "render_path": "gl", "gl": ["egl", "opengl,opengl3"], "describe": {"decoder": "v4l2slh265dec", "decoder_caps": "video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, drm-format=(string)NV12:0x0700000000000004", "glupload_caps": "video/x-raw(memory:DMABuf), format=(string)DMA_DRM, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, drm-format=(string)NV12:0x0700000000000004"}, "size": [3840, 2160], "duration": 10.007666666, "first_mean": [1.8, 1.8, 1.8], "paused_seek_updates": true, "paused_seek_s": 0.094, "mid_mean": [1.8, 1.8, 1.8], "paused_seek_picture_diff": 0.01, "position_after_paused_seek": 5.0, "burst_settled": true, "burst_s": 1.337, "burst_pipeline_seeks": 4, "burst_final_position": 7.01, "burst_target": 7.01, "play_fps": 30.0, "play_cpu_pct": 8.1, "play_readback_mean": [1.8, 1.8, 1.8], "loop_restarts": true, "loop_s": 1.744, "frames_after_loop_1s": 28, "position_after_stop": 0.0, "state_after_stop": ""}
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/hevc_2160p30.mp4>: render path nv12, decoder v4l2slh265dec, decoder output video/x-raw, format=(string)NV12_128C8, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1
+[INFO   ] [Check       ] {"clip": "hevc_2160p30.mp4", "path": "nv12", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.292, "render_path": "nv12", "gl": null, "describe": {"decoder": "v4l2slh265dec", "decoder_caps": "video/x-raw, format=(string)NV12_128C8, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1", "glupload_caps": null}, "size": [3840, 2160], "duration": 10.007666666, "first_mean": [1.8, 1.8, 1.8], "paused_seek_updates": true, "paused_seek_s": 0.14, "mid_mean": [1.8, 1.8, 1.8], "paused_seek_picture_diff": 0.01, "position_after_paused_seek": 5.0, "burst_settled": true, "burst_s": 1.569, "burst_pipeline_seeks": 3, "burst_final_position": 7.01, "burst_target": 7.01, "play_fps": 4.2, "play_cpu_pct": 92.0, "play_readback_mean": [1.8, 1.8, 1.8], "loop_restarts": true, "loop_s": 1.992, "frames_after_loop_1s": 4, "position_after_stop": 0.0, "state_after_stop": ""}
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/test_1080p30.mp4>: render path gl (EGL, opengl,opengl3), decoder avdec_h264, decoder output video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1
+[INFO   ] [Check       ] {"clip": "test_1080p30.mp4", "path": "gl", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.13, "render_path": "gl", "gl": ["egl", "opengl,opengl3"], "describe": {"decoder": "avdec_h264", "decoder_caps": "video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1", "glupload_caps": "video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1"}, "size": [1920, 1080], "duration": 20.0, "first_mean": [2.2, 1.5, 1.3], "paused_seek_updates": true, "paused_seek_s": 0.367, "mid_mean": [3.9, 3.3, 3.0], "paused_seek_picture_diff": 1.83, "position_after_paused_seek": 10.0, "burst_settled": true, "burst_s": 1.583, "burst_pipeline_seeks": 3, "burst_final_position": 14.0, "burst_target": 14.0, "play_fps": 29.8, "play_cpu_pct": 66.4, "play_readback_mean": [1.9, 1.5, 1.2], "loop_restarts": true, "loop_s": 1.792, "frames_after_loop_1s": 27, "position_after_stop": 0.0, "state_after_stop": ""}
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/test_1080p30.mp4>: render path nv12, decoder avdec_h264, decoder output video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1
+[INFO   ] [Check       ] {"clip": "test_1080p30.mp4", "path": "nv12", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.082, "render_path": "nv12", "gl": null, "describe": {"decoder": "avdec_h264", "decoder_caps": "video/x-raw, format=(string)I420, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, colorimetry=(string)bt709, framerate=(fraction)30/1", "glupload_caps": null}, "size": [1920, 1080], "duration": 20.0, "first_mean": [2.2, 1.5, 1.3], "paused_seek_updates": true, "paused_seek_s": 0.111, "mid_mean": [3.9, 3.3, 3.0], "paused_seek_picture_diff": 1.83, "position_after_paused_seek": 10.0, "burst_settled": true, "burst_s": 0.92, "burst_pipeline_seeks": 5, "burst_final_position": 14.0, "burst_target": 14.0, "play_fps": 30.0, "play_cpu_pct": 42.7, "play_readback_mean": [1.9, 1.5, 1.2], "loop_restarts": true, "loop_s": 1.614, "frames_after_loop_1s": 28, "position_after_stop": 0.0, "state_after_stop": ""}
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/big_buck_bunny_360_10s.mp4>: render path gl (EGL, opengl,opengl3), decoder avdec_h264, decoder output video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1
+[INFO   ] [Check       ] {"clip": "big_buck_bunny_360_10s.mp4", "path": "gl", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.099, "render_path": "gl", "gl": ["egl", "opengl,opengl3"], "describe": {"decoder": "avdec_h264", "decoder_caps": "video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1", "glupload_caps": "video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1"}, "size": [640, 360], "duration": 10.0, "first_mean": [89.5, 104.5, 56.5], "paused_seek_updates": true, "paused_seek_s": 0.49, "mid_mean": [89.0, 104.1, 53.4], "paused_seek_picture_diff": 22.36, "position_after_paused_seek": 5.0, "burst_settled": true, "burst_s": 1.447, "burst_pipeline_seeks": 4, "burst_final_position": 7.0, "burst_target": 7.0, "play_fps": 30.1, "play_cpu_pct": 24.1, "play_readback_mean": [88.5, 102.7, 53.7], "loop_restarts": true, "loop_s": 1.546, "frames_after_loop_1s": 29, "position_after_stop": 0.0, "state_after_stop": ""}
+[WARNING] [Image       ] Unknown <mp4> type, no loader found.
+[INFO   ] [VideoGstplayer] </home/edgarbus/gstreamer-spike/clips/big_buck_bunny_360_10s.mp4>: render path nv12, decoder avdec_h264, decoder output video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1
+[INFO   ] [Check       ] {"clip": "big_buck_bunny_360_10s.mp4", "path": "nv12", "provider": "VideoGstplayer", "first_frame_without_play": true, "load_s": 0.049, "render_path": "nv12", "gl": null, "describe": {"decoder": "avdec_h264", "decoder_caps": "video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, pixel-aspect-ratio=(fraction)1/1, chroma-site=(string)mpeg2, framerate=(fraction)30/1", "glupload_caps": null}, "size": [640, 360], "duration": 10.0, "first_mean": [89.6, 104.5, 56.5], "paused_seek_updates": true, "paused_seek_s": 0.18, "mid_mean": [89.0, 104.1, 53.3], "paused_seek_picture_diff": 22.33, "position_after_paused_seek": 5.0, "burst_settled": true, "burst_s": 0.937, "burst_pipeline_seeks": 9, "burst_final_position": 7.0, "burst_target": 7.0, "play_fps": 30.1, "play_cpu_pct": 12.5, "play_readback_mean": [88.5, 102.8, 53.8], "loop_restarts": true, "loop_s": 1.524, "frames_after_loop_1s": 30, "position_after_stop": 0.0, "state_after_stop": ""}
+[INFO   ] [Check       ] wrote results/pi5-provider/wayland.json
+[INFO   ] [Base        ] Leaving application in progress...
