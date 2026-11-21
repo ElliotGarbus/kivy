@@ -350,8 +350,10 @@ warning when the decoder could have produced DMABuf.
 Per stream, on Linux (**proven**, spike 4): for software-decoded video on
 the Pi 5, `nv12` beats `gl` (40% vs 66% of a core at 1080p H.264). So `auto`
 starts on `gl` and, at the first preroll, reads the decoder's output caps:
-plain system memory (`video/x-raw`) rebuilds the pipeline once on `nv12`;
-DMABuf, GL or other GPU memory stays on `gl`. Both best cases are met (4K
+a software decoder with frames in plain system memory (`video/x-raw`)
+rebuilds the pipeline once on `nv12`; DMABuf, GL or other GPU memory stays on
+`gl`, and so does a hardware decoder whose frames are copied out under GLX
+(spike 6: no cheaper on Iris Xe, dearer for VP9). Both best cases are met (4K
 HEVC 8%, 1080p H.264 40%) at the cost of 0.1â€“0.2 s more before the first
 frame of a software-decoded stream. No caps-time switching sink: it would
 need callbacks on GStreamer's threads. Windows keeps `gl`, which was as cheap
@@ -760,7 +762,10 @@ GStreamer cleanly, and a real AppImage waits for a manylinux aarch64 wheel
 from CI. **Spike 4 is done** (per-stream re-plan adopted into D6). **Spike 5
 is done except GLES:** under KMSDRM (no desktop) the Pi 5 gets the same
 zero-copy result as under Wayland (4K HEVC 30 fps, 8%); Kivy 3 can't create
-a GLES context on Linux today, so the GLES branch is untested.
+a GLES context on Linux today, so the GLES branch is untested. **Spike 6
+is done for Intel** (Iris Xe, Ubuntu 26.04 live): VA-API decode to DMABuf
+to `glupload` under Wayland and X11+EGL, 4K H.264 and HEVC at 6–7% of a
+core; GLX copies (19–20%) and warns. AMD and NVIDIA untested.
 
 | # | Question | Method | Done when |
 |---|---|---|---|

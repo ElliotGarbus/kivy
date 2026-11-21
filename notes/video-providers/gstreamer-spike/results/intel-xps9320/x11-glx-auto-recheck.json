@@ -1,0 +1,220 @@
+{
+ "meta": {
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "python": "3.14.4",
+  "gst": [
+   [
+    1,
+    28,
+    2,
+    0
+   ],
+   "/usr/lib/x86_64-linux-gnu/libgstreamer-1.0.so.0",
+   "system"
+  ],
+  "gl_version": "b'4.6 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3'",
+  "gl_renderer": "b'Mesa Intel(R) Iris(R) Xe Graphics (ADL GT2)'",
+  "kivy_gl_backend": null,
+  "window": "WindowSDL",
+  "sdl_video_driver": "x11"
+ },
+ "results": [
+  {
+   "clip": "test_2160p30.mp4",
+   "path": "auto",
+   "events": [
+    {
+     "t": 0.24,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 10.241,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.24,
+   "render_path": "gl",
+   "gl": [
+    "glx",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "vah264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1"
+   },
+   "size": [
+    3840,
+    2160
+   ],
+   "duration": 10.007666666,
+   "first_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.22,
+   "mid_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_picture_diff": 0.01,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 0.904,
+   "burst_pipeline_seeks": 6,
+   "burst_final_position": 7.01,
+   "burst_target": 7.01,
+   "play_fps": 29.7,
+   "play_cpu_pct": 20.4,
+   "play_readback_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.868,
+   "frames_after_loop_1s": 29,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "vp9_1080p.webm",
+   "path": "auto",
+   "events": [
+    {
+     "t": 0.093,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 7.161,
+     "what": "on_eos"
+    },
+    {
+     "t": 9.856,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.094,
+   "render_path": "gl",
+   "gl": [
+    "glx",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "vavp9dec",
+    "decoder_caps": "video/x-raw, format=(string)Y412_LE, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)Y412_LE, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1"
+   },
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 5.0,
+   "first_mean": [
+    133.9,
+    119.2,
+    129.6
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.148,
+   "mid_mean": [
+    133.3,
+    118.7,
+    129.0
+   ],
+   "paused_seek_picture_diff": 2.1,
+   "position_after_paused_seek": 2.5,
+   "burst_settled": true,
+   "burst_s": 0.91,
+   "burst_pipeline_seeks": 10,
+   "burst_final_position": 3.5,
+   "burst_target": 3.5,
+   "play_fps": 25.2,
+   "play_cpu_pct": 15.6,
+   "play_readback_mean": [
+    133.9,
+    119.2,
+    129.6
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.705,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "path": "auto",
+   "events": [
+    {
+     "t": 0.069,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 9.373,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.069,
+   "render_path": "gl",
+   "gl": [
+    "glx",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "vah264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1"
+   },
+   "size": [
+    640,
+    360
+   ],
+   "duration": 10.0,
+   "first_mean": [
+    89.6,
+    104.5,
+    56.5
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.036,
+   "mid_mean": [
+    89.1,
+    104.1,
+    53.4
+   ],
+   "paused_seek_picture_diff": 22.38,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 0.748,
+   "burst_pipeline_seeks": 38,
+   "burst_final_position": 7.0,
+   "burst_target": 7.0,
+   "play_fps": 30.0,
+   "play_cpu_pct": 4.2,
+   "play_readback_mean": [
+    88.5,
+    102.5,
+    53.8
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.515,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  }
+ ]
+}

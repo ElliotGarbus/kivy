@@ -419,6 +419,58 @@ Pi app without a desktop gets it too.
 
 Spike 5 is done apart from GLES, which waits for Kivy (above).
 
+## Spike 6: x86 Linux with Intel graphics (2026-11-21)
+
+Dell XPS 9320 (Core i7-1260P, Iris Xe, Alder Lake GT2), Ubuntu 26.04.1
+desktop booted live from USB (GNOME, Wayland), GStreamer 1.28.2 from the
+distro plus `gstreamer1.0-plugins-bad`, `-libav`, `-gl` and
+`intel-media-va-driver` (iHD 26.1.2: H.264, HEVC and VP9 decode; no AV1
+`vaav1dec` with that driver build). Kivy 3 built on the laptop from the
+branch. Results in `results/intel-xps9320/`.
+
+**Headless:** every case passes: VA decoders picked automatically
+(`vah264dec`, `vah265dec`, `vavp9dec`), HLS TS/fMP4, DASH, HTTP 404, the
+new "Could not connect to the server" text for DNS, the dead HLS server
+(0.05 s), first-run init 0.3 s.
+
+**Zero-copy works on Intel.** With an EGL context (Wayland, and X11 with
+`SDL_VIDEO_FORCE_EGL=1`), every hardware-decoded stream reaches `glupload`
+as DMABuf. CPU in % of one core, 6 s of playback:
+
+| Clip (decoder) | Wayland `gl` | Wayland `nv12` | X11+EGL `gl` | X11+GLX `gl` |
+|---|---|---|---|---|
+| 4K H.264 (`vah264dec`) | 30 fps, 7.2% | 20.4% | 5.8% | 18.9% |
+| 4K HEVC (`vah265dec`) | 30 fps, 6.3% | 21.0% | 5.7% | 19.6% |
+| 1080p H.264 | 5.5% | 9.4% | 5.1% | 9.9% |
+| 1080p VP9 (`vavp9dec`) | 4.7% | 20.7% | 4.1% | 15.5% |
+| 360p H.264 | 3.8% | 3.5% | 3.5% | 4.2% |
+
+GLX can't import DMABuf, so there the decoder's frames are copied to
+system memory and cost 3 to 4 times more; the provider's GLX warning fires.
+All rows: first frame without playing, paused seeks, loop, stop pass. The
+first video of each run read higher under `auto` (12.6–14.9% for 4K H.264
+against 5.8–7.2% under `gl`, same path) and the same clip on its own run
+didn't: warm-up, not the path.
+
+**Colour on Iris Xe:** BT.601, BT.709 and full range within 2.3–2.7 levels
+of the source in `gl` and `nv12`, as on the RTX 2060 and the Pi.
+
+**A fix from this run.** Under GLX, `auto` saw system-memory frames and
+rebuilt on `nv12`, logging "vah264dec decodes in software", which was
+wrong (hardware decode, copied out) and no cheaper (4K H.264 19.1% vs
+18.9%; VP9 20.8% vs 15.5%). The re-plan now also needs a software decoder
+(decoder name not starting with a hardware prefix); rechecked: GLX stays on
+`gl`, Wayland unchanged.
+
+**Practical notes for the test setup:** the live session suspended after
+idling and dropped Wi-Fi; masking the sleep targets and turning off Wi-Fi
+power saving fixed it. GNOME's Xwayland needs
+`XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.*` for apps started over
+SSH.
+
+Not covered: AV1 (no VA AV1 decoder in this driver build), AMD and NVIDIA
+(spike 6's other half), Intel software decoding.
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`
