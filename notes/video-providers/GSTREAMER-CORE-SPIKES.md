@@ -243,6 +243,46 @@ Windows with a DNS failure, a refused port, `expired.badssl.com` and
 `self-signed.badssl.com` (so certificate checks work with the wheels' TLS
 module). HTTP errors keep their status: `Not Found (HTTP 404)`.
 
+## Spike 9: rotation, pixel aspect ratio, colour (2026-11-20)
+
+With `videoflip` gone from the sinks, rotation is done by Kivy. The core
+reports the video sink's `image-orientation` tag (base sinks post the tags
+they receive as TAG messages; only those from Kivy's appsink are used). The
+provider maps the tag to a corner permutation (`_policy.py`) and draws the
+frame turned: in the NV12 path inside the Fbo it already uses, in the GL and
+RGBA paths with one extra Fbo pass, only for rotated or non-square-pixel
+streams. Non-square pixels widen (or heighten) the picture so no detail is
+lost. Thumbnails keep `videoflip` (one frame).
+
+`orient_check.py` generates SMPTE-bar clips with GStreamer: one MP4 per tag
+value (`taginject` before `mp4mux`, read back by `qtdemux`), WebM with 2:1
+and 1:2 pixels, and WebM tagged BT.601, BT.709 and full-range BT.601
+(generated from RGB, so `videoconvert` does the YUV conversion). Each path's
+first frame is read back on a 16x16 grid and compared with GStreamer's own
+rendering (`videoflip` auto + `videoconvert`, aspect applied) and, for the
+colour clips, with the source written as a lossless PNG.
+
+| | Windows (RTX 2060, 1.28.7) | Pi 5 (EGL, 1.26.2) |
+|---|---|---|
+| 8 orientation tags x gl / nv12 / rgba: size | all as expected (W x H or H x W) | same |
+| ... picture vs `videoflip` | 1.43 levels (gl, nv12), 0.0 (rgba) | 1.52 / 0.01 |
+| 2:1 and 1:2 pixels: size | 640x180, 320x360 | same |
+| BT.601 vs source | gl/nv12 2.58, GStreamer 3.86 | |
+| BT.709 vs source | gl/nv12 2.74, GStreamer 3.91 | |
+| full-range BT.601 vs source | gl/nv12 2.28, GStreamer 2.44 | |
+
+(The ~1.5-level difference between the GPU paths and `rgba` is rounding in
+the conversion. The Pi's colour row used the first clip generator, which
+labelled `videotestsrc`'s limited-range YUV as full range; its BT.601/709
+numbers matched Windows'.)
+
+Bug found on the way: the two transposes were swapped. GStreamer's
+`flip-rotate-N` is "mirror, then turn N degrees clockwise"; the first
+mapping turned first. Both now match `videoflip`; a unit test checks the
+composition.
+
+Not covered: 10-bit HEVC (no 10-bit encoder in the test setup) and BT.2020.
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`

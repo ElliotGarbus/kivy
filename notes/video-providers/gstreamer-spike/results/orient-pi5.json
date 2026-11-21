@@ -1,0 +1,891 @@
+{
+ "meta": {
+  "platform": "Linux-6.18.60+rpt-rpi-2712-aarch64-with-glibc2.41",
+  "encoder": "x264enc",
+  "gst": [
+   1,
+   26,
+   2,
+   0
+  ],
+  "clip_errors": {}
+ },
+ "results": [
+  {
+   "clip": "rotate-0",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "rotate-0",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "rotate-0",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 0.0
+  },
+  {
+   "clip": "rotate-90",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "rotate-90",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "rotate-90",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "rotate-180",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "rotate-180",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "rotate-180",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "rotate-270",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "rotate-270",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "rotate-270",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "flip-rotate-0",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "flip-rotate-0",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "flip-rotate-0",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "flip-rotate-0",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "flip-rotate-0",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "flip-rotate-0",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "flip-rotate-90",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "flip-rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "flip-rotate-90",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "flip-rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "flip-rotate-90",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "flip-rotate-90",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "flip-rotate-180",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "flip-rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "flip-rotate-180",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "flip-rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "flip-rotate-180",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "flip-rotate-180",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    180
+   ],
+   "expected_size": [
+    320,
+    180
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "flip-rotate-270",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": "flip-rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "flip-rotate-270",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": "flip-rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 1.53
+  },
+  {
+   "clip": "flip-rotate-270",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": "flip-rotate-270",
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    180,
+    320
+   ],
+   "expected_size": [
+    180,
+    320
+   ],
+   "size_ok": true,
+   "diff": 0.01
+  },
+  {
+   "clip": "par 2/1",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    2,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    640,
+    180
+   ],
+   "expected_size": [
+    640,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.52
+  },
+  {
+   "clip": "par 2/1",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    2,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    640,
+    180
+   ],
+   "expected_size": [
+    640,
+    180
+   ],
+   "size_ok": true,
+   "diff": 1.54
+  },
+  {
+   "clip": "par 2/1",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    2,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    640,
+    180
+   ],
+   "expected_size": [
+    640,
+    180
+   ],
+   "size_ok": true,
+   "diff": 0.07
+  },
+  {
+   "clip": "par 1/2",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    1,
+    2
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    360
+   ],
+   "expected_size": [
+    320,
+    360
+   ],
+   "size_ok": true,
+   "diff": 1.6
+  },
+  {
+   "clip": "par 1/2",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    1,
+    2
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    360
+   ],
+   "expected_size": [
+    320,
+    360
+   ],
+   "size_ok": true,
+   "diff": 1.6
+  },
+  {
+   "clip": "par 1/2",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    1,
+    2
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    360
+   ],
+   "expected_size": [
+    320,
+    360
+   ],
+   "size_ok": true,
+   "diff": 0.18
+  },
+  {
+   "clip": "colour bt601",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 1.51,
+   "diff_vs_source": 7.57,
+   "ref_vs_source": 8.68
+  },
+  {
+   "clip": "colour bt601",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt601",
+   "format": "NV12",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 1.51,
+   "diff_vs_source": 7.57,
+   "ref_vs_source": 8.68
+  },
+  {
+   "clip": "colour bt601",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:16:4",
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 0.0,
+   "diff_vs_source": 8.68,
+   "ref_vs_source": 8.68
+  },
+  {
+   "clip": "colour bt709",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 1.47,
+   "diff_vs_source": 7.59,
+   "ref_vs_source": 8.54
+  },
+  {
+   "clip": "colour bt709",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "bt709",
+   "format": "NV12",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 1.47,
+   "diff_vs_source": 7.59,
+   "ref_vs_source": 8.54
+  },
+  {
+   "clip": "colour bt709",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:5:1",
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 0.0,
+   "diff_vs_source": 8.54,
+   "ref_vs_source": 8.54
+  },
+  {
+   "clip": "colour 1:4:0:0",
+   "path": "gl",
+   "render_path": "gl",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": null,
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 0.51,
+   "diff_vs_source": 21.33,
+   "ref_vs_source": 21.49
+  },
+  {
+   "clip": "colour 1:4:0:0",
+   "path": "nv12",
+   "render_path": "nv12",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:4:0:0",
+   "format": "NV12",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 0.51,
+   "diff_vs_source": 21.33,
+   "ref_vs_source": 21.49
+  },
+  {
+   "clip": "colour 1:4:0:0",
+   "path": "rgba",
+   "render_path": "rgba",
+   "orientation_seen": null,
+   "par": [
+    1,
+    1
+   ],
+   "caps_colorimetry": "1:1:0:0",
+   "format": "RGBA",
+   "size": [
+    320,
+    240
+   ],
+   "expected_size": [
+    320,
+    240
+   ],
+   "size_ok": true,
+   "diff": 0.0,
+   "diff_vs_source": 21.49,
+   "ref_vs_source": 21.49
+  }
+ ]
+}

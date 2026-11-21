@@ -473,11 +473,14 @@ seek. **Unproven** as a whole: spike 3.
   Instead the provider reads the tag from the bus (TAG message) and rotates
   when drawing: the NV12 path already draws through an Fbo; the GL and RGBA
   paths need one extra Fbo pass only for rotated streams.
-* Non-square pixels: the GL sink adds `glcolorscale` with
-  `pixel-aspect-ratio=1/1` in its caps; the NV12 path sizes its Fbo to the
-  display size.
+* Non-square pixels: **changed** to the same mechanism: the frame is drawn
+  at the display size (widened for wide pixels, heightened for tall ones),
+  in the NV12 Fbo or the extra pass. No `glcolorscale`.
 
-Neither was exercised: spike 9.
+**Proven** (spike 9, `GSTREAMER-CORE-SPIKES.md`): all eight tag values and
+2:1 / 1:2 pixels match GStreamer's own `videoflip` + `videoconvert` in the
+gl, nv12 and rgba paths on Windows and the Pi 5; BT.601, BT.709 and
+full-range colour are within 2.3–2.7 levels of the source.
 
 ### D13. Options
 
@@ -737,7 +740,9 @@ The first three decide the shape of the core and should run before PR A.
 answered yes, on Windows, the Pi 5 and WSL2. **Spikes 10 and 11 are done**
 too (same file): thumbnails are bounded and fast; DNS, connection and TLS
 failures can't be told apart from the bus with libsoup 3, so they get one
-clearer message.
+clearer message. **Spike 9 is done** except 10-bit HEVC and BT.2020:
+rotation and pixel aspect ratio are applied by Kivy and match GStreamer's
+own rendering.
 
 | # | Question | Method | Done when |
 |---|---|---|---|
