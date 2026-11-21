@@ -1,0 +1,26 @@
+[project]
+name = "gst-pack-check"
+version = "0.1.0"
+description = "Spike 8: the gstplayer video provider in a kivyforge bundle"
+requires-python = ">=3.12"
+dependencies = [
+    # wheels/ holds Kivy built from the gstreamer-video-provider branch.
+    # The gstreamer extra pulls GStreamer's official wheels on Windows
+    # (nothing elsewhere: Linux uses the system's GStreamer).
+    "kivy[gstreamer]==3.0.0.dev0",
+]
+
+[tool.kivy]
+display_name = "GStreamer Pack Check"
+app_dir = "src"
+entry_point = "main"
+
+[tool.kivy.windows]
+schema_version = 1
+app_id = "KivySpike.GstPackCheck"
+archs = ["amd64"]
+find_links = ["wheels"]
+exclude = ["kivy-garden", "docutils", "pygments"]
+
+[tool.kivy.windows.python]
+version = "3.12.10"

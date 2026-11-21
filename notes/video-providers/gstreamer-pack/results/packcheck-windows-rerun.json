@@ -1,0 +1,81 @@
+{
+ "frozen": false,
+ "executable": "C:\\kgp\\python\\python.exe",
+ "prefix": "C:\\kgp\\python",
+ "import_kivy_s": 0.289,
+ "env": {
+  "GST_REGISTRY_1_0": "C:/Users/ellio/AppData/Local/Temp/gstreamer-1.0/wheel-registry-3.12-win-amd64.bin",
+  "GST_PLUGIN_SYSTEM_PATH_1_0": "C:/kgp/python/Lib/site-packages/gstreamer_plugins_libs/lib/gstreamer-1.0;C:/kgp/python/Lib/site-packages/gstreamer_plugins/lib/gstreamer-1.0;C:/kgp/python/Lib/site-packages/gstreamer_libs/lib/gstreamer-1.0",
+  "GIO_EXTRA_MODULES": "C:/kgp/python/Lib/site-packages/gstreamer_plugins_libs/lib/gio/modules",
+  "KIVY_GSTREAMER_ROOT": null
+ },
+ "cases": [
+  {
+   "case": "local",
+   "src": "C:\\kgp\\app\\clip.mp4",
+   "frames": 2,
+   "errors": [],
+   "provider": "VideoGstplayer",
+   "first_frame_s": 3.994,
+   "fps": 0.2,
+   "render_path": "gl",
+   "describe": {
+    "decoder": "d3d12h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1"
+   }
+  },
+  {
+   "case": "hls-fmp4",
+   "src": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+   "frames": 371,
+   "errors": [],
+   "provider": "VideoGstplayer",
+   "first_frame_s": 1.616,
+   "fps": 46.2,
+   "render_path": "gl",
+   "describe": {
+    "decoder": "d3d12h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1"
+   }
+  },
+  {
+   "case": "dash",
+   "src": "https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd",
+   "frames": 216,
+   "errors": [],
+   "provider": "VideoGstplayer",
+   "first_frame_s": 0.53,
+   "fps": 26.9,
+   "render_path": "gl",
+   "describe": {
+    "decoder": "d3d12h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1"
+   }
+  },
+  {
+   "case": "https-404",
+   "src": "https://gstreamer.freedesktop.org/data/does-not-exist.mp4",
+   "frames": 0,
+   "errors": [
+    "Not Found (HTTP 404)"
+   ],
+   "provider": "VideoGstplayer",
+   "fps": 0.0,
+   "render_path": "gl"
+  }
+ ],
+ "gst_runtime": [
+  [
+   1,
+   28,
+   7,
+   0
+  ],
+  "C:\\kgp\\python\\Lib\\site-packages\\gstreamer_libs\\bin\\gstreamer-1.0-0.dll",
+  "gstreamer-libs wheel"
+ ],
+ "gst_init_s": 3.378264599945396
+}

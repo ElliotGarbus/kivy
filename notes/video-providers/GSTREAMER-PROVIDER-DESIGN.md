@@ -578,10 +578,17 @@ Windows specifics the provider handles itself:
   1.28.7 / 1.28.8 install on the first try; 1.28.8 and 1.28.9 were published
   without a complete Windows set.
 * The plugin registry. Outside a venv the wheels use one file in `%TEMP%`
-  shared by every app on that Python version. When GStreamer was loaded from
-  the wheels in a bundled app, the loader sets `GST_REGISTRY_1_0` to a file
-  under Kivy's home directory before `gst_init`. `GST_REGISTRY_1_0` is a
-  single path (**source**). **Unproven**: spike 8.
+  shared by every app on that Python version. Whenever GStreamer is loaded
+  from the wheels outside a venv, the loader sets `GST_REGISTRY_1_0` to a
+  file per GStreamer installation, `<kivy home>/gstreamer/registry-<platform>-<hash>.bin`,
+  unless one is already set. **Proven** in a kivyforge bundle (spike 8).
+* The first launch of a bundled app waits 10–13 s for video (the first read
+  of ~250 new plugin DLLs plus a 3.5 s scan), 0.07 s after that. The
+  provider starts the background init when it is imported; a playback
+  plugin allowlist cuts the scan to 1.2–1.7 s and the plugins from 166 MB to
+  12 MB (spike 8; pruning is kivyforge's).
+* Licences: the wheels' metadata is an AND-list of component licences and
+  no licence texts are shipped (spike 8); kivyforge needs them from upstream.
 
 kivyforge work (separate repo, tracked there):
 
@@ -742,7 +749,11 @@ too (same file): thumbnails are bounded and fast; DNS, connection and TLS
 failures can't be told apart from the bus with libsoup 3, so they get one
 clearer message. **Spike 9 is done** except 10-bit HEVC and BT.2020:
 rotation and pixel aspect ratio are applied by Kivy and match GStreamer's
-own rendering.
+own rendering. **Spike 8 is done for Windows** (a kivyforge bundle plays
+local, HLS and DASH over HTTPS; size, first launch, registry and licences
+measured); the Pi half proved python-build-standalone loads the system
+GStreamer cleanly, and a real AppImage waits for a manylinux aarch64 wheel
+from CI.
 
 | # | Question | Method | Done when |
 |---|---|---|---|

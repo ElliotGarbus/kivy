@@ -1,0 +1,214 @@
+lock-version = "1.0"
+created-by = "kivyforge"
+requires-python = ">=3.12"
+extras = []
+dependency-groups = []
+default-groups = []
+
+[[packages]]
+name = "certifi"
+version = "2026.11.20"
+requires-python = ">=3.7"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "certifi-2026.11.20-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/6d/39/5eec3296860b94ac20bb8ed807725b88f6adfab3f343df592afd975f5f86/certifi-2026.11.20-py3-none-any.whl"
+hashes = { sha256 = "7422df25243767b9877031a2248cb14d09ddac9beee846f4cef3d5c9191d488f" }
+
+[[packages]]
+name = "charset-normalizer"
+version = "3.5.2"
+requires-python = ">=3.7"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "charset_normalizer-3.5.2-cp312-cp312-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/eb/e6/e6e083884cbcfd49c64865af05027fe7011be7b2d9179524f099a1b611f3/charset_normalizer-3.5.2-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "780fbe7cab297b81dad9fb8dc5eb003c0468ffb0d9e5f65068c53a34661a96bc" }
+
+[[packages]]
+name = "filetype"
+version = "1.2.0"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "filetype-1.2.0-py2.py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/18/79/1b8fa1bb3568781e84c9200f951c735f3f157429f44be0495da55894d620/filetype-1.2.0-py2.py3-none-any.whl"
+hashes = { sha256 = "7ce71b6880181241cf7ac8697a2f1eb6a8bd9b429f7ad6d27b8db9ba5f1c2d25" }
+
+[[packages]]
+name = "gstreamer_ext_runtime"
+version = "1.28.7"
+requires-python = ">= 3.9"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "gstreamer_ext_runtime-1.28.7-cp39-abi3-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/79/6a/2cf0a9b4c51c5d94433919af55a7112b087f826ce7b8c84e8e79143644e8/gstreamer_ext_runtime-1.28.7-cp39-abi3-win_amd64.whl"
+hashes = { sha256 = "838f7543ca718d05536cfe785d685a372b318505119f2190be59307a2a8a78f2" }
+
+[[packages]]
+name = "gstreamer_libs"
+version = "1.28.7"
+requires-python = ">= 3.9"
+dependencies = [{ name = "setuptools" }, { name = "gstreamer_ext_runtime" }]
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "gstreamer_libs-1.28.7-cp39-abi3-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/db/10/1f71e13414c505253c86990a129c74af5adffb556a63d99483b4333bc5f7/gstreamer_libs-1.28.7-cp39-abi3-win_amd64.whl"
+hashes = { sha256 = "ea81c0f3aba25ca53053202b274c9a05e71037761def9e2dbb172982e8e961bf" }
+
+[[packages]]
+name = "gstreamer_plugins"
+version = "1.28.7"
+requires-python = ">= 3.9"
+dependencies = [{ name = "gstreamer_plugins_libs" }]
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "gstreamer_plugins-1.28.7-cp39-abi3-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/62/4d/8f60c96a1c2afeaf00b3a90b60cd2f3bec1f2fc5c381c58337068ef48f39/gstreamer_plugins-1.28.7-cp39-abi3-win_amd64.whl"
+hashes = { sha256 = "960f8cc19f4c4dfb460e782b1c8a426e95d06a300195b6f356319731a3a2b70b" }
+
+[[packages]]
+name = "gstreamer_plugins_libs"
+version = "1.28.7"
+requires-python = ">= 3.9"
+dependencies = [{ name = "gstreamer_libs" }]
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "gstreamer_plugins_libs-1.28.7-cp39-abi3-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/ea/0e/ae869eaefbcc164494be251260ba953e624b873ada017eb3c66877b1939d/gstreamer_plugins_libs-1.28.7-cp39-abi3-win_amd64.whl"
+hashes = { sha256 = "5bfd41b8f3ec6ad1dac30132ad0ae4738a8a79de926606c7cc2c736bb1d22d06" }
+
+[[packages]]
+name = "idna"
+version = "3.20"
+requires-python = ">=3.9"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "idna-3.20-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl"
+hashes = { sha256 = "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c" }
+
+[[packages]]
+name = "Kivy"
+version = "3.0.0.dev0"
+requires-python = ">=3.11"
+dependencies = [{ name = "Kivy-Garden" }, { name = "docutils" }, { name = "pygments" }, { name = "requests" }, { name = "filetype" }, { name = "kivy_deps.angle" }, { name = "kivy_deps.sdl3" }, { name = "kivy_deps.glew" }, { name = "pypiwin32" }]
+
+[packages.tool.kivyforge]
+direct_requirement = true
+
+[[packages.wheels]]
+name = "kivy-3.0.0.dev0-cp312-cp312-win_amd64.whl"
+path = "wheels/kivy-3.0.0.dev0-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "8937ba64349e2f0a1f95725120dd24fcfa252dcc65aa6ea4ab3915a55575999d" }
+
+[[packages]]
+name = "kivy_deps.angle"
+version = "0.5.0"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "kivy_deps_angle-0.5.0-cp312-cp312-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/77/69/cbf10aef8110e178eff7dcfeb7440e627b0745967b56213e054411f5794b/kivy_deps_angle-0.5.0-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "663245a2063c760a1d82f5f0878ef3ed4a63b70a002c6144d62ff54dfd561d2d" }
+
+[[packages]]
+name = "kivy_deps.glew"
+version = "0.3.2"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "kivy_deps_glew-0.3.2-cp312-cp312-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/bf/37/6b1266f94591da4666e913dd3ee07d36c306ffd6282f2c2f864e417ea528/kivy_deps_glew-0.3.2-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "73aef7427855b01e70fc712c76df83def1022d57a3d64ebf393f95f424ff49c0" }
+
+[[packages]]
+name = "kivy_deps.sdl3"
+version = "0.1.0"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "kivy_deps_sdl3-0.1.0-cp312-cp312-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/63/77/0b6f1dcf41571943f9b59cffa5c653d34251d7ed185bf13a8c146de4894a/kivy_deps_sdl3-0.1.0-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "e83de874b5e458ea2b64ab28394b4817f91ba853f5c81e07a50fd50d79a6b0e2" }
+
+[[packages]]
+name = "pypiwin32"
+version = "223"
+dependencies = [{ name = "pywin32" }]
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "pypiwin32-223-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/d0/1b/2f292bbd742e369a100c91faa0483172cd91a1a422a6692055ac920946c5/pypiwin32-223-py3-none-any.whl"
+hashes = { sha256 = "67adf399debc1d5d14dffc1ab5acacb800da569754fafdc576b2a039485aa775" }
+
+[[packages]]
+name = "pywin32"
+version = "312"
+requires-python = ">=3.9"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "pywin32-312-cp312-cp312-win_amd64.whl"
+url = "https://files.pythonhosted.org/packages/03/d9/77040d3b43df3f3be32ea289433d660d2727f5ba327bc73be835127d9d60/pywin32-312-cp312-cp312-win_amd64.whl"
+hashes = { sha256 = "b457f6d628a47e8a7346ce22acb7e1a46a4a78b52e1d17e1af56871bd19a93bc" }
+
+[[packages]]
+name = "requests"
+version = "2.34.2"
+requires-python = ">=3.10"
+dependencies = [{ name = "charset_normalizer" }, { name = "idna" }, { name = "urllib3" }, { name = "certifi" }]
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "requests-2.34.2-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl"
+hashes = { sha256 = "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0" }
+
+[[packages]]
+name = "setuptools"
+version = "84.2.1"
+requires-python = ">=3.10"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "setuptools-84.2.1-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/ef/55/6dc6d6bb953bdfc52519a0059592c52b6e3b8ad51cf8256dffceb55b0610/setuptools-84.2.1-py3-none-any.whl"
+hashes = { sha256 = "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2" }
+
+[[packages]]
+name = "urllib3"
+version = "2.8.0"
+requires-python = ">=3.10"
+index = "https://pypi.org/simple/"
+
+[[packages.wheels]]
+name = "urllib3-2.8.0-py3-none-any.whl"
+url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl"
+hashes = { sha256 = "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3" }
+
+[tool.kivyforge]
+schema_version = 1
+kivyforge_version = "0.1.1.dev50+g0b8817462.d20261113"
+generated_at = "2026-11-21T03:26:45Z"
+lock_inputs_sha256 = "c1836baf84f98bdef9efea2c7d178c660984191e9c5f41d7b8b9d8e888ea9b97"
+tool_kivyforge_schema_version = 1
+archs = ["amd64"]
+
+[tool.kivyforge.python_runtime]
+provider = "python-build-standalone"
+version = "3.12.10"
+
+[[tool.kivyforge.python_runtime.artifacts]]
+arch = "amd64"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20250529/cpython-3.12.10%2B20250529-x86_64-pc-windows-msvc-install_only.tar.gz"
+sha256 = "3e0fd10e4bd60e66baad8be2a0e60775bb389e97e4f4a07138c34599c356aaed"
+archive_format = "tar.gz"

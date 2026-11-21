@@ -283,6 +283,83 @@ composition.
 
 Not covered: 10-bit HEVC (no 10-bit encoder in the test setup) and BT.2020.
 
+## Spike 8: packaging with kivyforge (2026-11-20)
+
+App: `gstreamer-pack/` (`src/main.py` plays a bundled clip, Apple's fMP4 HLS
+over HTTPS, DASH over HTTPS and an HTTPS 404, writes `packcheck.json`, quits).
+Dependencies: `kivy[gstreamer]==3.0.0.dev0`, with a cp312 wheel built from
+the branch in `wheels/`. kivyforge 0.1.1.dev50 (`lock`, `package -p windows`),
+bundled CPython 3.12.10.
+
+### Windows
+
+* **It works as a bundle.** The lock resolved the four official wheels from
+  the extra (17 packages); `package` took 64 s. The bundled app found
+  GStreamer in its own `site-packages` (`gstreamer-libs wheel`), applied the
+  wheels' environment itself (no `.pth` from `gstreamer-meta`), played the
+  local clip, HLS fMP4 and DASH on the `gl` path, and reported
+  `Not Found (HTTP 404)`: HTTPS works from the bundle (`GIO_EXTRA_MODULES`).
+* **Size:** the bundle is 500 MB; GStreamer is 258 MB of it
+  (`gstreamer_libs` 92, `gstreamer_plugins` 111, `gstreamer_plugins_libs` 53,
+  `gstreamer_ext_runtime` 2.3).
+* **First launch.** GStreamer's init took 12.6 s on the first launch and
+  9.8–10.8 s on fresh copies of the bundle in new folders; 0.07 s on later
+  launches. With the bundle's files already read once, a full rescan with a
+  deleted registry takes only 3.4–3.7 s, so most of the first launch is the
+  first read of ~250 newly written plugin DLLs (on-access scanning,
+  presumably), not the scan itself. The UI isn't blocked (worker thread), but
+  video only starts then. Two mitigations:
+  * the provider now starts initialization when it is imported (the app
+    selecting its video provider), not on the first `load()`. Measured on
+    a fresh copy: init still 11.1 s, so this only hides the app's own
+    start-up (Kivy import 1.4 s);
+  * an installer could run the scan once at install time (the registry is
+    per installation now);
+  * a playback allowlist of 28 plugins (`prune_estimate.py`'s list) is
+    11.7 MB instead of 166 MB of plugins and scans in 1.2–1.7 s instead of
+    3.4–3.7 s. Pruning is kivyforge work.
+* **Registry location.** Outside a venv the wheels put the registry in
+  `%TEMP%\gstreamer-1.0\wheel-registry-3.12-win-amd64.bin`, one file shared by
+  every app on that Python version. The loader now uses one file per
+  GStreamer installation, `~\.kivy\gstreamer\registry-win-amd64-<hash>.bin`
+  (a user's or `gstreamer-meta`'s `GST_REGISTRY_1_0` still wins). Seen in the
+  bundle: `registry-win-amd64-d30fdcc8301a.bin`.
+* **Licences.** The wheels' `License` fields are AND-lists of every bundled
+  component's licence (17 SPDX ids for the libs and plugins wheels, including
+  `GPL-2.0-or-later` and `LGPL-3.0-only`), without saying which component has
+  which; `gstreamer-ext-runtime` is the MSVC runtime
+  (`LicenseRef-Proprietary`). None of the four wheels contains a single
+  licence text. So an app bundling them has nothing to copy its notices from:
+  kivyforge would need the texts from upstream (cerbero's recipes), and which
+  component is GPL needs asking upstream.
+* Not done: the official installer (not on this machine), and pruning itself.
+
+### Linux (Pi 5)
+
+kivyforge's Linux AppImage runs python-build-standalone, so the question was
+whether PBS can load the distro's GStreamer without library clashes.
+
+* The aarch64 `dice-roller` AppImage kivyforge built earlier carries 53
+  shared libraries and **none** of GLib, GIO, OpenSSL or GStreamer, so the
+  system GStreamer would load its own GLib with nothing to clash with.
+* PBS CPython 3.13.14 (the build kivyforge caches) with the branch's Kivy
+  wheel: the provider loaded the system GStreamer 1.26.2 and played HTTPS
+  DASH (165 frames in 6 s). TLS went through the system's
+  `libgiognutls.so`; PBS's own OpenSSL 3.5.7 is static inside its `_ssl`
+  module and coexisted with the system `libssl.so.3` that was also loaded.
+* Windowed under PBS this ad-hoc setup failed before GStreamer mattered:
+  SDL3 (linked from outside the wheel) didn't start, Kivy fell back to its
+  `x11` window, which died with an X `BadAccess`. A real AppImage needs a
+  manylinux aarch64 Kivy wheel from the branch (with SDL3 inside), which CI
+  will produce; that run is still to do, and it is the community test app's
+  base.
+
+### Also seen
+
+The `Video` widget (not the provider) logs `Image: Not found <url>` for every
+stream: with no `preview`, `Video.texture_update()` passes `source` to
+`set_texture_from_resource()`. Upstream widget issue for all providers.
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`
