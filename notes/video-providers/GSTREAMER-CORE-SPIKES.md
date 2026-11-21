@@ -186,6 +186,63 @@ X11 (59 there, with `test_audio`). Existing video, VideoPlayer, Media
 Foundation and audio tests pass. The ported audio provider
 (`KIVY_AUDIO=gstplayer`): length, play to end, loop, stop.
 
+## Follow-up, same day: the Pi nv12 rate, spikes 10 and 11
+
+### Pi `nv12` 4K HEVC: `videoflip` was the cost
+
+`core_headless.py` with `CORE_FLIP=0|1` on the Pi 5, 8 s each:
+
+| Clip | sink | with `videoflip` | without |
+|---|---|---|---|
+| 4K HEVC (hardware) | nv12 | 29 frames, 89% CPU | **57 frames**, 87% |
+| 4K HEVC | rgba | 28 frames | 29 frames |
+| 4K H.264 (software) | nv12 | 235 frames, 114% | 236 frames, **94%** |
+
+`videoflip video-direction=auto` costs a full frame pass even with no
+orientation tag. It is now off by default (`GstPlayer(flip=False)`), which
+restores the PyGObject spike's 7 fps. Rotation (D12) moves to Kivy: read the
+`image-orientation` tag and rotate when drawing (the NV12 path already draws
+through an Fbo); spike 9.
+
+### Spike 10: thumbnails
+
+`thumb_check.py`, Windows 11, official wheels (`results/thumbs-windows.json`;
+Pi in `results/thumbs-pi5.json`):
+
+| Case | Time | Result |
+|---|---|---|
+| 1080p H.264 at 0 / 10 / 19.9 s | 1.31 (first call) / 0.14 / 0.17 s | 1920x1080 |
+| 1080p, 60 s (past the end) | 0.17 s | last frame (after a fix: it returned None) |
+| 2160p HEVC at 5 s | 0.18 s | 3840x2160 |
+| 360p at 5 s, `size=(160, 90)` | 0.19 s | 160x90 |
+| VP9 at 2 s | 0.44 s | 1920x1080 |
+| local HLS (CMAF) at 5 s | 0.53 s | 1920x1080 |
+| progressive HTTP at 5 s | 10.1 s (the bound) | None: Python's test server has no Range support and the MP4's index is at the end, so this says nothing about the provider |
+| missing file / not a video / corrupt | 0.002 / 0.06 / 0.01 s | None |
+| connection refused | 2.0 s | None |
+
+Pi 5: 0.11–0.82 s for the same local and HLS cases, failures in 1–7 ms.
+Never raised and never exceeded the 10 s bound. Done, apart from a
+Range-capable server for the HTTP case. After these changes the tests pass
+on the Pi again (60, Wayland and X11).
+
+### Spike 11: DNS, refused connection, TLS
+
+The bus has nothing better: with libsoup 3, `souphttpsrc`
+(`_session_send_cb`, 1.28 source) gets the failure as a `GError` and only
+logs it at DEBUG ("Sending message failed: ..."), then returns
+`GST_FLOW_ERROR`, so `basesrc` posts "Internal data stream error". The
+libsoup 2 path did post "Could not resolve server name." and friends. That
+is an upstream gap worth a patch (post the `GError` message with
+`GST_ELEMENT_ERROR`).
+
+Kivy now maps the generic error from a `souphttpsrc` with no HTTP status to
+"Could not connect to the server (the host name could not be resolved, the
+connection was refused, or the secure connection failed)". Checked on
+Windows with a DNS failure, a refused port, `expired.badssl.com` and
+`self-signed.badssl.com` (so certificate checks work with the wheels' TLS
+module). HTTP errors keep their status: `Not Found (HTTP 404)`.
+
 ## Still open from these spikes
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`

@@ -88,7 +88,8 @@ def run_case(g, policy, name, sink, seconds=None, hz=60):
         uri = g.filename_to_uri(os.path.join(CLIPS, src[5:]))
     else:
         uri = src
-    p = g.GstPlayer(uri, sink=sink)
+    p = g.GstPlayer(uri, sink=sink,
+                    flip=os.environ.get('CORE_FLIP', '1') != '0')
     res = dict(case=name, sink=sink, uri=uri, frames=0, first_frame_s=None,
                eos=False, error=None, size=None, buffering=[], warnings=[],
                missing=[])

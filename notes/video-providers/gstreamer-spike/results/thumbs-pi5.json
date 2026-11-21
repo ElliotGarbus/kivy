@@ -1,0 +1,110 @@
+{
+ "meta": {
+  "platform": "Linux-6.18.60+rpt-rpi-2712-aarch64-with-glibc2.41",
+  "init_s": 0.012
+ },
+ "results": [
+  {
+   "case": "local 1080p H.264 t=0",
+   "seconds": 0.114,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p H.264 t=10",
+   "seconds": 0.16,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p H.264 t=19.9",
+   "seconds": 0.229,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p past end t=60",
+   "seconds": 0.229,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 2160p HEVC t=5",
+   "seconds": 0.587,
+   "size": [
+    3840,
+    2160
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 360p t=5, size 160x90",
+   "seconds": 0.173,
+   "size": [
+    160,
+    90
+   ],
+   "raised": null
+  },
+  {
+   "case": "local VP9 t=2",
+   "seconds": 0.819,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "http progressive t=5",
+   "seconds": 0.024,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "http HLS t=5",
+   "seconds": 0.301,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "missing file",
+   "seconds": 0.001,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "not a video",
+   "seconds": 0.006,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "corrupt",
+   "seconds": 0.007,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "dead port",
+   "seconds": 0.006,
+   "size": null,
+   "raised": null
+  }
+ ]
+}

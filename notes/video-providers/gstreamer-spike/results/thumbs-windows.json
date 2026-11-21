@@ -1,0 +1,110 @@
+{
+ "meta": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "init_s": 0.053
+ },
+ "results": [
+  {
+   "case": "local 1080p H.264 t=0",
+   "seconds": 0.626,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p H.264 t=10",
+   "seconds": 0.136,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p H.264 t=19.9",
+   "seconds": 0.174,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 1080p past end t=60",
+   "seconds": 0.171,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 2160p HEVC t=5",
+   "seconds": 0.164,
+   "size": [
+    3840,
+    2160
+   ],
+   "raised": null
+  },
+  {
+   "case": "local 360p t=5, size 160x90",
+   "seconds": 0.168,
+   "size": [
+    160,
+    90
+   ],
+   "raised": null
+  },
+  {
+   "case": "local VP9 t=2",
+   "seconds": 0.418,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "http progressive t=5",
+   "seconds": 10.009,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "http HLS t=5",
+   "seconds": 0.442,
+   "size": [
+    1920,
+    1080
+   ],
+   "raised": null
+  },
+  {
+   "case": "missing file",
+   "seconds": 0.001,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "not a video",
+   "seconds": 0.007,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "corrupt",
+   "seconds": 0.008,
+   "size": null,
+   "raised": null
+  },
+  {
+   "case": "dead port",
+   "seconds": 2.057,
+   "size": null,
+   "raised": null
+  }
+ ]
+}

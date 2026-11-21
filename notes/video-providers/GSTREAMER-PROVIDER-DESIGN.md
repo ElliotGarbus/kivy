@@ -434,8 +434,13 @@ Timing differs by platform and the provider handles both: when an HLS server
 died, the error arrived after 0.05 s on Linux and 6.2 s on Windows, where
 playback continued from the buffer first (**proven**).
 
-Known weak spot: a DNS failure only says `Internal data stream error.`
-Spike 11 looks for a better source.
+DNS, refused connections and TLS failures (spike 11, **source** and
+**proven**): with libsoup 3, `souphttpsrc` only logs the reason at DEBUG, so
+the bus carries just `Internal data stream error.` from the source element.
+That case (`stream-failed` from a `souphttpsrc`, no HTTP status) is reported
+as "Could not connect to the server (the host name could not be resolved,
+the connection was refused, or the secure connection failed)". An upstream
+patch to post the `GError` would let the provider say which.
 
 ### D10. Buffering
 
@@ -462,9 +467,12 @@ seek. **Unproven** as a whole: spike 3.
 ### D12. Orientation and pixel aspect ratio
 
 * Rotated video (phone recordings) carries an `image-orientation` tag.
-  `glvideoflip` in the GL sink and `videoflip` in the NV12 sink, both with
-  `video-direction=auto`, apply it (**source**: both elements support
-  automatic mode).
+  **Changed:** not with `videoflip`/`glvideoflip`. `videoflip
+  video-direction=auto` halved the Pi 5's nv12 rate for 4K HEVC even with no
+  tag (**proven**), so the sinks don't contain it (`GstPlayer(flip=False)`).
+  Instead the provider reads the tag from the bus (TAG message) and rotates
+  when drawing: the NV12 path already draws through an Fbo; the GL and RGBA
+  paths need one extra Fbo pass only for rotated streams.
 * Non-square pixels: the GL sink adds `glcolorscale` with
   `pixel-aspect-ratio=1/1` in its caps; the NV12 path sizes its Fbo to the
   display size.
@@ -494,7 +502,10 @@ providers. Here it builds a separate short pipeline (`playbin3`, video only,
 RGBA `appsink`, audio to `fakesink`), sets PAUSED, waits for preroll with a
 timeout, seeks to `time`, pulls the preroll frame, uploads it and tears the
 pipeline down. It returns `None` on any failure or timeout. It uses the CPU
-path: one frame doesn't justify GL sharing. **Unproven**: spike 10.
+path: one frame doesn't justify GL sharing. A time past the end gives the
+last frame. **Proven** (spike 10): 0.14–0.53 s for local files and local
+HLS after the first call, failures in 2 ms to 2 s, never past the 10 s bound,
+never raised.
 
 ### D15. Versions
 
@@ -723,7 +734,10 @@ zero-copy path. The remaining spikes run alongside steps 2 to 4.
 
 The first three decide the shape of the core and should run before PR A.
 **Spikes 1 to 3 are done** (2026-11-20, `GSTREAMER-CORE-SPIKES.md`): all three
-answered yes, on Windows, the Pi 5 and WSL2.
+answered yes, on Windows, the Pi 5 and WSL2. **Spikes 10 and 11 are done**
+too (same file): thumbnails are bounded and fast; DNS, connection and TLS
+failures can't be told apart from the bus with libsoup 3, so they get one
+clearer message.
 
 | # | Question | Method | Done when |
 |---|---|---|---|
