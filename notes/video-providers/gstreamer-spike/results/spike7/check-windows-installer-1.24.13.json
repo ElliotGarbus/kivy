@@ -1,0 +1,582 @@
+{
+ "meta": {
+  "platform": "Windows-11-10.0.26200-SP0",
+  "machine": "AMD64",
+  "python": "3.12.10",
+  "gst": [
+   [
+    1,
+    24,
+    13,
+    0
+   ],
+   "D:\\gstreamer\\1.0\\msvc_x86_64\\bin\\gstreamer-1.0-0.dll",
+   "GSTREAMER_1_0_ROOT_MSVC_X86_64=D:\\gstreamer\\1.0\\msvc_x86_64\\"
+  ],
+  "gl_version": "b'4.6.0 NVIDIA 610.60'",
+  "gl_renderer": "b'NVIDIA GeForce RTX 2060/PCIe/SSE2'",
+  "kivy_gl_backend": null,
+  "window": "WindowSDL",
+  "sdl_video_driver": null
+ },
+ "results": [
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "path": "gl",
+   "events": [
+    {
+     "t": 0.522,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 9.138,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.522,
+   "render_path": "gl",
+   "gl": [
+    "wgl",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1"
+   },
+   "size": [
+    640,
+    360
+   ],
+   "duration": 10.0,
+   "first_mean": [
+    90.4,
+    104.0,
+    57.5
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.138,
+   "mid_mean": [
+    89.9,
+    103.5,
+    54.4
+   ],
+   "paused_seek_picture_diff": 22.38,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 0.927,
+   "burst_pipeline_seeks": 9,
+   "burst_final_position": 7.0,
+   "burst_target": 7.0,
+   "play_fps": 30.2,
+   "play_cpu_pct": 15.6,
+   "play_readback_mean": [
+    89.9,
+    103.5,
+    54.4
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.537,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "path": "nv12",
+   "events": [
+    {
+     "t": 0.224,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 8.865,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.224,
+   "render_path": "nv12",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    640,
+    360
+   ],
+   "duration": 10.0,
+   "first_mean": [
+    89.6,
+    104.5,
+    56.5
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.14,
+   "mid_mean": [
+    89.1,
+    104.0,
+    53.4
+   ],
+   "paused_seek_picture_diff": 22.36,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 0.948,
+   "burst_pipeline_seeks": 10,
+   "burst_final_position": 7.0,
+   "burst_target": 7.0,
+   "play_fps": 30.2,
+   "play_cpu_pct": 13.4,
+   "play_readback_mean": [
+    89.1,
+    104.0,
+    53.4
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.538,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "big_buck_bunny_360_10s.mp4",
+   "path": "rgba",
+   "events": [
+    {
+     "t": 0.219,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 8.859,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.219,
+   "render_path": "rgba",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    640,
+    360
+   ],
+   "duration": 10.0,
+   "first_mean": [
+    88.4,
+    100.5,
+    55.8
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.128,
+   "mid_mean": [
+    87.7,
+    100.1,
+    52.8
+   ],
+   "paused_seek_picture_diff": 22.25,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 0.955,
+   "burst_pipeline_seeks": 10,
+   "burst_final_position": 7.0,
+   "burst_target": 7.0,
+   "play_fps": 30.0,
+   "play_cpu_pct": 15.3,
+   "play_readback_mean": [
+    88.3,
+    100.4,
+    53.3
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.543,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "path": "gl",
+   "events": [
+    {
+     "t": 0.275,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 8.96,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.276,
+   "render_path": "gl",
+   "gl": [
+    "wgl",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1"
+   },
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "first_mean": [
+    3.2,
+    1.5,
+    2.3
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.103,
+   "mid_mean": [
+    4.9,
+    3.3,
+    4.0
+   ],
+   "paused_seek_picture_diff": 1.83,
+   "position_after_paused_seek": 10.0,
+   "burst_settled": true,
+   "burst_s": 0.933,
+   "burst_pipeline_seeks": 5,
+   "burst_final_position": 14.0,
+   "burst_target": 14.0,
+   "play_fps": 30.2,
+   "play_cpu_pct": 26.2,
+   "play_readback_mean": [
+    3.2,
+    1.5,
+    2.2
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.625,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "path": "nv12",
+   "events": [
+    {
+     "t": 0.231,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 8.92,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.231,
+   "render_path": "nv12",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "first_mean": [
+    2.2,
+    1.5,
+    1.3
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.104,
+   "mid_mean": [
+    3.9,
+    3.3,
+    3.0
+   ],
+   "paused_seek_picture_diff": 1.83,
+   "position_after_paused_seek": 10.0,
+   "burst_settled": true,
+   "burst_s": 0.96,
+   "burst_pipeline_seeks": 6,
+   "burst_final_position": 14.0,
+   "burst_target": 14.0,
+   "play_fps": 30.0,
+   "play_cpu_pct": 30.6,
+   "play_readback_mean": [
+    3.7,
+    3.3,
+    3.0
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.612,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "test_1080p30.mp4",
+   "path": "rgba",
+   "events": [
+    {
+     "t": 0.222,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 8.844,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.222,
+   "render_path": "rgba",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h264dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)1920, height=(int)1080, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    1920,
+    1080
+   ],
+   "duration": 20.0,
+   "first_mean": [
+    2.2,
+    1.5,
+    1.3
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.102,
+   "mid_mean": [
+    3.9,
+    3.2,
+    3.0
+   ],
+   "paused_seek_picture_diff": 1.81,
+   "position_after_paused_seek": 10.0,
+   "burst_settled": true,
+   "burst_s": 0.897,
+   "burst_pipeline_seeks": 5,
+   "burst_final_position": 14.0,
+   "burst_target": 14.0,
+   "play_fps": 30.2,
+   "play_cpu_pct": 40.9,
+   "play_readback_mean": [
+    2.1,
+    1.5,
+    1.2
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.615,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "hevc_2160p30.mp4",
+   "path": "gl",
+   "events": [
+    {
+     "t": 0.288,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 9.34,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.288,
+   "render_path": "gl",
+   "gl": [
+    "wgl",
+    "opengl,opengl3"
+   ],
+   "describe": {
+    "decoder": "d3d11h265dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1"
+   },
+   "size": [
+    3840,
+    2160
+   ],
+   "duration": 10.007666666,
+   "first_mean": [
+    2.8,
+    1.8,
+    2.8
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.01,
+   "mid_mean": [
+    2.8,
+    1.8,
+    2.8
+   ],
+   "paused_seek_picture_diff": 0.01,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 1.04,
+   "burst_pipeline_seeks": 5,
+   "burst_final_position": 7.01,
+   "burst_target": 7.01,
+   "play_fps": 30.2,
+   "play_cpu_pct": 55.2,
+   "play_readback_mean": [
+    2.8,
+    1.8,
+    2.8
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.97,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "hevc_2160p30.mp4",
+   "path": "nv12",
+   "events": [
+    {
+     "t": 0.276,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 9.622,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.277,
+   "render_path": "nv12",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h265dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    3840,
+    2160
+   ],
+   "duration": 10.007666666,
+   "first_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.012,
+   "mid_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_picture_diff": 0.01,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 1.402,
+   "burst_pipeline_seeks": 6,
+   "burst_final_position": 7.01,
+   "burst_target": 7.01,
+   "play_fps": 30.0,
+   "play_cpu_pct": 64.1,
+   "play_readback_mean": [
+    0.9,
+    0.7,
+    0.7
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.964,
+   "frames_after_loop_1s": 30,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  },
+  {
+   "clip": "hevc_2160p30.mp4",
+   "path": "rgba",
+   "events": [
+    {
+     "t": 0.26,
+     "what": "on_load",
+     "state": ""
+    },
+    {
+     "t": 9.35,
+     "what": "on_eos"
+    }
+   ],
+   "provider": "VideoGstplayer",
+   "first_frame_without_play": true,
+   "load_s": 0.26,
+   "render_path": "rgba",
+   "gl": null,
+   "describe": {
+    "decoder": "d3d11h265dec",
+    "decoder_caps": "video/x-raw, format=(string)NV12, width=(int)3840, height=(int)2160, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1",
+    "glupload_caps": null
+   },
+   "size": [
+    3840,
+    2160
+   ],
+   "duration": 10.007666666,
+   "first_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_updates": true,
+   "paused_seek_s": 0.04,
+   "mid_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "paused_seek_picture_diff": 0.0,
+   "position_after_paused_seek": 5.0,
+   "burst_settled": true,
+   "burst_s": 1.185,
+   "burst_pipeline_seeks": 4,
+   "burst_final_position": 7.01,
+   "burst_target": 7.01,
+   "play_fps": 30.2,
+   "play_cpu_pct": 133.0,
+   "play_readback_mean": [
+    1.8,
+    1.8,
+    1.8
+   ],
+   "loop_restarts": true,
+   "loop_s": 1.848,
+   "frames_after_loop_1s": 29,
+   "position_after_stop": 0.0,
+   "state_after_stop": ""
+  }
+ ]
+}

@@ -510,10 +510,83 @@ Two things seen only in containers without sound:
   working audio output here this run can't tell which; Debian 12 played it.
   Needs a run on a real 24.04 desktop.
 
-Not done: the Windows half (the official 1.24 installer against the
-Windows floor).
+### Windows: the official 1.24.13 installer
+
+`gstreamer-1.0-msvc-x86_64-1.24.13.msi` (102 MB, checksum verified),
+installed with `ADDLOCAL=ALL` (the complete set, restricted plugins
+included). It installed to `D:\gstreamer\1.0\msvc_x86_64\` (the drive with
+the most space, not `C:`) and set `GSTREAMER_1_0_ROOT_MSVC_X86_64` for the
+machine; PATH is unchanged. The run used a clean Python 3.12 venv with
+Kivy's SDL3/GLEW/ANGLE deps and no GStreamer package, so
+`find_runtime()` reported `GSTREAMER_1_0_ROOT_MSVC_X86_64=...` as the source.
+Results in `results/spike7/*-windows-installer-1.24.13*.json`.
+
+* **Headless:** every case passes, matching the 1.28.7 wheels: D3D11
+  decoding of H.264/HEVC up to 4K, VP9 in software, the error texts,
+  HTTP 404, HLS TS (`tsdemux` is in the complete install), DASH, the dead HLS
+  server (6.2 s to the error, as on 1.28.7: Windows behaviour, not version).
+  First-run init with a fresh registry 3.8 s, UI loop's longest gap 17.4 ms.
+* **Apple's fMP4 HLS stream plays on 1.24.13** (693 frames, text flag on),
+  where 1.28.7 stalls. So the subtitle/`wasapi2sink` stall is a regression
+  after 1.24: worth putting in the upstream report.
+* **Tests:** `test_gstplayer_policy.py` and `test_video_gstplayer.py`, 95
+  passed (windowed tests included).
+* **Windowed check** (`provider_check.py`, glew): `gl`, `nv12` and `rgba` all
+  work on the three clips: first frame without play, paused seek, the 50-seek
+  burst (4–10 pipeline seeks), 30 fps, loop, stop. Pictures match 1.28.7
+  within 2 levels.
+
+**CPU is higher than on 1.28.7 because of the decoder, not Kivy.** 1.24 ranks
+the `d3d11*dec` decoders first; 1.28 picks `d3d12*dec`. Both download frames
+to system memory. Forcing D3D12 on 1.24.13
+(`GST_PLUGIN_FEATURE_RANK=d3d12h265dec:MAX,d3d12h264dec:MAX`) brings it back
+in line (percent of one core, 30 fps throughout):
+
+| | 1.28.7 wheels (D3D12) | 1.24.13 (D3D11, default) | 1.24.13, D3D12 forced |
+|---|---|---|---|
+| 4K HEVC, `gl` | 20% | 55–58% | 18% |
+| 4K HEVC, `nv12` | 29% | 64–68% | 15% |
+| 1080p H.264, `gl` | 15% | 25–26% | 14% |
+| 1080p H.264, `nv12` | 14% | 24–31% | 14% |
+
+A cost of the old version, not a failure: the floor stands. Kivy could raise
+the D3D12 ranks itself on 1.24 and 1.25, but D3D12 in 1.24 is less
+exercised, so it isn't done; users of the installer can set the variable.
+
+**Bug found and fixed: libsoup 2's transport codes shown as HTTP.** The 1.24
+installer ships libsoup 2.4, which reports transport failures as status
+codes below 100 in the same field (2: name not resolved, 4: can't connect).
+`error_text` appended them: `Could not resolve server name. (HTTP 2)`,
+`Couldn't download fragments (HTTP 4)`. Now only statuses of 100 and above
+are appended (libsoup 2's message already names the failure), with a test.
+
+**Problem found: Kivy 2's `kivy_deps.gstreamer` leaks into an installer
+runtime.** A venv upgraded from Kivy 2 still has `kivy_deps.gstreamer`
+(0.3.4, GStreamer 1.18.6). Kivy 3's `__init__` still imports every
+`kivy_deps` package, and that one prepends its `bin` to PATH and sets
+`GST_PLUGIN_PATH` (its 216 plugins live in `bin`) and `GST_REGISTRY`.
+GStreamer reads those when the `_1_0` variants aren't set, and searches
+`GST_PLUGIN_PATH` first, so with the 1.24.13 installer
+`gst-inspect-1.0 coreelements` reported
+`.venv\share\gstreamer\bin\gstcoreelements.dll`, version 1.18.6: 1.18
+plugins in a 1.24 process. Playback still worked here, by luck. The wheels
+are immune (they set `GST_PLUGIN_PATH_1_0`, `GST_REGISTRY_1_0`, which take
+precedence); `KIVY_GSTREAMER_ROOT`, the installer and PATH runtimes aren't.
+**Fixed:** `kivy/__init__.py` no longer imports `gstreamer` or
+`gstreamer_dev` from `kivy_deps` (or the older `kivy.deps`); it logs
+`Not importing "kivy_deps.gstreamer": Kivy 3 no longer uses it. Uninstall
+it`. The 0.3.3 PATH patch for those packages (`_patch_mod_deps_win`) is
+gone with them. In the upgraded venv `GST_PLUGIN_PATH` and `GST_REGISTRY`
+stay unset and the old `bin` is off PATH; 96 tests pass in both venvs (a
+new one imports Kivy over a fake `kivy_deps` and checks the GStreamer
+packages are skipped and the others still load). The migration guide
+gives the uninstall command.
+
+First-run init (fresh registry) was 11 s on the first runs of the day and
+3.6 s on repeats in both venvs: a cold disk cache, not the old plugins.
 
 ## Still open from these spikes
+
 
 * Upstream reports: the libsoup abort and the subtitle/`wasapi2sink`
   stall (Windows 1.28.7).

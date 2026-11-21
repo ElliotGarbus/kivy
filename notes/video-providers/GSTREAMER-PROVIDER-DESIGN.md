@@ -524,15 +524,19 @@ never raised.
 | Minimum for the GL path (Linux, Pi) | 1.24 | `gst_gl_display_ensure_context()`, `DMA_DRM` caps (**source**) |
 | Minimum on Windows | 1.24 | `playbin3` declared stable; one tier, so the GL path is always available. No distro holds Windows back: the official wheels start at 1.28 and the installer version is the user's choice |
 | V4L2 DMABuf zero-copy (Pi) | 1.26 upstream | V4L2 elements negotiate `DMA_DRM` from 1.26 (**source**) |
-| Tested | 1.22.0 (Debian 12, headless), 1.24.2 (Ubuntu 24.04, headless), 1.26.2 (Pi OS Trixie), 1.28.2 (Ubuntu 26.04), 1.28.7 (Windows wheels) | the spikes |
+| Tested | 1.22.0 (Debian 12, headless), 1.24.2 (Ubuntu 24.04, headless), 1.26.2 (Pi OS Trixie), 1.28.2 (Ubuntu 26.04), 1.24.13 (Windows installer), 1.28.7 (Windows wheels) | the spikes |
 
 Below the minimum, the import fails with a logged reason and Kivy selects the
 next provider. **Decided:** on Linux and the Pi, 1.22 minimum with the GL
 path needing 1.24; **confirmed by spike 7**: on Debian 12 (1.22.0) and
 Ubuntu 24.04 (1.24.2) the core loads, passes its self-test, every headless
 case and the window-free tests, and `has_gl()` is False on 1.22 and True on
-1.24 as intended. On Windows, 1.24 minimum (the installer run is still to
-do). The loader therefore checks the version per platform.
+1.24 as intended. On Windows, 1.24 minimum, also confirmed by spike 7: with
+the official 1.24.13 installer every headless case, all 95 tests and the
+windowed check pass on all three render paths. Hardware decoding costs about
+three times the CPU of 1.28 there (1.24 ranks the D3D11 decoders above
+D3D12), a cost, not a failure. The loader therefore checks the version per
+platform.
 
 The minimum is a floor, not a pin. There is no maximum: the provider accepts
 any 1.x release at or above it, relying on GStreamer's stable 1.x ABI and the
@@ -767,8 +771,11 @@ a GLES context on Linux today, so the GLES branch is untested. **Spike 6
 is done for Intel** (Iris Xe, Ubuntu 26.04 live): VA-API decode to DMABuf
 to `glupload` under Wayland and X11+EGL, 4K H.264 and HEVC at 6–7% of a
 core; GLX copies (19–20%) and warns. AMD and NVIDIA untested. **Spike 7 is
-done for Linux:** 1.22 and 1.24 behave like the newer versions headless, so
-the floors stand; the Windows 1.24 installer run is still to do.
+done:** 1.22 and 1.24 behave like the newer versions on Linux (headless), and
+the official 1.24.13 installer works on Windows (headless, tests, windowed),
+so the floors stand. It found that Kivy 2's `kivy_deps.gstreamer`, if still
+installed, added its 1.18 plugins to an installer runtime; Kivy 3 now skips
+that package with a warning.
 
 | # | Question | Method | Done when |
 |---|---|---|---|
@@ -799,7 +806,7 @@ Made with the user on 2026-11-19.
 | 2 | What the Windows pip extras install | `gstreamer` = the four official wheels at one exact version; `gstreamer-restricted` = that plus the restricted wheel; `full` = Pillow + `gstreamer`; `media` unchanged in meaning (section 9) |
 | 3 | MPEG-TS and the other restricted plugins on Windows | Never installed by default. Users opt in with `kivy[gstreamer-restricted]`, or `kivy[full,gstreamer-restricted]` |
 | 4 | Hardware for the untested Linux cases | Don't block the release. Intel on the user's laptop from a live USB; a kivyforge test app for community members with other hardware; NVIDIA and Pi 4 untested unless hardware turns up (section 10) |
-| 5 | Minimum GStreamer version | Linux and Pi: 1.22, with the GL path needing 1.24, confirmed by spike 7. Windows: 1.24 (D15) |
+| 5 | Minimum GStreamer version | Linux and Pi: 1.22, with the GL path needing 1.24, confirmed by spike 7. Windows: 1.24, confirmed by spike 7 (D15) |
 
 ## 15. Risks
 
