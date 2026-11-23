@@ -1,0 +1,194 @@
+SCHECK INFO - provider VideoAndroid
+SCHECK INFO - host 10.168.168.202
+SCHECK CASE_START rtsp_h264 rtsp://10.168.168.202:8554/h264
+SCHECK STEP_OK rtsp_h264 loads
+SCHECK INFO rtsp_h264 load_s 1.2
+SCHECK INFO rtsp_h264 texture (1280, 720)
+SCHECK INFO rtsp_h264 duration 0.0
+SCHECK INFO rtsp_h264 fps 23.0
+SCHECK INFO rtsp_h264 position_advance 6.8
+SCHECK STEP_OK rtsp_h264 plays
+SCHECK STEP_OK rtsp_h264 pause_stops_frames
+SCHECK STEP_OK rtsp_h264 resume_plays
+SCHECK INFO rtsp_h264 position_after_seek 10.9 -> 17.0
+SCHECK STEP_OK rtsp_h264 plays_after_seek
+SCHECK INFO rtsp_h264 replay_s 1.93
+SCHECK STEP_OK rtsp_h264 stop_then_play
+SCHECK INFO rtsp_h264 unload_s 0.01
+SCHECK STEP_OK rtsp_h264 unload_quick
+SCHECK CASE_END rtsp_h264 ok=7 fail=0
+SCHECK CASE_START rtsp_h265 rtsp://10.168.168.202:8554/h265
+SCHECK ON_ERROR rtsp_h265 'ERROR_CODE_DECODING_FAILED: MediaCodecVideoRenderer error, index=0, format=Format(null, null, null, video/hevc, hvc1.1.6.L90.90, -1, null, [960, 540, -1.0, ColorInfo(BT601, Limited range, SDR SMPTE 170M, false, 8bit Luma, 8bit Chroma)], [-1, -1, -1]), format_supported=YES (Decoder failed: c2.exynos.hevc.decoder)'
+SCHECK STEP_FAIL rtsp_h265 loads on_error: ['ERROR_CODE_DECODING_FAILED: MediaCodecVideoRenderer error, index=0, format=Format(null, null, null, video/hevc, hvc1.1.6.L90.90, -1, null, [960, 540, -1.0, ColorInfo(BT601, Limited range, SDR SMPTE 170M, false, 8bit Luma, 8bit Chroma)], [-1, -1, -1]), format_supported=YES (Decoder failed: c2.exynos.hevc.decoder)']
+SCHECK STEP_OK rtsp_h265 reports_failure
+SCHECK CASE_END rtsp_h265 ok=1 fail=1
+SCHECK CASE_START rtsp_h264_tcp rtspt://10.168.168.202:8554/h264
+SCHECK STEP_OK rtsp_h264_tcp loads
+SCHECK INFO rtsp_h264_tcp load_s 0.61
+SCHECK INFO rtsp_h264_tcp texture (1280, 720)
+SCHECK INFO rtsp_h264_tcp duration 0.0
+SCHECK INFO rtsp_h264_tcp fps 21.3
+SCHECK INFO rtsp_h264_tcp position_advance 6.87
+SCHECK STEP_OK rtsp_h264_tcp plays
+SCHECK STEP_OK rtsp_h264_tcp pause_stops_frames
+SCHECK STEP_OK rtsp_h264_tcp resume_plays
+SCHECK INFO rtsp_h264_tcp position_after_seek 11.0 -> 17.1
+SCHECK STEP_OK rtsp_h264_tcp plays_after_seek
+SCHECK INFO rtsp_h264_tcp replay_s 2.0
+SCHECK STEP_OK rtsp_h264_tcp stop_then_play
+SCHECK INFO rtsp_h264_tcp unload_s 0.01
+SCHECK STEP_OK rtsp_h264_tcp unload_quick
+SCHECK CASE_END rtsp_h264_tcp ok=7 fail=0
+SCHECK CASE_START hls_live_ts http://10.168.168.202:8080/live-ts/index.m3u8
+SCHECK STEP_OK hls_live_ts loads
+SCHECK INFO hls_live_ts load_s 0.3
+SCHECK INFO hls_live_ts texture (1280, 718)
+SCHECK INFO hls_live_ts duration 12.4
+SCHECK INFO hls_live_ts fps 22.3
+SCHECK INFO hls_live_ts position_advance 3.2
+SCHECK STEP_OK hls_live_ts plays
+SCHECK STEP_OK hls_live_ts pause_stops_frames
+SCHECK STEP_OK hls_live_ts resume_plays
+SCHECK INFO hls_live_ts position_after_seek 4.5 -> 2.1
+SCHECK STEP_OK hls_live_ts plays_after_seek
+SCHECK INFO hls_live_ts replay_s 0.88
+SCHECK STEP_OK hls_live_ts stop_then_play
+SCHECK INFO hls_live_ts unload_s 0.01
+SCHECK STEP_OK hls_live_ts unload_quick
+SCHECK CASE_END hls_live_ts ok=7 fail=0
+SCHECK CASE_START hls_live_fmp4 http://10.168.168.202:8080/live-fmp4/index.m3u8
+SCHECK STEP_OK hls_live_fmp4 loads
+SCHECK INFO hls_live_fmp4 load_s 0.28
+SCHECK INFO hls_live_fmp4 texture (1280, 718)
+SCHECK INFO hls_live_fmp4 duration 10.4
+SCHECK INFO hls_live_fmp4 fps 23.4
+SCHECK INFO hls_live_fmp4 position_advance 0.38
+SCHECK STEP_OK hls_live_fmp4 plays
+SCHECK STEP_OK hls_live_fmp4 pause_stops_frames
+SCHECK STEP_OK hls_live_fmp4 resume_plays
+SCHECK INFO hls_live_fmp4 position_after_seek 2.0 -> 7.2
+SCHECK STEP_OK hls_live_fmp4 plays_after_seek
+SCHECK INFO hls_live_fmp4 replay_s 1.1
+SCHECK STEP_OK hls_live_fmp4 stop_then_play
+SCHECK INFO hls_live_fmp4 unload_s 0.02
+SCHECK STEP_OK hls_live_fmp4 unload_quick
+SCHECK CASE_END hls_live_fmp4 ok=7 fail=0
+SCHECK CASE_START hls_vod http://10.168.168.202:8080/vod/index.m3u8
+SCHECK STEP_OK hls_vod loads
+SCHECK INFO hls_vod load_s 0.29
+SCHECK INFO hls_vod texture (1280, 718)
+SCHECK INFO hls_vod duration 45.6
+SCHECK INFO hls_vod fps 21.8
+SCHECK INFO hls_vod position_advance 8.04
+SCHECK STEP_OK hls_vod plays
+SCHECK STEP_OK hls_vod pause_stops_frames
+SCHECK STEP_OK hls_vod resume_plays
+SCHECK INFO hls_vod position_after_seek 12.0 -> 28.6
+SCHECK STEP_OK hls_vod plays_after_seek
+SCHECK STEP_OK hls_vod seek_moves
+SCHECK INFO hls_vod replay_s 0.49
+SCHECK STEP_OK hls_vod stop_then_play
+SCHECK INFO hls_vod unload_s 0.01
+SCHECK STEP_OK hls_vod unload_quick
+SCHECK CASE_END hls_vod ok=8 fail=0
+SCHECK CASE_START dash_vod http://10.168.168.202:8080/dash/manifest.mpd
+SCHECK STEP_OK dash_vod loads
+SCHECK INFO dash_vod load_s 0.35
+SCHECK INFO dash_vod texture (1280, 718)
+SCHECK INFO dash_vod duration 45.6
+SCHECK INFO dash_vod fps 21.9
+SCHECK INFO dash_vod position_advance 8.0
+SCHECK STEP_OK dash_vod plays
+SCHECK STEP_OK dash_vod pause_stops_frames
+SCHECK STEP_OK dash_vod resume_plays
+SCHECK INFO dash_vod position_after_seek 12.0 -> 28.7
+SCHECK STEP_OK dash_vod plays_after_seek
+SCHECK STEP_OK dash_vod seek_moves
+SCHECK INFO dash_vod replay_s 0.45
+SCHECK STEP_OK dash_vod stop_then_play
+SCHECK INFO dash_vod unload_s 0.01
+SCHECK STEP_OK dash_vod unload_quick
+SCHECK CASE_END dash_vod ok=8 fail=0
+SCHECK CASE_START mjpeg http://10.168.168.202:8090/cam.mjpg
+SCHECK ON_ERROR mjpeg 'ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED: Source error (None of the available extractors (FlvExtractor, FlacExtractor, WavExtractor, FragmentedMp4Extractor, Mp4Extractor, AmrExtractor, PsExtractor, OggExtractor, TsExtractor, MatroskaExtractor, AdtsExtractor, Ac3Extractor, Ac4Extractor, Mp3Extractor, AviExtractor, JpegExtractor, PngExtractor, WebpExtractor, BmpExtractor, HeifExtractor, AvifExtractor) could read the stream. {contentIsMalformed=false, dataType=1}\nsniff failures: [NoDeclaredBrand, NoDeclaredBrand])'
+SCHECK STEP_FAIL mjpeg loads on_error: ['ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED: Source error (None of the available extractors (FlvExtractor, FlacExtractor, WavExtractor, FragmentedMp4Extractor, Mp4Extractor, AmrExtractor, PsExtractor, OggExtractor, TsExtractor, MatroskaExtractor, AdtsExtractor, Ac3Extractor, Ac4Extractor, Mp3Extractor, AviExtractor, JpegExtractor, PngExtractor, WebpExtractor, BmpExtractor, HeifExtractor, AvifExtractor) could read the stream. {contentIsMalformed=false, dataType=1}\nsniff failures: [NoDeclaredBrand, NoDeclaredBrand])']
+SCHECK STEP_OK mjpeg reports_failure
+SCHECK CASE_END mjpeg ok=1 fail=1
+SCHECK CASE_START hls_public_mux https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+SCHECK STEP_OK hls_public_mux loads
+SCHECK INFO hls_public_mux load_s 0.68
+SCHECK INFO hls_public_mux texture (1920, 1080)
+SCHECK INFO hls_public_mux duration 634.58
+SCHECK INFO hls_public_mux fps 26.8
+SCHECK INFO hls_public_mux position_advance 7.86
+SCHECK STEP_OK hls_public_mux plays
+SCHECK STEP_OK hls_public_mux pause_stops_frames
+SCHECK STEP_OK hls_public_mux resume_plays
+SCHECK INFO hls_public_mux position_after_seek 11.9 -> 320.4
+SCHECK STEP_OK hls_public_mux plays_after_seek
+SCHECK STEP_OK hls_public_mux seek_moves
+SCHECK INFO hls_public_mux replay_s 0.41
+SCHECK STEP_OK hls_public_mux stop_then_play
+SCHECK INFO hls_public_mux unload_s 0.01
+SCHECK STEP_OK hls_public_mux unload_quick
+SCHECK CASE_END hls_public_mux ok=8 fail=0
+SCHECK CASE_START hls_public_apple https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+SCHECK STEP_OK hls_public_apple loads
+SCHECK INFO hls_public_apple load_s 1.37
+SCHECK INFO hls_public_apple texture (1920, 1080)
+SCHECK INFO hls_public_apple duration 600.0
+SCHECK INFO hls_public_apple fps 27.9
+SCHECK INFO hls_public_apple position_advance 7.81
+SCHECK STEP_OK hls_public_apple plays
+SCHECK STEP_OK hls_public_apple pause_stops_frames
+SCHECK STEP_OK hls_public_apple resume_plays
+SCHECK INFO hls_public_apple position_after_seek 11.9 -> 305.6
+SCHECK STEP_OK hls_public_apple plays_after_seek
+SCHECK STEP_OK hls_public_apple seek_moves
+SCHECK INFO hls_public_apple replay_s 0.46
+SCHECK STEP_OK hls_public_apple stop_then_play
+SCHECK INFO hls_public_apple unload_s 0.01
+SCHECK STEP_OK hls_public_apple unload_quick
+SCHECK CASE_END hls_public_apple ok=8 fail=0
+SCHECK CASE_START rtsp_bad_path rtsp://10.168.168.202:8554/no-such-path
+SCHECK ON_ERROR rtsp_bad_path 'ERROR_CODE_IO_UNSPECIFIED: Source error (DESCRIBE 404)'
+SCHECK STEP_OK rtsp_bad_path fires_on_error
+SCHECK INFO rtsp_bad_path error_after_s 0.29
+SCHECK CASE_END rtsp_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_bad_port rtsp://10.168.168.202:8555/h264
+SCHECK ON_ERROR rtsp_bad_port 'ERROR_CODE_IO_UNSPECIFIED: Source error (failed to connect to /10.168.168.202 (port 8555) from /:: (port 38260): connect failed: ECONNREFUSED (Connection refused))'
+SCHECK STEP_OK rtsp_bad_port fires_on_error
+SCHECK INFO rtsp_bad_port error_after_s 0.14
+SCHECK CASE_END rtsp_bad_port ok=1 fail=0
+SCHECK CASE_START hls_bad_path http://10.168.168.202:8080/no-such/index.m3u8
+SCHECK ON_ERROR hls_bad_path 'ERROR_CODE_IO_BAD_HTTP_STATUS: Source error (Response code: 404)'
+SCHECK STEP_OK hls_bad_path fires_on_error
+SCHECK INFO hls_bad_path error_after_s 3.32
+SCHECK CASE_END hls_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_server_drop rtsp://10.168.168.202:8554/h264
+SCHECK STEP_OK rtsp_server_drop loads
+SCHECK INFO rtsp_server_drop load_s 0.45
+SCHECK INFO rtsp_server_drop texture (1280, 720)
+SCHECK INFO rtsp_server_drop duration 0.0
+SCHECK INFO rtsp_server_drop fps 21.3
+SCHECK INFO rtsp_server_drop position_advance 6.78
+SCHECK STEP_OK rtsp_server_drop plays
+SCHECK INFO rtsp_server_drop server dropped
+SCHECK INFO rtsp_server_drop error_after_drop_s 8.3
+SCHECK STEP_FAIL rtsp_server_drop on_error_after_drop eos=True errors=[]
+SCHECK CASE_END rtsp_server_drop ok=2 fail=1
+SCHECK CASE_START hls_server_drop http://10.168.168.202:8080/live-ts/index.m3u8
+SCHECK STEP_OK hls_server_drop loads
+SCHECK INFO hls_server_drop load_s 0.32
+SCHECK INFO hls_server_drop texture (1280, 718)
+SCHECK INFO hls_server_drop duration 12.8
+SCHECK INFO hls_server_drop fps 22.8
+SCHECK INFO hls_server_drop position_advance 5.21
+SCHECK STEP_OK hls_server_drop plays
+SCHECK INFO hls_server_drop server dropped
+SCHECK ON_ERROR hls_server_drop 'ERROR_CODE_BEHIND_LIVE_WINDOW: Source error'
+SCHECK INFO hls_server_drop error_after_drop_s 1.8
+SCHECK STEP_OK hls_server_drop on_error_after_drop
+SCHECK CASE_END hls_server_drop ok=3 fail=0
+SCHECK DONE ok=70 fail=3
+SCHECK INFO - results /data/user/0/org.kivyforge.streamcheck/files/results-VideoAndroid.jsonl

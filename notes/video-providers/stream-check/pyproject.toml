@@ -1,0 +1,49 @@
+[project]
+name = "stream-check"
+version = "0.1.0"
+description = "Network-stream check for Kivy 3's video providers (RTSP, HLS, DASH, MJPEG)"
+requires-python = ">=3.14"
+dependencies = [
+    # The android-provider-check wheels: the published dev202611051750 build
+    # with the ExoPlayer provider's Python overlaid.
+    "kivy==3.0.0.dev202611051750",
+    "pyjnius",
+]
+
+[tool.kivy]
+display_name = "Stream Check"
+app_dir = "src"
+entry_point = "main"
+orientation = ["portrait"]
+
+[tool.kivy.android]
+schema_version = 1
+package = "org.kivyforge.streamcheck"
+min_sdk = 24
+target_sdk = 35
+# Media3 1.11 requires compiling against API 36.
+compile_sdk = 36
+kivy_generation = 3
+abis = ["arm64_v8a", "x86_64"]
+extra_index_urls = ["https://elliotgarbus.github.io/kivy-mobile-wheels/simple/"]
+find_links = ["../android-provider-check/wheels"]
+exclude = ["kivy-garden", "docutils", "pygments"]
+
+[tool.kivy.android.python]
+version = "3.14.6"
+
+[tool.kivy.android.permissions]
+uses = ["INTERNET"]
+
+[tool.kivy.android.gradle]
+dependencies = [
+    "androidx.media3:media3-exoplayer:1.11.1",
+    "androidx.media3:media3-exoplayer-hls:1.11.1",
+    "androidx.media3:media3-exoplayer-dash:1.11.1",
+    "androidx.media3:media3-exoplayer-rtsp:1.11.1",
+]
+
+# The Pi serves HLS, DASH and MJPEG over plain http://, which Android blocks
+# by default (API 28+).
+[tool.kivy.android.manifest]
+application = { "android:usesCleartextTraffic" = true }

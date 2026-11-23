@@ -1,0 +1,67 @@
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer_dev": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [Kivy        ] KIVY_DESKTOP_PATH_ID not set. If your application targets desktop platforms, set it to provide a user-friendly application name for directories. See https://kivy.org/doc/stable/guide/environment.html
+[[1;32mINFO[0m   ] [Logger      ] Record log in C:\Users\ellio\PycharmProjects\KivyPRs\.kivy\logs\kivy_26-11-22_31.txt
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.angle" 0.5.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew_dev" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3" 0.1.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3_dev" 0.1.0
+[[1;32mINFO[0m   ] [Kivy        ] v3.0.0.dev0
+[[1;32mINFO[0m   ] [Kivy        ] Installed at "C:\Users\ellio\PycharmProjects\KivyPRs\.claude\worktrees\gstreamer-video-spike-695b29\kivy\__init__.py"
+[[1;32mINFO[0m   ] [Python      ] v3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+[[1;32mINFO[0m   ] [Python      ] Interpreter at "C:\Users\ellio\PycharmProjects\KivyPRs\.venv\Scripts\python.exe"
+[[1;32mINFO[0m   ] [Logger      ] Purge log fired. Processing...
+[[1;32mINFO[0m   ] [Logger      ] Purge finished!
+[[1;32mINFO[0m   ] [Factory     ] 199 symbols loaded
+[[1;32mINFO[0m   ] [Image       ] Providers: img_tex, img_dds, img_sdl3, img_pil, img_thorvg_svg 
+[[1;32mINFO[0m   ] [VideoGstplayer] GStreamer 1.28.7 from gstreamer-libs wheel (C:\Users\ellio\AppData\Local\Temp\claude\9b3f1a9fc8e797f5\d2cbc443-e105-4ff2-a0e8-49f3627a4d0a\scratchpad\gstwheels\gstreamer_libs\bin\gstreamer-1.0-0.dll)
+[[1;32mINFO[0m   ] [Video       ] Provider: gstplayer(['video_avfoundation', 'video_mediafoundation'] ignored)
+[[1;32mINFO[0m   ] [Text        ] Providers: text_pil, text_sdl3 
+[[1;32mINFO[0m   ] [Window      ] Provider: sdl3
+[[1;32mINFO[0m   ] [GL          ] Using the "OpenGL" graphics system
+[[1;32mINFO[0m   ] [GL          ] GLEW initialization succeeded
+[[1;32mINFO[0m   ] [GL          ] Backend used <glew>
+[[1;32mINFO[0m   ] [GL          ] OpenGL version <b'4.6.0 NVIDIA 610.60'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL vendor <b'NVIDIA Corporation'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL renderer <b'NVIDIA GeForce RTX 2060/PCIe/SSE2'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL parsed version: 4, 6
+[[1;32mINFO[0m   ] [GL          ] Shading version <b'4.60 NVIDIA'>
+[[1;32mINFO[0m   ] [GL          ] Texture max size <32768>
+[[1;32mINFO[0m   ] [GL          ] Texture max units <32>
+[[1;32mINFO[0m   ] [Window      ] auto add sdl3 input provider
+[[1;32mINFO[0m   ] [Window      ] virtual keyboard not allowed, single mode, not docked
+SCHECK INFO - provider VideoGstplayer
+SCHECK INFO - host 10.168.168.202
+[[1;32mINFO[0m   ] [Base        ] Start application main loop
+[[1;32mINFO[0m   ] [GL          ] NPOT texture support is available
+[[1;32mINFO[0m   ] [WindowSDL   ] Window pixel size changed
+SCHECK CASE_START hls_public_apple https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>
+'C:/Users/ellio/AppData/Local/Temp/claude/9b3f1a9fc8e797f5/d2cbc443-e105-4ff2-a0e8-49f3627a4d0a/scratchpad/gstwheels/gstreamer_plugins_libs/lib/gio/modules\giolibproxy.dll': The specified module could not be found.
+Failed to load module: C:/Users/ellio/AppData/Local/Temp/claude/9b3f1a9fc8e797f5/d2cbc443-e105-4ff2-a0e8-49f3627a4d0a/scratchpad/gstwheels/gstreamer_plugins_libs/lib/gio/modules\giolibproxy.dll
+
+(python.exe:30232): Pango-CRITICAL **: 22:23:59.458: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:30232): Pango-CRITICAL **: 22:23:59.459: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:30232): Pango-CRITICAL **: 22:23:59.459: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:30232): Pango-CRITICAL **: 22:23:59.459: pango_font_description_get_family: assertion 'desc != NULL' failed
+[[1;32mINFO[0m   ] [VideoGstplayer] <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1, glupload input video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1
+SCHECK STEP_OK hls_public_apple loads
+SCHECK INFO hls_public_apple load_s 3.47
+SCHECK INFO hls_public_apple texture (960, 540)
+SCHECK INFO hls_public_apple duration 600.0
+SCHECK INFO hls_public_apple fps 57.9
+SCHECK INFO hls_public_apple position_advance 8.0
+SCHECK STEP_OK hls_public_apple plays
+SCHECK STEP_OK hls_public_apple pause_stops_frames
+SCHECK STEP_FAIL hls_public_apple resume_plays frames after resume=1
+SCHECK INFO hls_public_apple position_after_seek 8.1 -> 300.0
+SCHECK STEP_FAIL hls_public_apple plays_after_seek frames=0
+SCHECK STEP_OK hls_public_apple seek_moves
+SCHECK STEP_FAIL hls_public_apple wait timed out waiting for frames after replay
+SCHECK CASE_END hls_public_apple ok=4 fail=3
+SCHECK DONE ok=4 fail=3
+SCHECK INFO - results C:\Users\ellio\PycharmProjects\KivyPRs-video-notes\notes\video-providers\stream-check\src\results-VideoGstplayer.jsonl

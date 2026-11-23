@@ -1,0 +1,174 @@
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer_dev": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [Kivy        ] KIVY_DESKTOP_PATH_ID not set. If your application targets desktop platforms, set it to provide a user-friendly application name for directories. See https://kivy.org/doc/stable/guide/environment.html
+[[1;32mINFO[0m   ] [Logger      ] Record log in C:\Users\ellio\PycharmProjects\KivyPRs\.kivy\logs\kivy_26-11-22_21.txt
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.angle" 0.5.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew_dev" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3" 0.1.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3_dev" 0.1.0
+[[1;32mINFO[0m   ] [Kivy        ] v3.0.0.dev0
+[[1;32mINFO[0m   ] [Kivy        ] Installed at "C:\Users\ellio\PycharmProjects\KivyPRs\.claude\worktrees\gstreamer-video-spike-695b29\kivy\__init__.py"
+[[1;32mINFO[0m   ] [Python      ] v3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+[[1;32mINFO[0m   ] [Python      ] Interpreter at "C:\Users\ellio\PycharmProjects\KivyPRs\.venv\Scripts\python.exe"
+[[1;32mINFO[0m   ] [Logger      ] Purge log fired. Processing...
+[[1;32mINFO[0m   ] [Logger      ] Purge finished!
+[[1;32mINFO[0m   ] [Factory     ] 199 symbols loaded
+[[1;32mINFO[0m   ] [Image       ] Providers: img_tex, img_dds, img_sdl3, img_pil, img_thorvg_svg 
+[[1;32mINFO[0m   ] [Video       ] Provider: mediafoundation(['video_avfoundation'] ignored)
+[[1;32mINFO[0m   ] [Text        ] Providers: text_pil, text_sdl3 
+[[1;32mINFO[0m   ] [Window      ] Provider: sdl3
+[[1;32mINFO[0m   ] [GL          ] Using the "OpenGL" graphics system
+[[1;32mINFO[0m   ] [GL          ] GLEW initialization succeeded
+[[1;32mINFO[0m   ] [GL          ] Backend used <glew>
+[[1;32mINFO[0m   ] [GL          ] OpenGL version <b'4.6.0 NVIDIA 610.60'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL vendor <b'NVIDIA Corporation'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL renderer <b'NVIDIA GeForce RTX 2060/PCIe/SSE2'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL parsed version: 4, 6
+[[1;32mINFO[0m   ] [GL          ] Shading version <b'4.60 NVIDIA'>
+[[1;32mINFO[0m   ] [GL          ] Texture max size <32768>
+[[1;32mINFO[0m   ] [GL          ] Texture max units <32>
+[[1;32mINFO[0m   ] [Window      ] auto add sdl3 input provider
+[[1;32mINFO[0m   ] [Window      ] virtual keyboard not allowed, single mode, not docked
+SCHECK INFO - provider VideoMediaFoundation
+SCHECK INFO - host 10.168.168.202
+[[1;32mINFO[0m   ] [Base        ] Start application main loop
+[[1;32mINFO[0m   ] [GL          ] NPOT texture support is available
+[[1;32mINFO[0m   ] [WindowSDL   ] Window pixel size changed
+SCHECK CASE_START rtsp_h264 rtsp://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h264>
+SCHECK STEP_OK rtsp_h264 loads
+SCHECK INFO rtsp_h264 load_s 5.7
+SCHECK INFO rtsp_h264 texture (1280, 720)
+SCHECK INFO rtsp_h264 duration 0.0
+SCHECK INFO rtsp_h264 fps 29.9
+SCHECK INFO rtsp_h264 position_advance 7.98
+SCHECK STEP_OK rtsp_h264 plays
+SCHECK STEP_OK rtsp_h264 pause_stops_frames
+SCHECK STEP_OK rtsp_h264 resume_plays
+SCHECK INFO rtsp_h264 position_after_seek 12.0 -> 18.0
+SCHECK STEP_OK rtsp_h264 plays_after_seek
+SCHECK INFO rtsp_h264 replay_s 0.34
+SCHECK STEP_OK rtsp_h264 stop_then_play
+SCHECK INFO rtsp_h264 unload_s 0.3
+SCHECK STEP_OK rtsp_h264 unload_quick
+SCHECK CASE_END rtsp_h264 ok=7 fail=0
+SCHECK CASE_START rtsp_h265 rtsp://10.168.168.202:8554/h265
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h265>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <rtsp://10.168.168.202:8554/h265>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D2EE6)
+SCHECK ON_ERROR rtsp_h265 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D2EE6)'
+SCHECK STEP_FAIL rtsp_h265 loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D2EE6)']
+SCHECK STEP_OK rtsp_h265 reports_failure
+SCHECK CASE_END rtsp_h265 ok=1 fail=1
+SCHECK CASE_START rtsp_h264_tcp rtspt://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtspt://10.168.168.202:8554/h264>
+SCHECK STEP_OK rtsp_h264_tcp loads
+SCHECK INFO rtsp_h264_tcp load_s 5.36
+SCHECK INFO rtsp_h264_tcp texture (1280, 720)
+SCHECK INFO rtsp_h264_tcp duration 0.0
+SCHECK INFO rtsp_h264_tcp fps 30.0
+SCHECK INFO rtsp_h264_tcp position_advance 8.03
+SCHECK STEP_OK rtsp_h264_tcp plays
+SCHECK STEP_OK rtsp_h264_tcp pause_stops_frames
+SCHECK STEP_OK rtsp_h264_tcp resume_plays
+SCHECK INFO rtsp_h264_tcp position_after_seek 12.1 -> 18.1
+SCHECK STEP_OK rtsp_h264_tcp plays_after_seek
+SCHECK INFO rtsp_h264_tcp replay_s 0.34
+SCHECK STEP_OK rtsp_h264_tcp stop_then_play
+SCHECK INFO rtsp_h264_tcp unload_s 0.3
+SCHECK STEP_OK rtsp_h264_tcp unload_quick
+SCHECK CASE_END rtsp_h264_tcp ok=7 fail=0
+SCHECK CASE_START hls_live_ts http://10.168.168.202:8080/live-ts/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-ts/index.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/live-ts/index.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_live_ts 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_live_ts loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_live_ts reports_failure
+SCHECK CASE_END hls_live_ts ok=1 fail=1
+SCHECK CASE_START hls_live_fmp4 http://10.168.168.202:8080/live-fmp4/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-fmp4/index.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/live-fmp4/index.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_live_fmp4 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_live_fmp4 loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_live_fmp4 reports_failure
+SCHECK CASE_END hls_live_fmp4 ok=1 fail=1
+SCHECK CASE_START hls_vod http://10.168.168.202:8080/vod/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/vod/index.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/vod/index.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_vod 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_vod loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_vod reports_failure
+SCHECK CASE_END hls_vod ok=1 fail=1
+SCHECK CASE_START dash_vod http://10.168.168.202:8080/dash/manifest.mpd
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/dash/manifest.mpd>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/dash/manifest.mpd>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR dash_vod 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL dash_vod loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK dash_vod reports_failure
+SCHECK CASE_END dash_vod ok=1 fail=1
+SCHECK CASE_START mjpeg http://10.168.168.202:8090/cam.mjpg
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8090/cam.mjpg>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8090/cam.mjpg>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR mjpeg 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL mjpeg loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK mjpeg reports_failure
+SCHECK CASE_END mjpeg ok=1 fail=1
+SCHECK CASE_START hls_public_mux https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_public_mux 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_public_mux loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_public_mux reports_failure
+SCHECK CASE_END hls_public_mux ok=1 fail=1
+SCHECK CASE_START hls_public_apple https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_public_apple 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_public_apple loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_public_apple reports_failure
+SCHECK CASE_END hls_public_apple ok=1 fail=1
+SCHECK CASE_START rtsp_bad_path rtsp://10.168.168.202:8554/no-such-path
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/no-such-path>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <rtsp://10.168.168.202:8554/no-such-path>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D001A)
+SCHECK ON_ERROR rtsp_bad_path 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D001A)'
+SCHECK STEP_OK rtsp_bad_path fires_on_error
+SCHECK INFO rtsp_bad_path error_after_s 0.58
+SCHECK CASE_END rtsp_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_bad_port rtsp://10.168.168.202:8555/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8555/h264>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <rtsp://10.168.168.202:8555/h264>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D0035)
+SCHECK ON_ERROR rtsp_bad_port 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D0035)'
+SCHECK STEP_OK rtsp_bad_port fires_on_error
+SCHECK INFO rtsp_bad_port error_after_s 21.17
+SCHECK CASE_END rtsp_bad_port ok=1 fail=0
+SCHECK CASE_START hls_bad_path http://10.168.168.202:8080/no-such/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/no-such/index.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/no-such/index.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D001A)
+SCHECK ON_ERROR hls_bad_path 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D001A)'
+SCHECK STEP_OK hls_bad_path fires_on_error
+SCHECK INFO hls_bad_path error_after_s 1.14
+SCHECK CASE_END hls_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_server_drop rtsp://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h264>
+SCHECK STEP_OK rtsp_server_drop loads
+SCHECK INFO rtsp_server_drop load_s 5.44
+SCHECK INFO rtsp_server_drop texture (1280, 720)
+SCHECK INFO rtsp_server_drop duration 0.0
+SCHECK INFO rtsp_server_drop fps 30.0
+SCHECK INFO rtsp_server_drop position_advance 8.0
+SCHECK STEP_OK rtsp_server_drop plays
+SCHECK INFO rtsp_server_drop server dropped
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <rtsp://10.168.168.202:8554/h264>: playback failed: decode error (HRESULT 0xC00D426A)
+SCHECK ON_ERROR rtsp_server_drop 'playback failed: decode error (HRESULT 0xC00D426A)'
+SCHECK INFO rtsp_server_drop error_after_drop_s 0.1
+SCHECK STEP_OK rtsp_server_drop on_error_after_drop
+SCHECK CASE_END rtsp_server_drop ok=3 fail=0
+SCHECK CASE_START hls_server_drop http://10.168.168.202:8080/live-ts/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-ts/index.m3u8>
+[[1;31mERROR[0m  ] [VideoMediaFoundation] <http://10.168.168.202:8080/live-ts/index.m3u8>: playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)
+SCHECK ON_ERROR hls_server_drop 'playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)'
+SCHECK STEP_FAIL hls_server_drop loads on_error: ['playback failed: format not supported (no Media Foundation source or decoder installed for it) (HRESULT 0xC00D36C4)']
+SCHECK STEP_OK hls_server_drop reports_failure
+SCHECK CASE_END hls_server_drop ok=1 fail=1
+SCHECK DONE ok=29 fail=9
+SCHECK INFO - results C:\Users\ellio\PycharmProjects\KivyPRs-video-notes\notes\video-providers\stream-check\src\results-VideoMediaFoundation.jsonl

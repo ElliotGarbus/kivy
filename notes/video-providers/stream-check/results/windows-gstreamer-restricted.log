@@ -1,0 +1,307 @@
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [deps        ] Not importing "kivy_deps.gstreamer_dev": Kivy 3 no longer uses it. Uninstall it (see the migration guide).
+[[1;33mWARNING[0m] [Kivy        ] KIVY_DESKTOP_PATH_ID not set. If your application targets desktop platforms, set it to provide a user-friendly application name for directories. See https://kivy.org/doc/stable/guide/environment.html
+[[1;32mINFO[0m   ] [Logger      ] Record log in C:\Users\ellio\PycharmProjects\KivyPRs\.kivy\logs\kivy_26-11-22_24.txt
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.angle" 0.5.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.glew_dev" 0.3.1
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3" 0.1.0
+[[1;32mINFO[0m   ] [deps        ] Successfully imported "kivy_deps.sdl3_dev" 0.1.0
+[[1;32mINFO[0m   ] [Kivy        ] v3.0.0.dev0
+[[1;32mINFO[0m   ] [Kivy        ] Installed at "C:\Users\ellio\PycharmProjects\KivyPRs\.claude\worktrees\gstreamer-video-spike-695b29\kivy\__init__.py"
+[[1;32mINFO[0m   ] [Python      ] v3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+[[1;32mINFO[0m   ] [Python      ] Interpreter at "C:\Users\ellio\PycharmProjects\KivyPRs\.venv\Scripts\python.exe"
+[[1;32mINFO[0m   ] [Logger      ] Purge log fired. Processing...
+[[1;32mINFO[0m   ] [Logger      ] Purge finished!
+[[1;32mINFO[0m   ] [Factory     ] 199 symbols loaded
+[[1;32mINFO[0m   ] [Image       ] Providers: img_tex, img_dds, img_sdl3, img_pil, img_thorvg_svg 
+[[1;32mINFO[0m   ] [VideoGstplayer] GStreamer 1.28.7 from gstreamer-libs wheel (C:\Users\ellio\AppData\Local\Temp\claude\9b3f1a9fc8e797f5\d2cbc443-e105-4ff2-a0e8-49f3627a4d0a\scratchpad\gstwheels\gstreamer_libs\bin\gstreamer-1.0-0.dll)
+[[1;32mINFO[0m   ] [Video       ] Provider: gstplayer(['video_avfoundation', 'video_mediafoundation'] ignored)
+[[1;32mINFO[0m   ] [Text        ] Providers: text_pil, text_sdl3 
+[[1;32mINFO[0m   ] [Window      ] Provider: sdl3
+[[1;32mINFO[0m   ] [GL          ] Using the "OpenGL" graphics system
+[[1;32mINFO[0m   ] [GL          ] GLEW initialization succeeded
+[[1;32mINFO[0m   ] [GL          ] Backend used <glew>
+[[1;32mINFO[0m   ] [GL          ] OpenGL version <b'4.6.0 NVIDIA 610.60'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL vendor <b'NVIDIA Corporation'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL renderer <b'NVIDIA GeForce RTX 2060/PCIe/SSE2'>
+[[1;32mINFO[0m   ] [GL          ] OpenGL parsed version: 4, 6
+[[1;32mINFO[0m   ] [GL          ] Shading version <b'4.60 NVIDIA'>
+[[1;32mINFO[0m   ] [GL          ] Texture max size <32768>
+[[1;32mINFO[0m   ] [GL          ] Texture max units <32>
+[[1;32mINFO[0m   ] [Window      ] auto add sdl3 input provider
+[[1;32mINFO[0m   ] [Window      ] virtual keyboard not allowed, single mode, not docked
+SCHECK INFO - provider VideoGstplayer
+SCHECK INFO - host 10.168.168.202
+[[1;32mINFO[0m   ] [Base        ] Start application main loop
+[[1;32mINFO[0m   ] [GL          ] NPOT texture support is available
+[[1;32mINFO[0m   ] [WindowSDL   ] Window pixel size changed
+SCHECK CASE_START rtsp_h264 rtsp://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h264>
+'C:/Users/ellio/AppData/Local/Temp/claude/9b3f1a9fc8e797f5/d2cbc443-e105-4ff2-a0e8-49f3627a4d0a/scratchpad/gstwheels/gstreamer_plugins_libs/lib/gio/modules\giolibproxy.dll': The specified module could not be found.
+Failed to load module: C:/Users/ellio/AppData/Local/Temp/claude/9b3f1a9fc8e797f5/d2cbc443-e105-4ff2-a0e8-49f3627a4d0a/scratchpad/gstwheels/gstreamer_plugins_libs/lib/gio/modules\giolibproxy.dll
+[[1;32mINFO[0m   ] [VideoGstplayer] <rtsp://10.168.168.202:8554/h264>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1
+SCHECK STEP_OK rtsp_h264 loads
+SCHECK INFO rtsp_h264 load_s 2.27
+SCHECK INFO rtsp_h264 texture (1280, 720)
+SCHECK INFO rtsp_h264 duration 0
+SCHECK INFO rtsp_h264 fps 29.3
+SCHECK INFO rtsp_h264 position_advance 8.01
+SCHECK STEP_OK rtsp_h264 plays
+SCHECK STEP_OK rtsp_h264 pause_stops_frames
+SCHECK STEP_OK rtsp_h264 resume_plays
+SCHECK INFO rtsp_h264 position_after_seek 12.1 -> 18.1
+SCHECK STEP_OK rtsp_h264 plays_after_seek
+SCHECK INFO rtsp_h264 replay_s 2.56
+SCHECK STEP_OK rtsp_h264 stop_then_play
+SCHECK INFO rtsp_h264 unload_s 0.05
+SCHECK STEP_OK rtsp_h264 unload_quick
+SCHECK CASE_END rtsp_h264 ok=7 fail=0
+SCHECK CASE_START rtsp_h265 rtsp://10.168.168.202:8554/h265
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h265>
+[[1;32mINFO[0m   ] [VideoGstplayer] <rtsp://10.168.168.202:8554/h265>: render path gl (WGL, opengl,opengl3), decoder d3d12h265dec, decoder output video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt601, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt601, framerate=(fraction)30/1
+SCHECK STEP_OK rtsp_h265 loads
+SCHECK INFO rtsp_h265 load_s 2.23
+SCHECK INFO rtsp_h265 texture (960, 540)
+SCHECK INFO rtsp_h265 duration 0
+SCHECK INFO rtsp_h265 fps 30.1
+SCHECK INFO rtsp_h265 position_advance 8.02
+SCHECK STEP_OK rtsp_h265 plays
+SCHECK STEP_OK rtsp_h265 pause_stops_frames
+SCHECK STEP_OK rtsp_h265 resume_plays
+SCHECK INFO rtsp_h265 position_after_seek 12.1 -> 18.1
+SCHECK STEP_OK rtsp_h265 plays_after_seek
+SCHECK INFO rtsp_h265 replay_s 2.41
+SCHECK STEP_OK rtsp_h265 stop_then_play
+SCHECK INFO rtsp_h265 unload_s 0.05
+SCHECK STEP_OK rtsp_h265 unload_quick
+SCHECK CASE_END rtsp_h265 ok=7 fail=0
+SCHECK CASE_START rtsp_h264_tcp rtspt://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtspt://10.168.168.202:8554/h264>
+[[1;32mINFO[0m   ] [VideoGstplayer] <rtspt://10.168.168.202:8554/h264>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1
+SCHECK STEP_OK rtsp_h264_tcp loads
+SCHECK INFO rtsp_h264_tcp load_s 2.22
+SCHECK INFO rtsp_h264_tcp texture (1280, 720)
+SCHECK INFO rtsp_h264_tcp duration 0
+SCHECK INFO rtsp_h264_tcp fps 29.5
+SCHECK INFO rtsp_h264_tcp position_advance 8.03
+SCHECK STEP_OK rtsp_h264_tcp plays
+SCHECK STEP_OK rtsp_h264_tcp pause_stops_frames
+SCHECK STEP_OK rtsp_h264_tcp resume_plays
+SCHECK INFO rtsp_h264_tcp position_after_seek 12.1 -> 18.1
+SCHECK STEP_OK rtsp_h264_tcp plays_after_seek
+SCHECK INFO rtsp_h264_tcp replay_s 2.55
+SCHECK STEP_OK rtsp_h264_tcp stop_then_play
+SCHECK INFO rtsp_h264_tcp unload_s 0.05
+SCHECK STEP_OK rtsp_h264_tcp unload_quick
+SCHECK CASE_END rtsp_h264_tcp ok=7 fail=0
+SCHECK CASE_START hls_live_ts http://10.168.168.202:8080/live-ts/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-ts/index.m3u8>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8080/live-ts/index.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1
+SCHECK STEP_OK hls_live_ts loads
+SCHECK INFO hls_live_ts load_s 0.27
+SCHECK INFO hls_live_ts texture (1280, 718)
+SCHECK INFO hls_live_ts duration 0
+SCHECK INFO hls_live_ts fps 24.6
+SCHECK INFO hls_live_ts position_advance 7.93
+SCHECK STEP_OK hls_live_ts plays
+SCHECK STEP_OK hls_live_ts pause_stops_frames
+SCHECK STEP_OK hls_live_ts resume_plays
+SCHECK INFO hls_live_ts position_after_seek 14.3 -> 20.4
+SCHECK STEP_OK hls_live_ts plays_after_seek
+SCHECK INFO hls_live_ts replay_s 0.47
+SCHECK STEP_OK hls_live_ts stop_then_play
+SCHECK INFO hls_live_ts unload_s 0.01
+SCHECK STEP_OK hls_live_ts unload_quick
+SCHECK CASE_END hls_live_ts ok=7 fail=0
+SCHECK CASE_START hls_live_fmp4 http://10.168.168.202:8080/live-fmp4/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-fmp4/index.m3u8>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8080/live-fmp4/index.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1
+SCHECK STEP_OK hls_live_fmp4 loads
+SCHECK INFO hls_live_fmp4 load_s 0.2
+SCHECK INFO hls_live_fmp4 texture (1280, 718)
+SCHECK INFO hls_live_fmp4 duration 0
+SCHECK INFO hls_live_fmp4 fps 24.5
+SCHECK INFO hls_live_fmp4 position_advance 7.89
+SCHECK STEP_OK hls_live_fmp4 plays
+SCHECK STEP_OK hls_live_fmp4 pause_stops_frames
+SCHECK STEP_OK hls_live_fmp4 resume_plays
+SCHECK INFO hls_live_fmp4 position_after_seek 14.7 -> 20.7
+SCHECK STEP_OK hls_live_fmp4 plays_after_seek
+SCHECK INFO hls_live_fmp4 replay_s 0.45
+SCHECK STEP_OK hls_live_fmp4 stop_then_play
+SCHECK INFO hls_live_fmp4 unload_s 0.02
+SCHECK STEP_OK hls_live_fmp4 unload_quick
+SCHECK CASE_END hls_live_fmp4 ok=7 fail=0
+SCHECK CASE_START hls_vod http://10.168.168.202:8080/vod/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/vod/index.m3u8>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8080/vod/index.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1
+SCHECK STEP_OK hls_vod loads
+SCHECK INFO hls_vod load_s 0.2
+SCHECK INFO hls_vod texture (1280, 718)
+SCHECK INFO hls_vod duration 45.6
+SCHECK INFO hls_vod fps 24.4
+SCHECK INFO hls_vod position_advance 7.89
+SCHECK STEP_OK hls_vod plays
+SCHECK STEP_OK hls_vod pause_stops_frames
+SCHECK STEP_OK hls_vod resume_plays
+SCHECK INFO hls_vod position_after_seek 11.9 -> 28.6
+SCHECK STEP_OK hls_vod plays_after_seek
+SCHECK STEP_OK hls_vod seek_moves
+SCHECK INFO hls_vod replay_s 0.5
+SCHECK STEP_OK hls_vod stop_then_play
+SCHECK INFO hls_vod unload_s 0.03
+SCHECK STEP_OK hls_vod unload_quick
+SCHECK CASE_END hls_vod ok=8 fail=0
+SCHECK CASE_START dash_vod http://10.168.168.202:8080/dash/manifest.mpd
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/dash/manifest.mpd>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8080/dash/manifest.mpd>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1
+SCHECK STEP_OK dash_vod loads
+SCHECK INFO dash_vod load_s 0.22
+SCHECK INFO dash_vod texture (1280, 718)
+SCHECK INFO dash_vod duration 45.6
+SCHECK INFO dash_vod fps 23.5
+SCHECK INFO dash_vod position_advance 7.57
+SCHECK STEP_OK dash_vod plays
+SCHECK STEP_OK dash_vod pause_stops_frames
+SCHECK STEP_OK dash_vod resume_plays
+SCHECK INFO dash_vod position_after_seek 11.6 -> 28.2
+SCHECK STEP_OK dash_vod plays_after_seek
+SCHECK STEP_OK dash_vod seek_moves
+SCHECK INFO dash_vod replay_s 0.47
+SCHECK STEP_OK dash_vod stop_then_play
+SCHECK INFO dash_vod unload_s 0.02
+SCHECK STEP_OK dash_vod unload_quick
+SCHECK CASE_END dash_vod ok=8 fail=0
+SCHECK CASE_START mjpeg http://10.168.168.202:8090/cam.mjpg
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8090/cam.mjpg>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8090/cam.mjpg>: render path gl (WGL, opengl,opengl3), decoder None, decoder output None, glupload input video/x-raw, format=(string)I420, width=(int)640, height=(int)360, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)405/404, chroma-site=(string)jpeg, colorimetry=(string)1:4:0:0, framerate=(fraction)0/1
+SCHECK STEP_OK mjpeg loads
+SCHECK INFO mjpeg load_s 0.25
+SCHECK INFO mjpeg texture (642, 360)
+SCHECK INFO mjpeg duration 0
+SCHECK INFO mjpeg fps 10.5
+SCHECK INFO mjpeg position_advance 8.0
+SCHECK STEP_OK mjpeg plays
+SCHECK STEP_OK mjpeg pause_stops_frames
+SCHECK STEP_OK mjpeg resume_plays
+SCHECK INFO mjpeg position_after_seek 12.0 -> 18.1
+SCHECK STEP_OK mjpeg plays_after_seek
+SCHECK INFO mjpeg replay_s 0.61
+SCHECK STEP_OK mjpeg stop_then_play
+SCHECK INFO mjpeg unload_s 0.01
+SCHECK STEP_OK mjpeg unload_quick
+SCHECK CASE_END mjpeg ok=7 fail=0
+SCHECK CASE_START hls_public_mux https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8>
+[[1;32mINFO[0m   ] [VideoGstplayer] <https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1
+SCHECK STEP_OK hls_public_mux loads
+SCHECK INFO hls_public_mux load_s 0.53
+SCHECK INFO hls_public_mux texture (1280, 720)
+SCHECK INFO hls_public_mux duration 634.58
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 6 (pid 0x0101) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 5 (pid 0x0101) (tsdemux3)
+SCHECK INFO hls_public_mux fps 56.8
+SCHECK INFO hls_public_mux position_advance 8.01
+SCHECK STEP_OK hls_public_mux plays
+SCHECK STEP_OK hls_public_mux pause_stops_frames
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 14 (pid 0x0101) (tsdemux3)
+SCHECK STEP_OK hls_public_mux resume_plays
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 0 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 11 (pid 0x0101) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 1 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 13 (pid 0x0101) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102) (tsdemux3)
+SCHECK INFO hls_public_mux position_after_seek 12.0 -> 317.3
+SCHECK STEP_FAIL hls_public_mux plays_after_seek frames=0
+SCHECK STEP_OK hls_public_mux seek_moves
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 0 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 11 (pid 0x0101) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 7 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 6 (pid 0x0101) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 12 (pid 0x0102) (tsdemux3)
+[[1;33mWARNING[0m] [VideoGstplayer] CONTINUITY: Mismatch packet 0, stream 5 (pid 0x0101) (tsdemux3)
+SCHECK STEP_FAIL hls_public_mux wait timed out waiting for frames after replay
+SCHECK CASE_END hls_public_mux ok=5 fail=2
+SCHECK CASE_START hls_public_apple https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>
+
+(python.exe:13424): Pango-CRITICAL **: 21:06:53.085: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:13424): Pango-CRITICAL **: 21:06:53.090: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:13424): Pango-CRITICAL **: 21:06:53.091: pango_font_description_get_family: assertion 'desc != NULL' failed
+
+(python.exe:13424): Pango-CRITICAL **: 21:06:53.091: pango_font_description_get_family: assertion 'desc != NULL' failed
+[[1;32mINFO[0m   ] [VideoGstplayer] <https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1, glupload input video/x-raw, format=(string)NV12, width=(int)960, height=(int)540, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, framerate=(fraction)60/1
+SCHECK STEP_OK hls_public_apple loads
+SCHECK INFO hls_public_apple load_s 3.02
+SCHECK INFO hls_public_apple texture (960, 540)
+SCHECK INFO hls_public_apple duration 600.0
+SCHECK INFO hls_public_apple fps 56.8
+SCHECK INFO hls_public_apple position_advance 8.02
+SCHECK STEP_OK hls_public_apple plays
+SCHECK STEP_OK hls_public_apple pause_stops_frames
+SCHECK STEP_FAIL hls_public_apple resume_plays frames after resume=1
+SCHECK INFO hls_public_apple position_after_seek 8.1 -> 300.0
+SCHECK STEP_FAIL hls_public_apple plays_after_seek frames=0
+SCHECK STEP_OK hls_public_apple seek_moves
+SCHECK STEP_FAIL hls_public_apple wait timed out waiting for frames after replay
+SCHECK CASE_END hls_public_apple ok=4 fail=3
+SCHECK CASE_START rtsp_bad_path rtsp://10.168.168.202:8554/no-such-path
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/no-such-path>
+[[1;31mERROR[0m  ] [VideoGstplayer] <rtsp://10.168.168.202:8554/no-such-path>: Not found
+SCHECK ON_ERROR rtsp_bad_path 'Not found'
+SCHECK STEP_OK rtsp_bad_path fires_on_error
+SCHECK INFO rtsp_bad_path error_after_s 0.26
+SCHECK CASE_END rtsp_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_bad_port rtsp://10.168.168.202:8555/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8555/h264>
+[[1;31mERROR[0m  ] [VideoGstplayer] <rtsp://10.168.168.202:8555/h264>: Could not open resource for reading and writing.
+SCHECK ON_ERROR rtsp_bad_port 'Could not open resource for reading and writing.'
+SCHECK STEP_OK rtsp_bad_port fires_on_error
+SCHECK INFO rtsp_bad_port error_after_s 2.16
+SCHECK CASE_END rtsp_bad_port ok=1 fail=0
+SCHECK CASE_START hls_bad_path http://10.168.168.202:8080/no-such/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/no-such/index.m3u8>
+[[1;31mERROR[0m  ] [VideoGstplayer] <http://10.168.168.202:8080/no-such/index.m3u8>: File not found (HTTP 404)
+SCHECK ON_ERROR hls_bad_path 'File not found (HTTP 404)'
+SCHECK STEP_OK hls_bad_path fires_on_error
+SCHECK INFO hls_bad_path error_after_s 0.11
+SCHECK CASE_END hls_bad_path ok=1 fail=0
+SCHECK CASE_START rtsp_server_drop rtsp://10.168.168.202:8554/h264
+[[1;31mERROR[0m  ] [Image       ] Not found <rtsp://10.168.168.202:8554/h264>
+[[1;32mINFO[0m   ] [VideoGstplayer] <rtsp://10.168.168.202:8554/h264>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)720, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)1/1, colorimetry=(string)bt709, framerate=(fraction)30/1
+SCHECK STEP_OK rtsp_server_drop loads
+SCHECK INFO rtsp_server_drop load_s 2.25
+SCHECK INFO rtsp_server_drop texture (1280, 720)
+SCHECK INFO rtsp_server_drop duration 0
+SCHECK INFO rtsp_server_drop fps 29.2
+SCHECK INFO rtsp_server_drop position_advance 8.02
+SCHECK STEP_OK rtsp_server_drop plays
+SCHECK INFO rtsp_server_drop server dropped
+[[1;33mWARNING[0m] [VideoGstplayer] Could not read from resource. (rtspsrc5)
+SCHECK INFO rtsp_server_drop error_after_drop_s 27.7
+SCHECK STEP_FAIL rtsp_server_drop on_error_after_drop eos=True errors=[]
+SCHECK CASE_END rtsp_server_drop ok=2 fail=1
+SCHECK CASE_START hls_server_drop http://10.168.168.202:8080/live-ts/index.m3u8
+[[1;31mERROR[0m  ] [Image       ] Not found <http://10.168.168.202:8080/live-ts/index.m3u8>
+[[1;32mINFO[0m   ] [VideoGstplayer] <http://10.168.168.202:8080/live-ts/index.m3u8>: render path gl (WGL, opengl,opengl3), decoder d3d12h264dec, decoder output video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1, glupload input video/x-raw, format=(string)NV12, width=(int)1280, height=(int)718, interlace-mode=(string)progressive, multiview-mode=(string)mono, multiview-flags=(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono, pixel-aspect-ratio=(fraction)3231/3232, colorimetry=(string)bt601, framerate=(fraction)25/1
+SCHECK STEP_OK hls_server_drop loads
+SCHECK INFO hls_server_drop load_s 0.2
+SCHECK INFO hls_server_drop texture (1280, 718)
+SCHECK INFO hls_server_drop duration 0
+SCHECK INFO hls_server_drop fps 24.4
+SCHECK INFO hls_server_drop position_advance 7.88
+SCHECK STEP_OK hls_server_drop plays
+SCHECK INFO hls_server_drop server dropped
+[[1;31mERROR[0m  ] [VideoGstplayer] <http://10.168.168.202:8080/live-ts/index.m3u8>: Internal data stream error. (Could not update any variant playlist)
+SCHECK ON_ERROR hls_server_drop 'Internal data stream error. (Could not update any variant playlist)'
+SCHECK INFO hls_server_drop error_after_drop_s 0.2
+SCHECK STEP_OK hls_server_drop on_error_after_drop
+SCHECK CASE_END hls_server_drop ok=3 fail=0
+SCHECK DONE ok=75 fail=6
+SCHECK INFO - results C:\Users\ellio\PycharmProjects\KivyPRs-video-notes\notes\video-providers\stream-check\src\results-VideoGstplayer.jsonl

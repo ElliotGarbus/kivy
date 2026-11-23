@@ -1,0 +1,5 @@
+[lock] arm64_v8a: resolving wheels
+[lock] x86_64: resolving wheels
+[lock] resolving 4 Maven dependencies with Gradle (a first run also downloads Gradle itself)
+[lock] host CPython 3.14.6 for byte-compiling: aarch64-apple-darwin, x86_64-pc-windows-msvc, x86_64-unknown-linux-gnu
+Wrote pylock.android.toml (8 packages pinned).
