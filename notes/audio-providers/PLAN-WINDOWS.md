@@ -60,16 +60,110 @@ the `video-provider-notes` branch, `notes/video-providers/`:
 | Step | What | Branch | Needs | Unblocks |
 |---|---|---|---|---|
 | W1 | What SDL3 plays on each platform; O2 measurement | `audio-provider-notes` (results only) | M0 | M1 merge |
+| W-SP1 | Spike: when each provider notices a bad file (Windows, Linux, Pi, Android) | `audio-provider-notes` (results only) | M0 | S1, S2 |
 | W2 | Check the Mac's phase 1 branch on 4 platforms | none (results only) | M1 pushed | M1 merge |
-| W3 | Phase 3: `mediafoundation` audio provider | `audio-mediafoundation` | S1 (local merge) | W6 |
-| W4a | `gstplayer` meets the contracts | `audio-gstplayer-contract` | S1 (local merge), S2 | W6 |
+| SP5 | Spike: Media Foundation audio-only engine | scratch only | nothing | W3 |
+| W3 | Phase 3: `mediafoundation` audio provider | `audio-mediafoundation` | SP5, S1 (local merge) | W6 |
+| SP6 | Spike: GStreamer gapless loop | scratch only | nothing | W4a |
+| W4a | `gstplayer` meets the contracts | `audio-gstplayer-contract` | SP6, S1 (local merge), S2 | W6 |
 | W4b | `android` (`MediaPlayer`) meets the contracts | `audio-android-contract` | S1 (local merge), S2 | W5 |
 | W4c | Check the Mac's `sdl3` contract branch on 4 platforms | none (results only) | S4 pushed | S4 merge |
-| W5 | Phase 5: Media3 in the `android` provider | `audio-android-media3` | W4b | W6 |
+| SP7 | Spike: Media3 load wait across threads | scratch only | nothing | W5 |
+| W5 | Phase 5: Media3 in the `android` provider | `audio-android-media3` | SP7, W4b | W6 |
 | W6 | Phase 6: streaming through `mediafoundation`, `gstplayer`, `android` | one branch per provider | W3, W4a, W5 | none |
 
-W1 can start as soon as M0 is pushed. W3 can start right away against
-`CONTRACTS.md`; it needs S1 only to run.
+SP5, SP6 and SP7 can start right away. W1 and W-SP1 start as soon as M0 is
+pushed; run them together, they use the same probe and fixtures. W3 starts
+after SP5, against `CONTRACTS.md`; it needs S1 only to run.
+
+## Spikes
+
+A spike answers one question with throwaway code, inside a time box, and
+writes its answer to `results/spikes/<name>.md`: the question, what was
+run, the numbers, the answer, and what it changes in `CONTRACTS.md` or a
+plan step. A contract change goes to `README.md` ("Hand-offs") for the
+Mac, which owns `CONTRACTS.md`, before the dependent step starts. Spike
+code lives under `notes/audio-providers/spikes/<name>/` if worth keeping.
+
+### W-SP1. When does a provider notice a bad file? (Windows half of SP1)
+
+Time box: one day, run with W1. Needs M0's fixtures (`notaudio.<ext>`:
+random bytes; `damaged.<ext>`: a valid header, then random bytes).
+
+C2 assumes `load()` raises for a file that can't be played, but `sdl3`
+decodes during playback (`predecode=False`) and other frameworks may only
+read the header when opening (O4).
+
+1. With `format_probe.py`, for each extension and each provider that
+   claims it, record: does `load()` fail; if not, what `length` says and
+   what `play()` does (error, early stop, noise, silence for the full
+   length). Providers: `sdl3` on Windows, WSL2, the Pi and Android;
+   `gstplayer` on Windows and WSL2; `android` (`MediaPlayer`) on Android.
+2. `gstplayer` returns before GStreamer opens the file today: record when
+   the error arrives (milliseconds after `load()`) for both kinds.
+3. Write `results/spikes/W-SP1.md` and add a hand-off for the Mac, which
+   combines it with SP1 to settle O4.
+
+### SP5. Media Foundation audio-only engine
+
+Time box: two days. Answers what W3's design assumes.
+
+In a scratch C++ console program (then a minimal Cython wrapper inside a
+Kivy app, so SDL's window and COM setup are present):
+
+1. Create `IMFMediaEngine` with `MF_MEDIA_ENGINE_AUDIOONLY`, no DXGI
+   manager, no window. Does it play `short1.m4a`, `.aac`, `.wma`, `.mp3`?
+2. COM: SDL may initialize COM on Kivy's thread before the provider does.
+   Check `CoInitializeEx` results (`S_OK`, `S_FALSE`,
+   `RPC_E_CHANGED_MODE`) inside a running Kivy app, and that the video
+   provider's approach (around line 161 of
+   `video_mediafoundation_implem.cpp`) works for audio as is.
+3. Time from `SetSource` to `MF_MEDIA_ENGINE_EVENT_LOADEDMETADATA` for
+   local files (cold and warm), and to `..._ERROR` for `notaudio.m4a` and a
+   missing file. Is C2's 2 s timeout right?
+4. `SetLoop(TRUE)`: the gap at the wrap with `tone10.wav` and
+   `tone10.m4a` (record the output with a loopback capture, or by ear).
+5. `SetPlaybackRate(1.5)`: does pitch stay the same?
+6. No audio device (disable the output device in Sound settings, as on CI):
+   does engine creation fail, or `Play`? What error?
+7. Answer each question in `results/spikes/SP5.md`, and adjust W3's design
+   (and C2's timeout via a hand-off) if needed.
+
+### SP6. GStreamer gapless loop
+
+Time box: two days.
+
+1. In `kivy/lib/gstplayer/_gstplayer.pyx` (scratch branch), try both:
+   a segment seek (`GST_SEEK_FLAG_SEGMENT`, then a non-flushing segment
+   seek back to 0 on `SEGMENT_DONE`), and re-setting the URI on playbin3's
+   `about-to-finish` signal.
+2. For each: the new C or Cython needed (signal handlers run on a
+   GStreamer thread; the core polls messages from the Clock today), and
+   the gap at the wrap with `tone10.wav` and `tone10.ogg` on Windows, WSL2
+   and the Pi. Target: under 10 ms.
+3. Also check a rate seek for `pitch` (C7): does it change pitch with
+   speed, and does it survive the loop?
+4. Answer in `results/spikes/SP6.md`: the method W4a uses.
+
+### SP7. Media3 load wait across threads
+
+Time box: one day, in the Android check app with Media3 added.
+
+C2 now requires the `android` provider's Media3 backend to wait in
+`load()`, on Kivy's thread, until the player (on the UI thread) reports
+`STATE_READY` or an error.
+
+1. Build an ExoPlayer for a local file on the UI thread
+   (`run_on_ui_thread`), with a `Player.Listener` that sets a
+   `threading.Event`; wait on it from Kivy's thread with a 2 s timeout.
+   Confirm no deadlock (the pyjnius callback needs the GIL while Kivy's
+   thread waits) and measure the time to `STATE_READY` (cold and warm)
+   and to the error for `notaudio.mp3` and a missing file.
+2. Audio-only playback with no `Surface`: no warnings or errors.
+3. Load 20 sounds in a row (a game loading its effects at startup): total
+   time, and whether players must be released before more are created.
+4. Answer in `results/spikes/SP7.md`; adjust W5 (and C2's timeout via a
+   hand-off) if needed.
 
 ---
 
@@ -163,9 +257,8 @@ Design:
     `video_mediafoundation.pyx` does (`_update`, around line 369): EOS
     with `loop` off calls `_do_eos()`; an error calls `_do_error()`.
   - `pause()`/`resume()` (C5), `get_pos()`, `length`, `on_volume`,
-    `on_pitch` (`setRate`; check whether pitch is kept and document it,
-    C7), `loop` through `setLoop` (measure the gap at the wrap with
-    `tone10`; record it).
+    `on_pitch` (`setRate`; document whether pitch is kept, per SP5, C7),
+    `loop` through `setLoop` (document the gap SP5 measured).
 - **Register**: add `('mediafoundation', 'audio_mediafoundation')` to
   `PROVIDER_CONFIGS['audio_output']` after `avplayer`, and in
   `kivy/core/audio_output/__init__.py` append it on `win32` after `sdl3`
@@ -179,7 +272,7 @@ Verify:
 - Unit tests that don't need a device: extension list, registration on
   `win32` (patched platform), `load()` raising for a missing file.
 - `format_probe.py` on Windows without GStreamer: m4a/aac/wma go to
-  `SoundMediaFoundation` and play to the end; `corrupt.m4a` falls back
+  `SoundMediaFoundation` and play to the end; `notaudio.m4a` falls back
   (with GStreamer installed, to `gstplayer`, which also fails, and the
   aggregated warning names both).
 - The shared suite (`test_audio_behavior.py`) passes for
@@ -202,15 +295,13 @@ contract.
    already known to be missing at `load()` (`init_status()[0] ==
    'error'`), raise `SoundLoadError` instead.
 2. **End of stream**: EOS with `loop` off calls `_do_eos()`.
-3. **Gapless loop**: today EOS seeks back to 0, which leaves a gap. Use a
-   segment seek (`GST_SEEK_FLAG_SEGMENT`) and loop on `SEGMENT_DONE`, or
-   re-queue the URI on playbin3's `about-to-finish`, whichever
-   `kivy/lib/gstplayer/_gstplayer.pyx` supports with the least new C;
-   add the needed message type to `pop_messages()` if missing. Measure the
-   gap with `tone10.wav` on Windows, WSL2 and the Pi; target under 10 ms.
+3. **Gapless loop**: today EOS seeks back to 0, which leaves a gap. Use
+   the method SP6 chose; add the needed message type to `pop_messages()`
+   if missing. Confirm the gap with `tone10.wav` on Windows, WSL2 and the
+   Pi; target under 10 ms.
 4. **Pause** (C5): `set_state(STATE_PAUSED)` without the seek `stop()` does.
-5. **`pitch`** (C7): a rate seek; record whether pitch changes with speed
-   (expected: yes, without `scaletempo`) and document it.
+5. **`pitch`** (C7): a rate seek, as SP6 found; document whether pitch
+   changes with speed.
 6. Remove `gstplayer` from `_KNOWN_FAILURES`; run the shared suite on
    Windows (with GStreamer), WSL2 and the Pi.
 

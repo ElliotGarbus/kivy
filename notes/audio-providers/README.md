@@ -31,6 +31,10 @@ upstream PR.
 | Step | Owner | Branch / PR | Status |
 |---|---|---|---|
 | M0 fixtures and probe | Mac | `audio-provider-notes` | not started |
+| SP1 spike: bad files in `sdl3`/`avplayer` | Mac | `audio-provider-notes` | waits for M0 |
+| SP2 spike: raising from `on_source` | Mac | scratch | not started |
+| SP3 spike: `AVAudioPlayer.play()` off the main thread | Mac | scratch | not started |
+| SP4 spike: `AVPlayer` streams through rubicon-objc | Mac | scratch | not started |
 | M1 `sdl3` first (phase 1) | Mac | `audio-sdl3-first` | worktree created |
 | S1 contracts in `Sound`/`SoundLoader` | Mac | `audio-sound-contracts` | not started |
 | S2 shared behavior suite | Mac | `audio-behavior-tests` | not started |
@@ -39,6 +43,10 @@ upstream PR.
 | M2 ffpyplayer removal (phase 2) | Mac | #9546 | open |
 | M6 Apple streaming | Mac | `audio-avplayer-streaming` | not started |
 | W1 SDL3 formats per platform, O2 measurement | Windows | `audio-provider-notes` | waits for M0 |
+| W-SP1 spike: bad files on Windows, Linux, Pi, Android | Windows | `audio-provider-notes` | waits for M0 |
+| SP5 spike: Media Foundation audio-only engine | Windows | scratch | not started |
+| SP6 spike: GStreamer gapless loop | Windows | scratch | not started |
+| SP7 spike: Media3 load wait across threads | Windows | scratch | not started |
 | W2 phase 1 checks | Windows | none | waits for M1 |
 | W3 `mediafoundation` (phase 3) | Windows | `audio-mediafoundation` | not started |
 | W4a `gstplayer` contract | Windows | `audio-gstplayer-contract` | not started |
@@ -60,6 +68,8 @@ PRs this depends on: [#9529](https://github.com/kivy/kivy/pull/9529),
 | Mac | Windows | M0: fixtures and `format_probe.py` pushed | |
 | Mac | Windows | S1 branch pushed (API usable for local merges) | |
 | Windows | Mac | W1: SDL3 decoder sets and AIFF `length` per platform (O2) | |
+| Windows | Mac | W-SP1: bad-file behavior per provider (O4, with SP1) | |
+| Windows | Mac | SP5, SP7: any change to C2's 2 s load timeout | |
 | Windows | Mac | W2: phase 1 results on 4 platforms | |
 | Windows | Mac | `_KNOWN_FAILURES` for `gstplayer`, `android`, `mediafoundation`, and `sdl3` on 4 platforms | |
 | Windows | Mac | W4c: `sdl3` contract results on 4 platforms | |
@@ -73,7 +83,19 @@ Record each change to `CONTRACTS.md` here with the date and the commit.
   Media3 backend must confirm a local file opens before `load()` returns
   (C2). O2 decided: map `AIFF` only if W1 finds its `length` correct.
 
+- 2026-11-24: spikes added. C8's single `corrupt` fixture split into
+  `notaudio` (tests 7 and 8) and `damaged` (test 10, defined after SP1).
+  New open question O4.
+
 ## Open questions
 
-O3 (`AVAudioPlayer.play()` off the main thread) is in `CONTRACTS.md`; S3
-measures it. O1 and O2 are decided (above).
+In `CONTRACTS.md`: O4 (files with a valid header and damaged data; SP1 and
+W-SP1 answer it before S1 starts) and O3 (`AVAudioPlayer.play()` off the
+main thread; SP3). O1 and O2 are decided (above).
+
+## Spikes
+
+Each plan has a "Spikes" section: SP1-SP4 on the Mac, W-SP1 and SP5-SP7 on
+the Windows machine. A spike answers one question inside a time box and
+writes `results/spikes/<name>.md` before the step that depends on it
+starts.

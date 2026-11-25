@@ -72,18 +72,112 @@ both machines implement.
 
 | Step | What | Branch | Needs | Unblocks |
 |---|---|---|---|---|
-| M0 | Fixtures for both machines | `audio-provider-notes` | nothing | W1, S2 |
+| M0 | Fixtures and probe for both machines | `audio-provider-notes` | nothing | W1, SP1, S2 |
+| SP1 | Spike: when `sdl3` and `avplayer` notice a bad file | `audio-provider-notes` (results only) | M0 | S1, S2 |
+| SP2 | Spike: raising from `on_source` during construction | scratch only | nothing | S1 |
 | M1 | Phase 1: `sdl3` first | `audio-sdl3-first` (worktree `kivy-audio-phase1` exists) | #9533, #9546 merged before it merges; W1 report before it merges | phase 1 checks on Windows |
-| S1 | Contracts in `Sound`/`SoundLoader` | `audio-sound-contracts` | nothing | every provider step on both machines |
-| S2 | Shared behavior test suite | `audio-behavior-tests` | S1 (stack locally), M0 | W4, W5 runs |
+| S1 | Contracts in `Sound`/`SoundLoader` | `audio-sound-contracts` | SP1 (both machines), SP2 | every provider step on both machines |
+| S2 | Shared behavior test suite | `audio-behavior-tests` | S1 (stack locally), M0, SP1 | W4, W5 runs |
 | S4 | `sdl3` meets the contracts | `audio-sdl3-contract` | S1, #9533 | W4 checks on 4 platforms |
-| S3 | `avplayer` meets the contracts | `audio-avplayer-contract` | S1, #9530 | none |
+| SP3 | Spike: `AVAudioPlayer.play()` off the main thread (O3) | scratch only | nothing | S3 |
+| S3 | `avplayer` meets the contracts | `audio-avplayer-contract` | S1, #9530, SP3 | none |
 | M2 | Keep #9546 current | `remove-ffpyplayer` | nothing | none |
-| M6 | Phase 6: Apple streaming | `audio-avplayer-streaming` | S1, S3 | none |
+| SP4 | Spike: `AVPlayer` streams through rubicon-objc | scratch only | nothing | M6 |
+| M6 | Phase 6: Apple streaming | `audio-avplayer-streaming` | S1, S3, SP4 | none |
 
-Do M0 first (it's short and the Windows machine waits on it), then S1, since
-both machines' provider work needs it. M1 can be prepared alongside S1 but
-merges after #9533 and #9546.
+Do M0 first (it's short and the Windows machine waits on it), then SP1 and
+SP2 (both small; S1 waits on them), then S1, since both machines' provider
+work needs it. M1 can be prepared alongside S1 but merges after #9533 and
+#9546. SP3 and SP4 can run any time before their steps.
+
+## Spikes
+
+A spike answers one question with throwaway code, inside a time box, and
+writes its answer to `results/spikes/SP<n>.md`: the question, what was
+run, the numbers, the answer, and what it changes in `CONTRACTS.md` or a
+plan step. If the answer changes a contract, update `CONTRACTS.md` and log
+it in `README.md` ("Contract changes") before the dependent step starts.
+Spike code lives under `notes/audio-providers/spikes/SP<n>/` if worth
+keeping, otherwise in `~/Developer/kivyPRs/scratch/`.
+
+### SP1. When does a provider notice a bad file? (Mac half; W-SP1 is the other)
+
+Time box: half a day. Needs M0's fixtures.
+
+C2 assumes `load()` raises for a file that can't be played. But `sdl3`
+loads with `predecode=False`, which `SDL_mixer.h` describes as decoding "on
+the fly during playback", so a file with a valid header and damaged data
+may load fine and fail (or play noise) only while playing. `AVAudioPlayer`
+may also read only the header at init.
+
+1. Use M0's two kinds of bad file: `notaudio.<ext>` (random bytes from the
+   first byte) and `damaged.<ext>` (a valid header, then random bytes).
+2. For `sdl3` and `avplayer` on macOS (and `sdl3`/`avplayer` on the iPhone
+   through `ios-check`), record for each extension: does `load()` fail;
+   if not, what `length` says, and what `play()` does (error at play,
+   stops early, plays noise, plays silence for the full length).
+3. Also try `MIX_LoadAudio(..., predecode=True)` for `damaged.*` in a
+   scratch build, and time it for `tone10.*`: if predecoding catches
+   damaged files and costs little for short sounds, note it as an option.
+4. Answer: which failures `load()` catches per provider, and what C2 and
+   C8 should say. Expected outcome: `notaudio` falls back (C2), `damaged`
+   ends in `on_error` or plays to a short end, and C8 test 7 uses
+   `notaudio`, test 8 uses `damaged`. Combine with W-SP1's results before
+   changing `CONTRACTS.md`.
+
+### SP2. Raising from `on_source` during `Sound.__init__`
+
+Time box: two hours. No device needed.
+
+C2 has `Sound.on_source` re-raise `SoundLoadError` during construction so
+`SoundLoader` can try the next provider.
+
+1. In a scratch copy of `kivy/core/audio_output/__init__.py`, raise from a
+   fake provider's `load()` and check that the exception leaves
+   `EventDispatcher.__init__` unchanged (no wrapping, no swallowing), and
+   that the half-built object is garbage-collected (a `weakref` is dead
+   after `gc.collect()`).
+2. Check the real providers' `load()` for anything created before the
+   failure point that would outlive the object: `gstplayer` schedules a
+   Clock interval in `load()`; `sdl3` creates its track in `__init__`
+   before `load()`; `android` creates a `MediaPlayer` before `prepare()`.
+3. Answer: whether `Sound` needs a cleanup hook (for example, calling
+   `unload()` before re-raising) and which providers must reorder `load()`.
+   Feed it into S1's design and the provider steps (S3, S4, W3, W4).
+
+### SP3. `AVAudioPlayer.play()` off the main thread (O3)
+
+Time box: one day. Moved out of S3, step 5.
+
+1. In a scratch app (macOS, then `ios-check` on the iPhone), call
+   `prepareToPlay` and `play` on a serial dispatch queue through
+   rubicon-objc, and the delegate callbacks back on the main thread.
+2. Measure how long the Kivy thread is blocked (expected near zero, against
+   13-107 ms today) and the start latency.
+3. Stress: 1,000 rapid `play`/`pause`/`stop`/`seek` cycles from Kivy, with
+   `volume` and `pitch` changes interleaved; no crash, no stuck `state`, no
+   delegate callback for a stopped player.
+4. Answer: ship it in S3 or keep `play()` on the main thread and document
+   "use wav/ogg/mp3 for sound effects". Close O3 in `CONTRACTS.md`.
+
+### SP4. `AVPlayer` streams through rubicon-objc
+
+Time box: one day.
+
+1. In a scratch script with a Kivy `App`, open an HTTP MP3 and an
+   audio-only HLS stream (from `notes/video-providers/stream-check/` on
+   `video-provider-notes`) with `AVPlayer` through rubicon-objc.
+2. Poll `currentItem.status`, `currentItem.error`, `currentTime`,
+   `duration` and `rate` from the Clock; subscribe to
+   `AVPlayerItemDidPlayToEndTimeNotification` and
+   `AVPlayerItemFailedToPlayToEndTimeNotification` with
+   `NSNotificationCenter.addObserverForName:object:queue:usingBlock:`
+   through a rubicon block, and confirm the block runs and can be removed.
+3. Check: a bad URL, a 404, a stream cut mid-play (stop the Pi server),
+   live versus on-demand `duration`, pause/resume, and that the iOS
+   audio session category from S3 applies to `AVPlayer` too.
+4. Answer: polling versus notifications, the error texts, and whether
+   anything needs Objective-C beyond rubicon. Adjust M6's design.
 
 ---
 
@@ -99,9 +193,12 @@ formats only the Mac can encode (`afconvert`).
      `wav flac mp3 ogg opus aiff m4a aac caf`.
    - `tone10`: 10.0 s, 440 Hz with a click every second, same formats
      (for loop, seek and drift checks by ear).
-   - `corrupt.<ext>` for the same extensions: the first 64 bytes of the
-     matching `short1` file followed by 4 KiB of random bytes (seeded, so
-     reruns produce identical files).
+   - Two kinds of bad file for the same extensions, seeded so reruns
+     produce identical files (SP1 uses both):
+     - `notaudio.<ext>`: 4 KiB of random bytes from the first byte.
+     - `damaged.<ext>`: the matching `tone10` file's header (the first
+       64 bytes, or the whole header for formats with longer ones, such
+       as the `moov` box in m4a) followed by 64 KiB of random bytes.
    - `manifest.json`: true durations (from `afinfo`, or `soundfile` where
      CoreAudio can't read the format), sizes and SHA-256.
 2. `pip install numpy soundfile` in the venv if missing; run it.
@@ -116,11 +213,12 @@ formats only the Mac can encode (`afconvert`).
      `SoundSDL3.extensions()`, and every "Unrecognized audio decoder"
      warning (capture `Logger` output), which together give the SDL3
      decoder set.
-   - For each `short1.*`, `corrupt.*` and `tone10.*`: which provider the
+   - For each `short1.*`, `notaudio.*`, `damaged.*` and `tone10.*`: which provider the
      default `SoundLoader.load()` picks; then for each provider that claims
      the extension, with `audio_output_provider=name`: load result or
-     exception text, `length`, and for `short1` the time from `play()` to
-     `on_stop` (and `on_eos` once S1 exists), with a 5 s timeout.
+     exception text, `length`, and for `short1` and `damaged` the time from
+     `play()` to `on_stop` (and `on_eos` or `on_error` once S1 exists),
+     with a timeout of `length` + 5 s.
    - Prints one `APROBE {json}` line per result and writes all of them to
      `out_path` (default `results/<platform>-<label>/probe.json`).
    - Test it on macOS against the fixtures.
@@ -254,7 +352,8 @@ failure". Mention that it supersedes #8609 and answers #2156.
 
 Branch `audio-behavior-tests`, stacked locally on S1 until S1 merges.
 
-1. Copy `fixtures/short1.*` and `fixtures/corrupt.*` into
+1. Copy `fixtures/short1.*`, `fixtures/notaudio.*` and (if SP1 keeps a
+   test for them) `fixtures/damaged.*` into
    `kivy/tests/audio_fixtures/` (check `MANIFEST.in`/`pyproject.toml` so
    they ship with the tests like other test data).
 2. Write `kivy/tests/test_audio_behavior.py` as specified in C8, with
@@ -303,11 +402,7 @@ Branch `audio-avplayer-contract`, from `upstream/master` after #9530 merges
    ducking, or `KIVY_AUDIO_CATEGORY`), through `AVAudioSession`, so an app
    that only plays m4a/aac isn't left in SoloAmbient. Reuse #9533's
    category table rather than a second copy.
-5. O3: measure calling `play()` on a serial dispatch queue (latency, and
-   1,000 rapid play/stop/pause cycles without a crash or a stuck state) on
-   the Mac and the iPhone. Ship it only if it's reliable; otherwise keep
-   `play()` on the main thread and document "use wav/ogg/mp3 for sound
-   effects". Record the numbers in `results/s3-play-thread.md`.
+5. `play()` off the main thread, or not, as SP3 decided.
 6. Remove `avplayer` from `_KNOWN_FAILURES`; run the suite on macOS and in
    `ios-check`.
 
