@@ -7,6 +7,7 @@ upstream PR.
 |---|---|
 | `AUDIO-PLAN.md` | The high-level plan: provider matrix, phases, decisions |
 | `CONTRACTS.md` | The API and behavior every provider implements (C1-C8), and the open questions (O1-O3) |
+| `MOBILE-AUDIO.md` | SDL3 versus native audio on Android and iOS, for the default order; spike SP8 |
 | `PLAN-MAC.md` | Shared work (Python, `sdl3`, test suite, docs), macOS and iOS. Steps M0, M1, M2, M6, S1-S4 |
 | `PLAN-WINDOWS.md` | Windows, Linux, Raspberry Pi and Android. Steps W1-W6 |
 | `tools/` | `make_fixtures.py`, `format_probe.py` (M0), `bench_audio.py`, `summarize_audio.py` (from the rubicon spike) |
