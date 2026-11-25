@@ -137,9 +137,11 @@ Branch `audio-sdl3-first`, worktree `~/Developer/kivyPRs/kivy-audio-phase1`
 
 Code:
 
-1. **Order (C1).** In `kivy/core/audio_output/__init__.py`, append `sdl3`
-   first (when `USE_SDL3`), then `android` or `avplayer` by platform, then
-   `gstplayer` in its existing `try`. Reorder
+1. **Order (C1).** In `kivy/core/audio_output/__init__.py`: on Android,
+   append `android` then `sdl3` (unchanged from today apart from
+   `ffpyplayer`, which #9546 removes); everywhere else, `sdl3` first (when
+   `USE_SDL3`), then `avplayer` on macOS and iOS, then `gstplayer` in its
+   existing `try`. Reorder
    `PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py` to
    `sdl3, avplayer, mediafoundation, android, gstplayer`, but leave
    `mediafoundation` out until phase 3 adds the module (the Windows
@@ -158,7 +160,7 @@ Code:
    | `OPUS` | opus |
    | `FLAC`, `DRFLAC` | flac |
    | `MPG123`, `DRMP3` | mp3 |
-   | `AIFF` | aiff, aif (subject to O2) |
+   | `AIFF` | aiff, aif (only if W1 finds `length` correct; O2) |
    | `AU` | au |
    | `VOC` | voc |
    | `WAVPACK` | wv |
@@ -176,14 +178,16 @@ Code:
 3. **Docs.**
    - `audio_output/__init__.py` module docstring: a short "Provider order"
      paragraph (SDL3 first; the platform's provider plays what SDL3
-     can't).
+     can't; on Android the platform player stays first so audio keeps
+     playing in the background, and `audio_output_provider='sdl3'` gives
+     lower latency for sound effects).
    - `doc/sources/guide/environment.rst`, `KIVY_AUDIO_OUTPUT`: the
      default order per platform.
    - `doc/sources/migration.rst`, Audio section: "`sdl3` is tried first on
-     every platform" with the per-platform consequence (macOS/iOS: mp3/wav
-     now play through SDL3, not AVFoundation; Android: see O1), and
-     correct #9533's sentence that tracker formats aren't supported (they
-     play on builds whose SDL3_mixer has `XMP`, per the W1 report).
+     every platform except Android" with the consequence (macOS/iOS:
+     mp3/wav now play through SDL3, not AVFoundation; Android: unchanged),
+     and correct #9533's sentence that tracker formats aren't supported
+     (they play on builds whose SDL3_mixer has `XMP`, per the W1 report).
 4. **Tests** (`kivy/tests/test_audio_provider.py`): the registration order
    per platform (patch `platform` and reload, or assert on
    `PROVIDER_CONFIGS` plus the append order); the decoder dict maps every
@@ -199,11 +203,11 @@ Verify:
   copies `format_probe.py` and the fixtures into `src/` at prepare time
   and calls `run_probe()`. Run it on the device and save the log and JSON
   to `results/ios-m1/`.
-- Before merging: the W1 report (Windows, Linux, Pi, Android decoder sets)
-  and the O1/O2 decisions are in `README.md`; update the migration note
-  with them.
+- Before merging: the W1 report (Windows, Linux, Pi, Android decoder sets
+  and the O2 AIFF measurement) is in `README.md`; apply O2's rule and
+  update the migration note with the results.
 
-PR title: "Audio: try the sdl3 provider first on every platform".
+PR title: "Audio: try the sdl3 provider first on desktop and iOS".
 
 ## S1. Contracts in `Sound` and `SoundLoader`
 

@@ -15,16 +15,17 @@ machines.
 | Windows | SDL3 | Media Foundation (new, shares the video provider's `IMFMediaEngine` code) / GStreamer (modernized, optional) |
 | Linux | SDL3 | GStreamer (modernized, shared with video) |
 | Raspberry Pi | SDL3 | GStreamer (modernized, shared with video) |
-| Android | SDL3 | Media3 ExoPlayer when the app includes it (shared with video), `MediaPlayer` otherwise |
+| Android | `android`: Media3 ExoPlayer when the app includes it (shared with video), `MediaPlayer` otherwise | SDL3 (the formats `android` doesn't claim) |
 
 Removed in 3.0: `ffpyplayer` (audio, and with the video plan, video and image).
 
 ## Goals
 
-- SDL3 first on every platform: low start latency (12-42 ms measured on
-  a Mac and an iPhone), a non-blocking `play()`, mixing many sounds, and the
-  same behavior everywhere. This is the opposite of video, where SDL has
-  nothing to offer.
+- SDL3 first on every platform except Android: low start latency (12-42 ms
+  measured on a Mac and an iPhone), a non-blocking `play()`, mixing many
+  sounds, and the same behavior everywhere. This is the opposite of video,
+  where SDL has nothing to offer. Android keeps its platform player first
+  so audio keeps playing in the background (see Decisions).
 - Native OS frameworks only to fill gaps: formats SDL3_mixer can't decode
   (m4a/aac, and wma on Windows), and streaming URLs.
 - Share secondary providers with video (AVFoundation, Media Foundation,
@@ -87,8 +88,9 @@ mp3 and ogg away from SDL3, and SDL3 is first only on Windows and Linux.
 the older `gstplayer, ffpyplayer, sdl3, avplayer, android` order.
 
 New order: `sdl3`, then the platform's secondary (`avplayer`,
-`mediafoundation`, `android`), then `gstplayer` where its runtime exists.
-`content://` keeps routing to the Android provider by scheme. Each
+`mediafoundation`), then `gstplayer` where its runtime exists. On Android,
+`android` stays first and `sdl3` comes second. `content://` keeps routing
+to the Android provider by scheme. Each
 secondary keeps its full extension list; it only receives the formats SDL3
 doesn't claim. The exact rule is contract C1 in `CONTRACTS.md`.
 
@@ -178,7 +180,7 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
 
 0. **In flight**: rubicon-objc and avplayer (#9529-#9532), SDL3 loops and
    events (#9533).
-1. **SDL3 first**: change the provider order; map the remaining SDL3_mixer
+1. **SDL3 first** (except on Android): change the provider order; map the remaining SDL3_mixer
    decoder names (not `TIMIDITY`); verify the Windows and Android decoder
    sets. The `android` provider keeps its MIDI extensions (see Decisions).
    Update #9533's migration note, which says tracker formats aren't
@@ -204,6 +206,13 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
 
 ## Decisions
 
+- **Android keeps `android` before `sdl3`** (2026-11-24, CONTRACTS O1).
+  SDL3's audio device pauses when the activity pauses; `MediaPlayer` and
+  Media3 keep playing in the background, as Kivy 2.x apps expect. SDL3 plays
+  what `android` doesn't claim; apps that want its latency for sound
+  effects select it per sound or with `KIVY_AUDIO_OUTPUT`.
+- **AIFF through SDL3** (2026-11-24, CONTRACTS O2): mapped only on builds
+  where SDL3_mixer reports its duration correctly (W1 measures).
 - **Android: Media3 when the app has it, `MediaPlayer` otherwise.** Media3
   is only in an APK when the app adds the Maven dependency (the Media3 video
   provider has the same requirement). The `android` audio provider uses
@@ -255,8 +264,7 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
   - Don't map SDL3_mixer's `TIMIDITY` decoder in `SoundSDL3.extensions()`.
   - Leave the `android` provider's MIDI extensions (`mid`, `xmf`, `mxmf`,
     and the ringtone formats Android plays with the same synth: `rtttl`,
-    `rtx`, `ota`, `imy`) for now. With `sdl3` first they still reach the
-    `android` provider, because SDL3 doesn't claim them, and
+    `rtx`, `ota`, `imy`) for now. `android` stays first on Android, and
     `MediaPlayer` plays them with no extra library, so keeping them costs
     nothing.
   - Revisit in phase 5. Media3 plays MIDI only with the

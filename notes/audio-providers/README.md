@@ -38,7 +38,7 @@ upstream PR.
 | S4 `sdl3` contract | Mac | `audio-sdl3-contract` | waits for #9533 |
 | M2 ffpyplayer removal (phase 2) | Mac | #9546 | open |
 | M6 Apple streaming | Mac | `audio-avplayer-streaming` | not started |
-| W1 SDL3 formats per platform, O1, O2 | Windows | `audio-provider-notes` | waits for M0 |
+| W1 SDL3 formats per platform, O2 measurement | Windows | `audio-provider-notes` | waits for M0 |
 | W2 phase 1 checks | Windows | none | waits for M1 |
 | W3 `mediafoundation` (phase 3) | Windows | `audio-mediafoundation` | not started |
 | W4a `gstplayer` contract | Windows | `audio-gstplayer-contract` | not started |
@@ -59,18 +59,21 @@ PRs this depends on: [#9529](https://github.com/kivy/kivy/pull/9529),
 |---|---|---|---|
 | Mac | Windows | M0: fixtures and `format_probe.py` pushed | |
 | Mac | Windows | S1 branch pushed (API usable for local merges) | |
-| Windows | Mac | W1: SDL3 decoder sets, O1 and O2 results | |
+| Windows | Mac | W1: SDL3 decoder sets and AIFF `length` per platform (O2) | |
 | Windows | Mac | W2: phase 1 results on 4 platforms | |
 | Windows | Mac | `_KNOWN_FAILURES` for `gstplayer`, `android`, `mediafoundation`, and `sdl3` on 4 platforms | |
 | Windows | Mac | W4c: `sdl3` contract results on 4 platforms | |
 
 ## Contract changes
 
-None yet. Record each change to `CONTRACTS.md` here with the date and the
-commit.
+Record each change to `CONTRACTS.md` here with the date and the commit.
+
+- 2026-11-24: O1 decided, `android` stays before `sdl3` on Android (C1).
+  So `android` is no longer the last candidate there for local files: its
+  Media3 backend must confirm a local file opens before `load()` returns
+  (C2). O2 decided: map `AIFF` only if W1 finds its `length` correct.
 
 ## Open questions
 
-O1 (Android background audio with `sdl3` first), O2 (AIFF through SDL3)
-and O3 (`AVAudioPlayer.play()` off the main thread) are in `CONTRACTS.md`.
-O1 and O2 need W1's results; the user decides them before M1 merges.
+O3 (`AVAudioPlayer.play()` off the main thread) is in `CONTRACTS.md`; S3
+measures it. O1 and O2 are decided (above).

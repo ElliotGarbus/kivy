@@ -59,7 +59,7 @@ the `video-provider-notes` branch, `notes/video-providers/`:
 
 | Step | What | Branch | Needs | Unblocks |
 |---|---|---|---|---|
-| W1 | What SDL3 plays on each platform; O1, O2 | `audio-provider-notes` (results only) | M0 | M1 merge |
+| W1 | What SDL3 plays on each platform; O2 measurement | `audio-provider-notes` (results only) | M0 | M1 merge |
 | W2 | Check the Mac's phase 1 branch on 4 platforms | none (results only) | M1 pushed | M1 merge |
 | W3 | Phase 3: `mediafoundation` audio provider | `audio-mediafoundation` | S1 (local merge) | W6 |
 | W4a | `gstplayer` meets the contracts | `audio-gstplayer-contract` | S1 (local merge), S2 | W6 |
@@ -94,16 +94,10 @@ No Kivy changes; results go to `notes/audio-providers/results/`.
    SDL3 opens and plays to the end, `length` for each (O2: is
    `short1.aiff`'s length right?), and which provider plays each format by
    default.
-3. **O1, Android background audio.** In the Android check app, add a
-   scenario that plays `tone10.ogg` with `loop = True`, once with
-   `audio_output_provider='sdl3'` and once with `'android'`, then press
-   Home (`adb shell input keyevent KEYCODE_HOME`), wait 10 s, and return.
-   Record by ear whether audio continued in the background, and the
-   position before and after. Write the result in `W1.md`.
-4. Optional: if a small public-domain tracker file (`.mod` or `.xm`) is at
+3. Optional: if a small public-domain tracker file (`.mod` or `.xm`) is at
    hand, add it to the fixtures and probe it on Linux (the `XMP` decoder).
-5. Add a "Hand-offs" entry in `README.md` for the Mac: the decoder sets,
-   O1 and O2 results.
+4. Add a "Hand-offs" entry in `README.md` for the Mac: the decoder sets
+   and the O2 result (AIFF `length` per platform).
 
 ## W2. Check phase 1 (`audio-sdl3-first`) on 4 platforms
 
@@ -113,10 +107,13 @@ When the Mac pushes `origin/audio-sdl3-first`:
    existing audio tests (`kivy/tests/test_audio*.py`).
 2. Android: the branch changes `audio_sdl3.pyx`, so build real wheels
    (kivy-dev-build guide) and run the check app.
-3. Expected: wav/flac/mp3/ogg (and opus, tracker and game-music formats
-   where W1 found the decoders) go to `SoundSDL3`; m4a/aac go to the
-   secondary (`gstplayer` on Linux and on Windows with GStreamer; nothing
-   on Windows without it until W3; `android` on Android).
+3. Expected on Windows, Linux and the Pi: wav/flac/mp3/ogg (and opus,
+   tracker and game-music formats where W1 found the decoders) go to
+   `SoundSDL3`; m4a/aac go to `gstplayer` (on Windows only with GStreamer;
+   nothing without it until W3). Expected on Android (order unchanged,
+   O1): everything `android` claims stays on `SoundAndroidPlayer`; opus,
+   tracker and game-music formats go to `SoundSDL3` where the build has
+   the decoders.
 4. Save to `results/<platform>-w2/` and report in `README.md`.
 
 ## W3. Phase 3: `mediafoundation` audio provider
@@ -271,11 +268,14 @@ Design:
   `pause()`/`play()`; `STATE_ENDED` with repeat off calls `_do_eos()`;
   `onPlayerError` calls `_do_error()` with the error code name and message
   (reuse `_describe_error()` from the video provider).
-- Load (C2): `android` is the last candidate on Android, so `load()` may
-  return before `STATE_READY` and report a later failure through
-  `on_error`. For local files, still wait up to 2 s for `STATE_READY` or an
-  error and raise `SoundLoadError` if it fails, so `SoundLoader`'s warning
-  is the signal where it can be.
+- Load (C2): `android` is first on Android with `sdl3` behind it, so for
+  local files `load()` must wait up to 2 s for `STATE_READY` or an error
+  and raise `SoundLoadError` on error or timeout, letting `SoundLoader`
+  fall back to SDL3. The wait runs on Kivy's thread while the player
+  lives on the UI thread; that can't deadlock as long as nothing on the UI
+  thread waits for Kivy's thread. URL sources (`content://`, and
+  `http(s)` in W6) may return early and report failures through
+  `on_error`.
 - `content://` plays through Media3's default data source. Keep `schemes()
   == ('content',)` until W6.
 - Audio attributes: `USAGE_MEDIA`, `AUDIO_CONTENT_TYPE_MUSIC`; audio focus

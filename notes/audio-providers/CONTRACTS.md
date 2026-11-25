@@ -23,19 +23,27 @@ Names used below:
 
 ## C1. Provider order
 
-Every platform tries `sdl3` first, then its native secondary, then
-`gstplayer` when it is importable:
+Every platform except Android tries `sdl3` first, then its native
+secondary, then `gstplayer` when it is importable. Android keeps its
+platform player first:
 
 | Platform | Order |
 |---|---|
 | macOS, iOS | `sdl3`, `avplayer` |
 | Windows | `sdl3`, `mediafoundation` (after phase 3), `gstplayer` |
 | Linux, Raspberry Pi | `sdl3`, `gstplayer` |
-| Android | `sdl3`, `android` |
+| Android | `android`, `sdl3` |
 
+- Android (decided, O1): SDL3's audio device pauses when the activity
+  pauses, while `MediaPlayer` (and Media3) keep playing in the background,
+  so `android` stays first, as in Kivy 2.x. SDL3 plays what `android`
+  doesn't claim (opus, tracker and game-music formats where the build has
+  the decoders). Apps that want SDL3's lower latency for sound effects pass
+  `audio_output_provider='sdl3'` or set `KIVY_AUDIO_OUTPUT=sdl3,android`.
 - `kivy/core/audio_output/__init__.py` appends in this order.
-  `PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py` lists the
-  same order: `sdl3, avplayer, mediafoundation, android, gstplayer`.
+  `PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py` lists
+  `sdl3, avplayer, mediafoundation, android, gstplayer`; the Android
+  exception lives in the appends.
 - `KIVY_AUDIO_OUTPUT` and `audio_output_provider=` still override it.
 - `sdl3` only claims the extensions of decoders its build registered
   (`MIX_GetAudioDecoder`), never `TIMIDITY` or `FLUIDSYNTH` (no MIDI).
@@ -61,11 +69,13 @@ Provider side:
   Media Foundation, Media3) does one of the following:
   - **Confirms before returning**: waits in `load()` for "metadata loaded"
     or "error" for a local file, with a timeout of 2 s, and raises on error
-    or timeout. Required for `mediafoundation`, which has `gstplayer`
-    behind it on Windows.
-  - **Is the last candidate on its platform**: it may return, and report a
-    later failure through `on_error` (C3). Allowed for `gstplayer` (last
-    everywhere) and `android` (last on Android).
+    or timeout. Required for `mediafoundation` (`gstplayer` is behind it on
+    Windows) and for `android`'s Media3 backend (`sdl3` is behind it on
+    Android). `MediaPlayer.prepare()` is already synchronous.
+  - **Is the last candidate**: it may return, and report a later failure
+    through `on_error` (C3). Allowed for `gstplayer` (last everywhere), and
+    for URL sources on any provider, since a scheme has a single provider
+    per platform.
 - Providers never log a load failure at warning or error level themselves.
   Use `Logger.debug`; `SoundLoader` does the user-facing warning.
 
@@ -243,18 +253,16 @@ def schemes():
 
 Decide these before the PR named next to each merges.
 
-- **O1. Android background playback (before phase 1 merges).** With `sdl3`
-  first on Android, wav/mp3/ogg play through SDL3, whose audio device pauses
-  when the activity pauses (#9500's routing comment). Today the `android`
-  provider plays them, and `MediaPlayer` keeps playing in the background.
-  Either accept the change and document `audio_output_provider='android'`
-  for background audio, or keep `android` before `sdl3` on Android only.
-  W1 measures what actually happens on a device.
-- **O2. AIFF through SDL3 (before phase 1 merges).** SDL3_mixer 3.2.0's AIFF
-  decoder reported no duration in the rubicon spike. The Apple builds don't
-  include it; the Linux build does. W1 checks `length` for `short1.aiff` on
-  each platform. Rule: if `length` is wrong, don't map `AIFF` in
-  `sdl3` (the secondary plays it), and note the upstream bug.
+- **O1. Android background playback. Decided (2026-11-24): keep `android`
+  first on Android** (C1). With `sdl3` first, wav/mp3/ogg would have played
+  through SDL3, whose audio device pauses when the activity pauses (#9500's
+  routing comment), while `MediaPlayer` keeps playing in the background.
+- **O2. AIFF through SDL3. Decided (2026-11-24): the rule below; W1
+  supplies the measurement.** SDL3_mixer 3.2.0's AIFF decoder reported no
+  duration in the rubicon spike. The Apple builds don't include it; the
+  Linux build does. W1 checks `length` for `short1.aiff` on each platform.
+  If `length` is wrong, don't map `AIFF` in `sdl3` (the secondary plays
+  it), and note the upstream bug in the M1 PR.
 - **O3. `AVAudioPlayer.play()` off the main thread (before S3 merges).**
   Apple doesn't document `AVAudioPlayer` as thread-safe. S3 measures
   whether calling `play()` on a serial dispatch queue is reliable before
