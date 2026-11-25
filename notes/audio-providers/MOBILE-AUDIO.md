@@ -62,7 +62,8 @@ that key, both providers keep playing in the background; with `ambient` or
 
 ## Consequences for the default
 
-- **Android.** With `android` first, sounds would continue in the
+- **Android. Decided (2026-11-25, CONTRACTS O1): `sdl3` first.** With
+  `android` first, sounds would continue in the
   background by accident: no notification, no way for the user to stop
   them, no Python running to stop them, and from Android 17 not reliably at
   all. Apps whose purpose is background audio need a foreground service and

@@ -15,17 +15,17 @@ machines.
 | Windows | SDL3 | Media Foundation (new, shares the video provider's `IMFMediaEngine` code) / GStreamer (modernized, optional) |
 | Linux | SDL3 | GStreamer (modernized, shared with video) |
 | Raspberry Pi | SDL3 | GStreamer (modernized, shared with video) |
-| Android | `android`: Media3 ExoPlayer when the app includes it (shared with video), `MediaPlayer` otherwise | SDL3 (the formats `android` doesn't claim) |
+| Android | SDL3 | `android`: Media3 ExoPlayer when the app includes it (shared with video), `MediaPlayer` otherwise |
 
 Removed in 3.0: `ffpyplayer` (audio, and with the video plan, video and image).
 
 ## Goals
 
-- SDL3 first on every platform except Android: low start latency (12-42 ms
-  measured on a Mac and an iPhone), a non-blocking `play()`, mixing many
-  sounds, and the same behavior everywhere. This is the opposite of video,
-  where SDL has nothing to offer. Android keeps its platform player first
-  so audio keeps playing in the background (see Decisions).
+- SDL3 first on every platform: low start latency (12-42 ms measured on a
+  Mac and an iPhone), a non-blocking `play()`, mixing many sounds, and the
+  same behavior everywhere. This is the opposite of video, where SDL has
+  nothing to offer. On Android, SDL3 pauses with the app; background
+  playback is a separate feature (see Decisions and `MOBILE-AUDIO.md`).
 - Native OS frameworks only to fill gaps: formats SDL3_mixer can't decode
   (m4a/aac, and wma on Windows), and streaming URLs.
 - Share secondary providers with video (AVFoundation, Media Foundation,
@@ -79,29 +79,44 @@ on Linux at no cost. `TIMIDITY` stays unmapped (no MIDI support; see Decisions).
 
 ## Provider order
 
-Today (master after #9540) `kivy/core/audio_output/__init__.py` registers
-the platform's native provider first (`android` on Android, `avplayer` on
-macOS and iOS), then `ffpyplayer` (removed by #9546), then `sdl3`, then
-`gstplayer`. So on macOS, iOS and Android the native provider takes wav,
-mp3 and ogg away from SDL3, and SDL3 is first only on Windows and Linux.
-`PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py` still lists
-the older `gstplayer, ffpyplayer, sdl3, avplayer, android` order.
+The order providers register in is `kivy_options['audio_output']`, which
+comes from `PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py`
+(or `KIVY_AUDIO_OUTPUT`). `core_register_libs()` imports in that order;
+the appends in `kivy/core/audio_output/__init__.py` only decide which
+modules a platform can import.
+
+Today (master) the list is `gstplayer, ffpyplayer, sdl3, avplayer,
+android`. So:
+
+- Windows and Linux: `gstplayer` is first whenever GStreamer is installed,
+  and takes wav, mp3, ogg and flac from SDL3 (#9540's comment says it was
+  put after `sdl3`, but only the append moved).
+- macOS, iOS: `sdl3` is already ahead of `avplayer`.
+- Android: `sdl3` is already ahead of `android`, which gets m4a, aac, 3gp,
+  MIDI and `content://`.
+
+Kivy 2.x: `kivy_options['audio']` was `gstplayer, pygame, ffpyplayer,
+sdl2, avplayer`, without `android`, so the Android provider never loaded
+unless the app set `KIVY_AUDIO`; kivy-ios's template sets
+`KIVY_AUDIO=sdl2`. Android and iOS played everything through SDL2, and on
+macOS SDL2 came before AVFoundation.
 
 New order: `sdl3`, then the platform's secondary (`avplayer`,
-`mediafoundation`), then `gstplayer` where its runtime exists. On Android,
-`android` stays first and `sdl3` comes second. `content://` keeps routing
-to the Android provider by scheme. Each
-secondary keeps its full extension list; it only receives the formats SDL3
-doesn't claim. The exact rule is contract C1 in `CONTRACTS.md`.
+`mediafoundation`, `android`), then `gstplayer` where its runtime exists.
+One global list does it for every platform. `content://` routes to the
+Android provider by scheme. Each secondary keeps its full extension list;
+it only receives the formats SDL3 doesn't claim. The exact rule is
+contract C1 in `CONTRACTS.md`.
 
-Nothing on record explains why SDL wasn't first: it was added after
-GStreamer in 2012, and each provider added since was put in front of it.
-The two recorded reasons are format coverage: avplayer (2015) "supports far
-more format than the current sdl2 (mp3, ogg, wav)", and android (2020, #6603)
-"support natively AAC (mp4/aac/m4a)". SDL3 closed the quality gaps of Kivy
-2's `sdl2` provider (whole-file decode at load, no seek or position,
-buffer-copy pitch, gapped loops); AAC/m4a, streaming and `content://` are
-still gaps, and the secondaries keep them.
+So "SDL first" was already the effective order on macOS (since 2015), iOS
+and Android. Where SDL wasn't first, it was behind GStreamer and
+ffpyplayer, which came first in the options list; nothing on record says
+why. The recorded reasons for adding avplayer (2015, "supports far more
+format than the current sdl2 (mp3, ogg, wav)") and android (2020, #6603,
+"support natively AAC (mp4/aac/m4a)") are format coverage. SDL3 closed the
+quality gaps of Kivy 2's `sdl2` provider (whole-file decode at load, no
+seek or position, buffer-copy pitch, gapped loops); AAC/m4a, streaming and
+`content://` are still gaps, and the secondaries keep them.
 
 ## Removing ffpyplayer
 
@@ -153,8 +168,9 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
      today, possibly Media3) either confirm the file opens before `load()`
      returns (for example, preroll with a timeout for local files) or
      stay last in the order for their extensions, so a later `on_error`
-     still means every provider failed. Streaming URLs go to a single
-     provider by scheme, so they don't have this problem.
+     still means every provider failed. A URL goes only to its scheme's
+     owner on that platform (one provider; no fallback), so it doesn't
+     have this problem.
 2. **End of stream**: `on_eos` for all providers
    ([#2156](https://github.com/kivy/kivy/issues/2156),
    [#8609](https://github.com/kivy/kivy/pull/8609), open since Feb 2024);
@@ -180,7 +196,7 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
 
 0. **In flight**: rubicon-objc and avplayer (#9529-#9532), SDL3 loops and
    events (#9533).
-1. **SDL3 first** (except on Android): change the provider order; map the remaining SDL3_mixer
+1. **SDL3 first**: set the order in `PROVIDER_CONFIGS` (which moves `gstplayer` behind `sdl3`); map the remaining SDL3_mixer
    decoder names (not `TIMIDITY`); verify the Windows and Android decoder
    sets. The `android` provider keeps its MIDI extensions (see Decisions).
    Update #9533's migration note, which says tracker formats aren't
@@ -206,11 +222,15 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
 
 ## Decisions
 
-- **Android keeps `android` before `sdl3`** (2026-11-24, CONTRACTS O1).
-  SDL3's audio device pauses when the activity pauses; `MediaPlayer` and
-  Media3 keep playing in the background, as Kivy 2.x apps expect. SDL3 plays
-  what `android` doesn't claim; apps that want its latency for sound
-  effects select it per sound or with `KIVY_AUDIO_OUTPUT`.
+- **Android: `sdl3` before `android`** (2026-11-25, CONTRACTS O1; reverses
+  the 2026-11-24 decision, which assumed `android` led on Android in 2.x
+  and on master). Compared on merit in `MOBILE-AUDIO.md`: with `android`
+  first, sounds keep playing in the background with no notification, no
+  Python running and no way for the user to stop them, and Android 17
+  blocks it without a foreground service. SDL3 pauses and resumes with the
+  app, starts faster, has no per-sound player limit, and behaves as on
+  other platforms. Background music becomes an opt-in feature built on
+  Media3's `MediaSessionService` (phase 5 or later), whatever the order.
 - **AIFF through SDL3** (2026-11-24, CONTRACTS O2): mapped only on builds
   where SDL3_mixer reports its duration correctly (W1 measures).
 - **Android: Media3 when the app has it, `MediaPlayer` otherwise.** Media3
@@ -257,23 +277,24 @@ Like `on_error` for video ([#9528](https://github.com/kivy/kivy/pull/9528)):
 - **No MIDI support added in Kivy 3.0; Android keeps what it has until
   Media3.** MIDI was never documented: no guide or reference page mentions
   it, on stable or master (the only written trace was one line in Kivy 2's
-  `sdl2` provider docstring). It only ever worked on Android, Windows, and
-  Linux with Timidity patches installed (see "MIDI background" below), and
+  `sdl2` provider docstring). In 2.x it worked on Windows and on Linux with
+  Timidity patches installed (Android unverified; on 3.0 master the
+  `android` provider plays it; see "MIDI background" below), and
   #7833 is the only MIDI issue in Kivy's history. Apps that need MIDI can
   drive an external synthesizer or MIDI library. Consequences:
   - Don't map SDL3_mixer's `TIMIDITY` decoder in `SoundSDL3.extensions()`.
   - Leave the `android` provider's MIDI extensions (`mid`, `xmf`, `mxmf`,
     and the ringtone formats Android plays with the same synth: `rtttl`,
-    `rtx`, `ota`, `imy`) for now. `android` stays first on Android, and
-    `MediaPlayer` plays them with no extra library, so keeping them costs
-    nothing.
+    `rtx`, `ota`, `imy`) for now. SDL3 doesn't claim them, so they go to
+    `android`, and `MediaPlayer` plays them with no extra library, so
+    keeping them costs nothing.
   - Revisit in phase 5. Media3 plays MIDI only with the
     `media3-exoplayer-midi` extension (JSyn, published on jitpack): either
     take that dependency, keep `MediaPlayer` for these formats, or drop
     them then with a migration note.
   - #9533's migration note says the MIDI formats Kivy 2 played through
-    SDL2_mixer aren't supported; that stays accurate, since Android never
-    used SDL2_mixer for MIDI.
+    SDL2_mixer aren't supported. Add to it: on Android, MIDI now plays
+    through the `android` provider.
 
 ## MIDI background
 
@@ -283,7 +304,7 @@ Xcode settings for kivy-ios:
 
 | Platform | Who plays `.mid` in 2.3.1 | Result |
 |---|---|---|
-| Android | `android` provider (first in order), platform player | works, built-in synth (also `.xmf`, RTTTL, OTA, iMelody) |
+| Android | `MusicSDL2`: the `android` provider wasn't in `kivy_options['audio']`, so it never loaded by default | not verified; depends on python-for-android's SDL2_mixer MIDI build (Timidity has no patches on a device). In 3.0 the `android` provider plays MIDI with the platform synth (also `.xmf`, RTTTL, OTA, iMelody) |
 | Windows | `MusicSDL2`, SDL2_mixer native MIDI (winmm, Microsoft GS Wavetable Synth) | works out of the box |
 | Linux, Raspberry Pi | `MusicSDL2`, SDL2_mixer Timidity | only with patches installed (`/etc/timidity.cfg` or `TIMIDITY_CFG`) |
 | macOS | `MusicSDL2` claims `.mid`, but SDL2_mixer 2.8.0 has no MIDI decoder (native MIDI is commented out in SDL2_mixer's Xcode config) | broken: warning, sound never plays |

@@ -19,8 +19,9 @@ machines implement, so this plan doesn't wait for the Mac's PRs to merge.
   merges. Don't open a provider PR for review before S1 merges; open it as
   a draft.
 - Don't edit the shared files the Mac owns (`kivy/core/audio_output/__init__.py`,
-  `audio_sdl3.pyx`, `test_audio_contracts.py`) except to register a new
-  provider (W3) or remove your provider's `_KNOWN_FAILURES` entries
+  `audio_sdl3.pyx`, `test_audio_contracts.py`, `PROVIDER_CONFIGS` in
+  `kivy/core/__init__.py`) except to register a new provider (W3's two
+  edits) or remove your provider's `_KNOWN_FAILURES` entries
   (`test_audio_behavior.py`). If a shared change is needed, describe it in
   `README.md` under "Hand-offs" for the Mac.
 - No AI attribution in commits, PR titles, descriptions or comments.
@@ -149,9 +150,10 @@ Time box: two days.
 
 Time box: one day, in the Android check app with Media3 added.
 
-C2 now requires the `android` provider's Media3 backend to wait in
-`load()`, on Kivy's thread, until the player (on the UI thread) reports
-`STATE_READY` or an error.
+C2 has the `android` provider's Media3 backend wait in `load()`, on Kivy's
+thread, until the player (on the UI thread) reports `STATE_READY` or an
+error, so it matches the `MediaPlayer` backend (`length` known, bad file
+gives `None`).
 
 1. Build an ExoPlayer for a local file on the UI thread
    (`run_on_ui_thread`), with a `Player.Listener` that sets a
@@ -203,11 +205,13 @@ When the Mac pushes `origin/audio-sdl3-first`:
    (kivy-dev-build guide) and run the check app.
 3. Expected on Windows, Linux and the Pi: wav/flac/mp3/ogg (and opus,
    tracker and game-music formats where W1 found the decoders) go to
-   `SoundSDL3`; m4a/aac go to `gstplayer` (on Windows only with GStreamer;
-   nothing without it until W3). Expected on Android (order unchanged,
-   O1): everything `android` claims stays on `SoundAndroidPlayer`; opus,
-   tracker and game-music formats go to `SoundSDL3` where the build has
-   the decoders.
+   `SoundSDL3`, also with GStreamer installed (on master `gstplayer` took
+   them, because `PROVIDER_CONFIGS` listed it first); m4a/aac go to
+   `gstplayer` (on Windows only with GStreamer; nothing without it until
+   W3). The log line `Audio_output: Providers:` lists `audio_sdl3` first.
+   Expected on Android (C1, O1: `sdl3` first, as on master): wav, mp3, ogg,
+   flac and whatever else the build's decoders cover go to `SoundSDL3`;
+   m4a, aac, 3gp, MIDI and `content://` go to `SoundAndroidPlayer`.
 4. Save to `results/<platform>-w2/` and report in `README.md`.
 
 ## W3. Phase 3: `mediafoundation` audio provider
@@ -240,37 +244,71 @@ Design:
   `pause()`, `stop()` (pause and `SetCurrentTime(0)`), `seek(double)`,
   `position()`, `duration()`, `setVolume(double)`, `setLoop(bool)`
   (`IMFMediaEngine::SetLoop`), `setRate(double)` (`SetPlaybackRate`),
-  `isEOS()`, `hasError()`, `lastError()`, and
+  `isEOS()`, `hasError()`, `lastError()`,
   `waitReady(int timeout_ms)` that blocks until
   `MF_MEDIA_ENGINE_EVENT_LOADEDMETADATA` or `..._ERROR` (an event set by
   `EngineNotify`, which runs on an MF thread, so waiting on Kivy's thread
-  can't deadlock).
+  can't deadlock), and `shutdown()`.
+- **Native cleanup** (C9): `shutdown()` sets a `closed` flag under the
+  same lock `EngineNotify` takes, signals the `waitReady` event (so a wait
+  in progress returns as an error), calls `IMFMediaEngine::Shutdown()`,
+  then releases the engine, the notify object and the source resolver
+  extension. `EngineNotify::EventNotify` checks `closed` first and does
+  nothing once it's set. The destructor calls `shutdown()` if it wasn't
+  called; `shutdown()` twice is harmless. `MFShutdown` follows the video
+  provider's reference counting (don't shut MF down while a video or
+  another sound holds it).
 - **Python provider** `SoundMediaFoundation(Sound)`, `_provider_name =
   'mediafoundation'`:
   - `extensions()`: `m4a, mp4, aac, adts, wma, 3gp, 3g2, mp3, wav, flac`
     (SDL3 takes the formats it claims first; the rest are here so
     `audio_output_provider='mediafoundation'` and fallback work).
-  - `load()`: create the player, `waitReady(2000)`; raise `SoundLoadError`
-    with `lastError()` on error or timeout (C2: required, `gstplayer` is
-    behind it).
+  - `load()`: create the player. For a local file, `waitReady(2000)`;
+    on error or timeout, `shutdown()` the player and raise
+    `SoundLoadError` with `lastError()` (C2: required, `gstplayer` is
+    behind it). For a URL (W6), `mediafoundation` is the owner and
+    returns at once; errors arrive through `_do_error()`.
   - Poll `isEOS()`/`hasError()` from a Clock event while playing, as
     `video_mediafoundation.pyx` does (`_update`, around line 369): EOS
     with `loop` off calls `_do_eos()`; an error calls `_do_error()`.
+  - `play()` (C4): when playing or paused, `self.stop()` first; always
+    `seek(0)` before `Play()`, since `IMFMediaEngine::Play` continues from
+    the current position.
   - `pause()`/`resume()` (C5), `get_pos()`, `length`, `on_volume`,
     `on_pitch` (`setRate`; document whether pitch is kept, per SP5, C7),
     `loop` through `setLoop` (document the gap SP5 measured).
-- **Register**: add `('mediafoundation', 'audio_mediafoundation')` to
-  `PROVIDER_CONFIGS['audio_output']` after `avplayer`, and in
-  `kivy/core/audio_output/__init__.py` append it on `win32` after `sdl3`
-  and before `gstplayer`. This is the one shared-file edit W3 makes.
+  - `unload()` (C9): unschedule the Clock poll, call `shutdown()`, drop
+    the C++ object, then `super()`. `__dealloc__` does the same without
+    events.
+- **Register**: two edits, the only shared-file edits W3 makes:
+  - `kivy/core/__init__.py`: insert `('mediafoundation',
+    'audio_mediafoundation')` after `avplayer`, so the list is exactly
+    `sdl3, avplayer, mediafoundation, android, gstplayer` (C1). This list
+    is what sets the order.
+  - `kivy/core/audio_output/__init__.py`: make the module importable on
+    Windows only, with `kivy.utils.platform == 'win'` (the file already
+    imports `platform` from `kivy.utils`; `'win32'` is `sys.platform` and
+    never matches):
+    ```python
+    elif platform == 'win':
+        audio_libs += [('mediafoundation', 'audio_mediafoundation')]
+    ```
+    Where the line sits among the appends doesn't change the order; put it
+    after the `avplayer` branch to match `PROVIDER_CONFIGS`.
 - **Docs**: module docstring (formats, pitch behavior, loop gap),
   `environment.rst` `KIVY_AUDIO_OUTPUT` values, `migration.rst` Audio
   section ("m4a and aac play on Windows without GStreamer").
 
 Verify:
 
-- Unit tests that don't need a device: extension list, registration on
-  `win32` (patched platform), `load()` raising for a missing file.
+- Unit tests that don't need a device: extension list; the
+  `PROVIDER_CONFIGS` list; the import condition (patch
+  `kivy.utils.platform` to `'win'` and to `'linux'` and reload
+  `kivy.core.audio_output`); `load()` raising for a missing file.
+- Lifecycle: 50 cycles of load, play, `unload()`; and (after W6)
+  `unload()` right after loading an `http` URL, before the engine reports
+  ready: no crash, no event after `unload()`, and the process's handle
+  count (`psutil.Process().num_handles()`) back near its starting value.
 - `format_probe.py` on Windows without GStreamer: m4a/aac/wma go to
   `SoundMediaFoundation` and play to the end; `notaudio.m4a` falls back
   (with GStreamer installed, to `gstplayer`, which also fails, and the
@@ -302,7 +340,21 @@ contract.
 4. **Pause** (C5): `set_state(STATE_PAUSED)` without the seek `stop()` does.
 5. **`pitch`** (C7): a rate seek, as SP6 found; document whether pitch
    changes with speed.
-6. Remove `gstplayer` from `_KNOWN_FAILURES`; run the shared suite on
+6. **Restart** (C4): `play()` while playing or paused calls `self.stop()`
+   and seeks to 0 before `PLAYING`.
+7. **Load-failure test** (C8 test 7): `gstplayer` is in
+   `ASYNC_LOAD_PROVIDERS`, so for `notaudio.<ext>` construction returns
+   and one `on_error` follows. Check the delay W-SP1 measured fits the
+   test's 5 s.
+8. **Lifecycle** (C9): `unload()` unschedules `_poll`, sets the pipeline to
+   `NULL` and releases it, discards messages still queued for it, then
+   calls `super()`. Messages delivered after that go through
+   `self._post()` and are dropped. The runtime's background init
+   (`init_start()`) may finish after `unload()`: `_build()` checks the
+   generation before creating a pipeline. 50 cycles: the count of live
+   pipelines (from the core, or `GST_DEBUG=GST_TRACER:7` with the
+   `leaks` tracer) returns to zero.
+9. Remove `gstplayer` from `_KNOWN_FAILURES`; run the shared suite on
    Windows (with GStreamer), WSL2 and the Pi.
 
 PR title: "GStreamer audio: gapless loops, pause, on_eos and on_error".
@@ -312,19 +364,35 @@ PR title: "GStreamer audio: gapless loops, pause, on_eos and on_error".
 Branch `audio-android-contract`. Python only, so `make_wheels.py` overlays
 work for device checks.
 
+`android` is last on Android (C1), so a `SoundLoadError` from it ends in
+`None` and the aggregated warning; nothing falls back further.
+
 1. `load()`: wrap `prepare()`'s `JavaException` (and the `content://`
-   context error) in `SoundLoadError`.
+   context error) in `SoundLoadError`; release the `MediaPlayer` created
+   before the failure.
 2. `pause()`/`resume()`: `MediaPlayer.pause()`/`start()`.
-3. End of sound: the existing `OnCompletionListener` calls `_do_eos()`
-   when not looping (on Kivy's thread: schedule through the Clock, as the
-   listener runs on a Java thread).
-4. Loop: `setLooping(True)` instead of restarting on completion; measure
+3. `play()` and `stop()` (C4). Today `play()` calls `start()`, which
+   continues from the current position, and `stop()` never calls
+   `super().stop()`, so `on_stop` never fires and `state` stays `'play'`.
+   - `play()`: when `state` is `'play'` or `'pause'`, `self.stop()` first;
+     then `seekTo(0)`, `start()`, `super().play()`.
+   - `stop()`: `MediaPlayer.stop()`, `prepare()` (as today, so the player
+     can start again), then `super().stop()`.
+4. End of sound: the existing `OnCompletionListener` calls `_do_eos()`
+   when not looping, through `self._post()` (the listener runs on a Java
+   thread).
+5. Loop: `setLooping(True)` instead of restarting on completion; measure
    the gap.
-5. Errors after load: an `OnErrorListener` calls `_do_error()` with
-   `what`/`extra` decoded to text.
-6. `pitch`: `PlaybackParams().setSpeed()` on API 23+ (keeps pitch);
+6. Errors after load: an `OnErrorListener` calls `_do_error()` through
+   `self._post()`, with `what`/`extra` decoded to text.
+7. `pitch`: `PlaybackParams().setSpeed()` on API 23+ (keeps pitch);
    document.
-7. Run the shared suite in the Android check app (a "behavior" scenario
+8. Lifecycle (C9): `unload()` removes the listeners
+   (`setOnCompletionListener(None)`, `setOnErrorListener(None)`), calls
+   `release()`, drops the Python listener objects, then calls `super()`.
+   50 cycles: no `MediaPlayer` errors in logcat, and the listener objects
+   are collected (`weakref` dead after `gc.collect()`).
+9. Run the shared suite in the Android check app (a "behavior" scenario
    running the suite's checks in-app), and the probe.
 
 PR title: "Android audio: pause, gapless loops, on_eos and on_error".
@@ -359,14 +427,35 @@ Design:
   `pause()`/`play()`; `STATE_ENDED` with repeat off calls `_do_eos()`;
   `onPlayerError` calls `_do_error()` with the error code name and message
   (reuse `_describe_error()` from the video provider).
-- Load (C2): `android` is first on Android with `sdl3` behind it, so for
-  local files `load()` must wait up to 2 s for `STATE_READY` or an error
-  and raise `SoundLoadError` on error or timeout, letting `SoundLoader`
-  fall back to SDL3. The wait runs on Kivy's thread while the player
-  lives on the UI thread; that can't deadlock as long as nothing on the UI
-  thread waits for Kivy's thread. URL sources (`content://`, and
-  `http(s)` in W6) may return early and report failures through
-  `on_error`.
+- Load (C2): `android` is last on Android, so nothing falls back after it.
+  For local files `load()` still waits up to 2 s for `STATE_READY` or an
+  error and raises `SoundLoadError` on error or timeout, so the Media3
+  backend behaves like the `MediaPlayer` one: `length` is known when
+  `load()` returns and a bad file gives `None`. The wait runs on Kivy's
+  thread while the player lives on the UI thread; that can't deadlock as
+  long as nothing on the UI thread waits for Kivy's thread. URL sources
+  (`content://`, and `http(s)` in W6) return early, since `android` owns
+  them (C6), and report failures through `on_error`.
+- `play()` (C4): when playing or paused, `self.stop()` first; then
+  `seekTo(0)` and `play()` on the UI thread (ExoPlayer's `play()`
+  continues from the current position).
+- Lifecycle (C9):
+  - Every task posted with `run_on_ui_thread` captures the generation
+    and returns without touching the player if it changed.
+  - `unload()` increments the generation (through `super()`, last), and
+    posts one UI-thread task that calls `removeListener()`, `stop()` and
+    `release()` on the player. The Python `Player.Listener` keeps no
+    reference to the `Sound` after that (it holds a weak reference, so a
+    late callback finds nothing).
+  - Listener callbacks reach Kivy through `self._post()`, so one arriving
+    after `unload()` is dropped.
+  - A `load()` wait interrupted by `unload()` can't happen on Kivy's
+    thread (the wait blocks it); a URL load that returned early and is
+    unloaded before `STATE_READY` releases the player and drops the late
+    state change.
+  - Verify: 50 cycles of load, play, `unload()` with Media3, then `adb
+    shell dumpsys media.player` (or `dumpsys media_session`) shows no
+    leftover players, and no event after `unload()`.
 - `content://` plays through Media3's default data source. Keep `schemes()
   == ('content',)` until W6.
 - Audio attributes: `USAGE_MEDIA`, `AUDIO_CONTENT_TYPE_MUSIC`; audio focus
@@ -396,11 +485,20 @@ One branch per provider (`audio-gstplayer-streams`,
 provider's contract step. Each provider declares `schemes()` (C6) and
 reports stream failures through `on_error`.
 
-| Provider | `schemes()` | Notes |
-|---|---|---|
-| `gstplayer` | `http`, `https`, `rtsp` | playbin3 opens them already; HLS/DASH through the same `http(s)` URLs |
-| `mediafoundation` | `http`, `https` | the source resolver opens progressive HTTP; check HLS on Windows 11 and document what works |
-| `android` | `content`, `http`, `https` | Media3 backend only; HLS/DASH need the app's `media3-exoplayer-hls`/`-dash` modules; the `MediaPlayer` backend keeps `content` only |
+A URL has one owner per platform: the first provider in C1 order that
+declares its scheme (C6). Only the owner is tried, and it returns from
+`load()` at once (C2).
+
+| Provider | `schemes()` | Owner of | Notes |
+|---|---|---|---|
+| `mediafoundation` | `http`, `https` | `http`, `https` on Windows | the source resolver opens progressive HTTP; check HLS on Windows 11 and document what works |
+| `gstplayer` | `http`, `https`, `rtsp` | all three on Linux and the Pi; `rtsp` on Windows | playbin3 opens them already; HLS/DASH through the same `http(s)` URLs. On Windows it plays `http(s)` only when the app asks for it (`audio_output_provider='gstplayer'`) or reorders `KIVY_AUDIO_OUTPUT` |
+| `android` | `content`, `http`, `https` | all three on Android | `http(s)` on the Media3 backend only; HLS/DASH need the app's `media3-exoplayer-hls`/`-dash` modules. Without Media3, `schemes()` returns `('content',)` and `http(s)` has no owner (warning, `None`) |
+
+- Windows tests: an `http` MP3 goes to `mediafoundation` with GStreamer
+  installed; the same URL with `audio_output_provider='gstplayer'` goes to
+  `gstplayer`; an `rtsp` URL goes to `gstplayer`, and without GStreamer
+  gives the "no provider opens 'rtsp' URLs" warning.
 
 - `length` is 0 for live streams; `seek` is ignored on live streams (log at
   debug).

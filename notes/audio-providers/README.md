@@ -6,7 +6,7 @@ upstream PR.
 | File | What |
 |---|---|
 | `AUDIO-PLAN.md` | The high-level plan: provider matrix, phases, decisions |
-| `CONTRACTS.md` | The API and behavior every provider implements (C1-C8), and the open questions (O1-O3) |
+| `CONTRACTS.md` | The API and behavior every provider implements (C1-C9), and the open questions (O1-O4) |
 | `MOBILE-AUDIO.md` | SDL3 versus native audio on Android and iOS, for the default order; spike SP8 |
 | `PLAN-MAC.md` | Shared work (Python, `sdl3`, test suite, docs), macOS and iOS. Steps M0, M1, M2, M6, S1-S4 |
 | `PLAN-WINDOWS.md` | Windows, Linux, Raspberry Pi and Android. Steps W1-W6 |
@@ -36,6 +36,7 @@ upstream PR.
 | SP2 spike: raising from `on_source` | Mac | scratch | not started |
 | SP3 spike: `AVAudioPlayer.play()` off the main thread | Mac | scratch | not started |
 | SP4 spike: `AVPlayer` streams through rubicon-objc | Mac | scratch | not started |
+| SP8 spike: mobile audio measurements, iPhone half | Mac | `audio-provider-notes` (results only) | waits for M0 |
 | M1 `sdl3` first (phase 1) | Mac | `audio-sdl3-first` | worktree created |
 | S1 contracts in `Sound`/`SoundLoader` | Mac | `audio-sound-contracts` | not started |
 | S2 shared behavior suite | Mac | `audio-behavior-tests` | not started |
@@ -48,6 +49,7 @@ upstream PR.
 | SP5 spike: Media Foundation audio-only engine | Windows | scratch | not started |
 | SP6 spike: GStreamer gapless loop | Windows | scratch | not started |
 | SP7 spike: Media3 load wait across threads | Windows | scratch | not started |
+| SP8 spike: mobile audio measurements, Android half | Windows | `audio-provider-notes` (results only) | waits for M0 |
 | W2 phase 1 checks | Windows | none | waits for M1 |
 | W3 `mediafoundation` (phase 3) | Windows | `audio-mediafoundation` | not started |
 | W4a `gstplayer` contract | Windows | `audio-gstplayer-contract` | not started |
@@ -88,11 +90,41 @@ Record each change to `CONTRACTS.md` here with the date and the commit.
   `notaudio` (tests 7 and 8) and `damaged` (test 10, defined after SP1).
   New open question O4.
 
+- 2026-11-25: review fixes, and O1 reversed.
+  - C1: `sdl3` first on Android too (O1 reversed after `MOBILE-AUDIO.md`;
+    the first decision assumed `android` led on Android in 2.x and on
+    master, which it didn't). The order is set by
+    `PROVIDER_CONFIGS['audio_output']` alone (`core_register_libs()`
+    imports in `kivy_options` order); the appends only decide what each
+    platform can import. Exact lists for M1 and W3 are in C1.
+  - C2: `audio_output_provider=` is a preference (tried first, then the
+    default order without retrying it), as `load_with_provider_selection()`
+    already does; strict mode unchanged. The Media3 backend still confirms
+    local files, now for parity with `MediaPlayer`, since `android` is
+    last. URLs: one owner, no fallback.
+  - C4: a full transition table; providers restart from 0 on `play()`
+    while playing or paused; base `stop()` silent when already stopped.
+  - C6: `file://` converted to a local path (percent-decoding, `localhost`,
+    Windows drives and UNC) before `resource_find()`; URL owner per scheme
+    and platform (Windows `http(s)` goes to `mediafoundation`).
+  - C7: `length` rule for providers that return early; `pitch` clamping.
+  - C8: split into contract tests (no device, never skipped,
+    `test_audio_contracts.py`) and behavior tests (device); behavior tests
+    construct provider classes directly; test 7 split by synchronous and
+    early-returning providers; new tests 9 (restart) and 10 (lifecycle);
+    `damaged` moves to test 11; `_KNOWN_FAILURES` keyed by
+    `(provider, platform, ext, test)`.
+  - C9 (new): lifecycle and native cleanup, `_generation` and `_post()`.
+
 ## Open questions
 
 In `CONTRACTS.md`: O4 (files with a valid header and damaged data; SP1 and
 W-SP1 answer it before S1 starts) and O3 (`AVAudioPlayer.play()` off the
-main thread; SP3). O1 and O2 are decided (above).
+main thread; SP3). O1 and O2 are decided (above; O1 revised 2026-11-25).
+
+Spike SP8 (`MOBILE-AUDIO.md`) measures latency, concurrent sounds, loop
+gaps and background behavior on the Android phone and the iPhone. It
+informs the docs; it doesn't block a step.
 
 ## Spikes
 

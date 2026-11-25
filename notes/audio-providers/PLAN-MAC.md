@@ -235,17 +235,33 @@ Branch `audio-sdl3-first`, worktree `~/Developer/kivyPRs/kivy-audio-phase1`
 
 Code:
 
-1. **Order (C1).** In `kivy/core/audio_output/__init__.py`: on Android,
-   append `android` then `sdl3` (unchanged from today apart from
-   `ffpyplayer`, which #9546 removes); everywhere else, `sdl3` first (when
-   `USE_SDL3`), then `avplayer` on macOS and iOS, then `gstplayer` in its
-   existing `try`. Reorder
-   `PROVIDER_CONFIGS['audio_output']` in `kivy/core/__init__.py` to
-   `sdl3, avplayer, mediafoundation, android, gstplayer`, but leave
-   `mediafoundation` out until phase 3 adds the module (the Windows
-   machine adds it then). Delete the orphaned "Little trick here, don't
-   activate gstreamer on window" comment and the comment above `gstplayer`
-   that explains it was put after `sdl3`.
+1. **Order (C1).** The order comes from `PROVIDER_CONFIGS`, not from the
+   appends (`core_register_libs()` imports in `kivy_options` order). On
+   master the list is `gstplayer, ffpyplayer, sdl3, avplayer, android`, so
+   `gstplayer` is effectively first on Windows and Linux whenever
+   GStreamer is installed, despite #9540's "after sdl3" comment.
+   - In `kivy/core/__init__.py`, set `PROVIDER_CONFIGS['audio_output']` to
+     exactly:
+     ```python
+     'audio_output': [
+         ('sdl3', 'audio_sdl3'),
+         ('avplayer', 'audio_avplayer'),
+         ('android', 'audio_android'),
+         ('gstplayer', 'audio_gstplayer'),
+     ],
+     ```
+     No `mediafoundation` (W3 inserts it after `avplayer`) and no
+     `ffpyplayer` (#9546 removes it and merges first; if it hasn't,
+     rebase onto it rather than carrying `ffpyplayer` here).
+   - In `kivy/core/audio_output/__init__.py`, keep the platform
+     conditions as they are (`android` on Android, `avplayer` on macOS and
+     iOS, `sdl3` when `USE_SDL3`, `gstplayer` in its `try`), and list them
+     in the same order as `PROVIDER_CONFIGS` so the file reads the way it
+     behaves. Add one comment above them: the order is
+     `PROVIDER_CONFIGS['audio_output']`; these lines only decide what each
+     platform can import. Delete the orphaned "Little trick here, don't
+     activate gstreamer on window" comment and the comment above
+     `gstplayer` that says it was put after `sdl3`.
 2. **Decoder names.** In `SoundSDL3.extensions()`
    (`kivy/core/audio_output/audio_sdl3.pyx`), replace the `if/elif` chain
    with a module-level dict from SDL3_mixer 3.2.0's decoder names
@@ -275,27 +291,37 @@ Code:
    read.
 3. **Docs.**
    - `audio_output/__init__.py` module docstring: a short "Provider order"
-     paragraph (SDL3 first; the platform's provider plays what SDL3
-     can't; on Android the platform player stays first so audio keeps
-     playing in the background, and `audio_output_provider='sdl3'` gives
-     lower latency for sound effects).
+     paragraph (SDL3 first on every platform; the platform's provider
+     plays what SDL3 can't; how to change it). On Android and iOS, a
+     sentence on background audio from `MOBILE-AUDIO.md`: SDL3 pauses with
+     the app on Android; background playback on Android needs a foreground
+     service, and on iOS the session category and the `audio` background
+     mode.
    - `doc/sources/guide/environment.rst`, `KIVY_AUDIO_OUTPUT`: the
-     default order per platform.
+     default order per platform (C1's table).
    - `doc/sources/migration.rst`, Audio section: "`sdl3` is tried first on
-     every platform except Android" with the consequence (macOS/iOS:
-     mp3/wav now play through SDL3, not AVFoundation; Android: unchanged),
-     and correct #9533's sentence that tracker formats aren't supported
-     (they play on builds whose SDL3_mixer has `XMP`, per the W1 report).
-4. **Tests** (`kivy/tests/test_audio_provider.py`): the registration order
-   per platform (patch `platform` and reload, or assert on
-   `PROVIDER_CONFIGS` plus the append order); the decoder dict maps every
-   name above and none of the MIDI ones.
+     every platform". What changes against 3.0 master is small: with
+     GStreamer installed (Windows, Linux), wav/mp3/ogg/flac move from
+     `gstplayer` to `sdl3`. Against Kivy 2.x: macOS mp3/wav already played
+     through SDL2 ahead of AVFoundation; Android and iOS played everything
+     through SDL2, and now m4a/aac play through the native provider. Also
+     correct #9533's sentence that tracker formats aren't supported (they
+     play on builds whose SDL3_mixer has `XMP`, per the W1 report).
+4. **Tests** (`kivy/tests/test_audio_provider.py`):
+   - `PROVIDER_CONFIGS['audio_output']` equals the list in step 1.
+   - Registration follows that list: call `core_register_libs()` with a
+     patched `kivy.kivy_options['audio_output']` and fake modules listed
+     in reverse order, and check the import order.
+   - The decoder dict maps every name above and none of the MIDI ones.
 
 Verify:
 
 - macOS: build, run the tests, and `tools/format_probe.py` against the
-  branch; save to `results/macos-m1/probe.json`. Expected default picks:
-  wav/flac/mp3/ogg on `SoundSDL3`, m4a/aac/caf/aiff on `SoundAvplayer`.
+  branch; save to `results/macos-m1/probe.json`. Expected default picks
+  (the same as master on macOS, where `sdl3` was already ahead of
+  `avplayer`): wav/flac/mp3/ogg on `SoundSDL3`, m4a/aac/caf/aiff on
+  `SoundAvplayer`. Log line to check: `Audio_output: Providers:
+  audio_sdl3, audio_avplayer`.
 - iOS: create `notes/audio-providers/ios-check/` from `scratch/ios-9533/`
   (rename the project, bundle id `org.kivy.audio-check`). Its `main.py`
   copies `format_probe.py` and the fixtures into `src/` at prepare time
@@ -305,12 +331,13 @@ Verify:
   and the O2 AIFF measurement) is in `README.md`; apply O2's rule and
   update the migration note with the results.
 
-PR title: "Audio: try the sdl3 provider first on desktop and iOS".
+PR title: "Audio: try the sdl3 provider first on every platform".
 
 ## S1. Contracts in `Sound` and `SoundLoader`
 
-Branch `audio-sound-contracts`. Implements C2-C7's base-class parts. Python
-only, so it runs on every platform's CI and on Android by overlay.
+Branch `audio-sound-contracts`. Implements the base-class parts of C2-C6
+and C9. Python only, so it runs on every platform's CI and on Android by
+overlay.
 
 1. `kivy/core/audio_output/__init__.py`:
    - `SoundLoadError` (C2), exported in `__all__`.
@@ -320,24 +347,40 @@ only, so it runs on every platform's CI and on Android by overlay.
      `CONTRACTS.md`; `_constructed` set at the end of `__init__`;
      `on_source` re-raises during construction and calls `_do_error`
      after.
-   - `SoundLoader.load()`: collect failures, one aggregated warning, strict
-     mode raises `SoundLoadError` (C2); URL routing by `schemes()` (C6),
-     replacing the `content://` special case; `resource_find` skipped for
-     URLs.
+   - C4 transitions in the base: `stop()` returns without dispatching when
+     `state` is `'stop'`; `play()` sets `'play'` and dispatches `on_play`.
+     Check every provider on master against the C4 rule (`play()` calls
+     `self.stop()` first when playing or paused, and starts from 0);
+     `sdl3` does after #9533. Don't fix other providers here (S3, S4, W3,
+     W4a, W4b do); record each gap in `_KNOWN_FAILURES` (S2).
+   - C9 helpers: `self._generation` (incremented at the end of the base
+     `unload()`, which providers call through `super()`), and
+     `self._post(callback, *args)`, which schedules `callback` on the Clock
+     and drops it if `_generation` changed. Base `unload()` calls
+     `Sound.stop()` when `state` is `'play'` or `'pause'`.
+   - `SoundLoader.load()`:
+     - classify the source first (C6): convert `file://` to a local path
+       (every case in C6), then URLs by owner, then local paths;
+     - collect failures, one aggregated warning, strict mode raises
+       `SoundLoadError` (C2);
+     - URL owner by `schemes()` in C1 order, only the owner tried, the
+       `audio_output_provider=` provider as owner when it declares the
+       scheme; replaces the `content://` special case; `resource_find`
+       skipped for URLs.
    - `SoundAndroidPlayer.schemes()` returns `('content',)`
      (`audio_android.py`); it's the only provider change in this PR.
    - `pitch` docstring: drop "only implemented for SDL3"; describe C7's
      per-provider behavior.
-2. `kivy/core/__init__.py`: check `load_with_provider_selection()` can
-   carry the failure list (it's shared with image and text; keep their
-   behavior unchanged).
-3. Tests in a new `kivy/tests/test_audio_contracts.py`, with fake providers
-   registered on a fresh `SoundLoader` state (no audio device): fallback
-   order; aggregated warning text; `None` vs strict-mode raise; `on_source`
-   after construction dispatches `on_error`; `_do_eos` and `_do_error`
-   event order and state; pause/resume state rules; scheme routing,
-   `file://` as a local path, unknown scheme warning; `content://` still
-   goes to `android` (extend the existing `TestContentUriRouting`).
+2. `kivy/core/__init__.py`, `load_with_provider_selection()` (shared with
+   image and text; keep their behavior unchanged):
+   - audio needs the preference semantics of C2: after the requested
+     provider fails or is incompatible, `fallback_load()` must skip it, and
+     its failure must reach the aggregated warning. Add an optional
+     parameter (for example `fallback_load(skip=name, failures=[...])`)
+     that only audio passes, rather than changing image and text.
+   - Strict mode stays as it is.
+3. Tests in a new `kivy/tests/test_audio_contracts.py`: every item in C8's
+   "Contract tests" list. No audio device; never skipped.
 4. Docs: the module docstring gets "Errors", "End of stream" and "Pausing"
    sections; `migration.rst` Audio section: new events and states, and
    that `SoundLoader.load()` now tries the next provider when one fails.
@@ -356,12 +399,20 @@ Branch `audio-behavior-tests`, stacked locally on S1 until S1 merges.
    test for them) `fixtures/damaged.*` into
    `kivy/tests/audio_fixtures/` (check `MANIFEST.in`/`pyproject.toml` so
    they ship with the tests like other test data).
-2. Write `kivy/tests/test_audio_behavior.py` as specified in C8, with
-   `_KNOWN_FAILURES` filled in for every provider by running it on macOS
+2. Write `kivy/tests/test_audio_behavior.py` as specified in C8
+   ("Behavior tests"), with `_KNOWN_FAILURES` (`(provider, platform, ext,
+   test)` tuples) filled in for every provider by running it on macOS
    (sdl3, avplayer) and from the W-machine's first run (the Windows
    machine posts its list in `README.md`, "Hand-offs").
-3. CI: the suite skips without an audio device; confirm on the GitHub
-   macOS, Windows and Ubuntu jobs that it skips cleanly or passes.
+3. CI:
+   - `test_audio_contracts.py` runs on every job, never skipped.
+   - Try `SDL_AUDIO_DRIVER=dummy` on the GitHub macOS, Windows and Ubuntu
+     jobs: if SDL3's mixer opens with it and the `sdl3` behavior tests
+     pass (the dummy driver consumes audio in real time), set it in those
+     jobs so `sdl3` playback is tested on CI. Record the result in the PR.
+   - Print the per-provider skip reasons in the test summary
+     (`-rs`), and check each job's count: a provider skipped on a job
+     where it ran before is a regression to explain in the PR.
 
 PR title: "Audio: one behavior test suite for every audio provider".
 
@@ -379,7 +430,14 @@ Pi and Android (W4).
 3. End of sound: where `_check_play` currently calls `stop()` for a
    finished, non-looping sound, call `_do_eos()`.
 4. `play()` failure (`MIX_PlayTrack` false): `_do_error`.
-5. Remove `sdl3` from `_KNOWN_FAILURES`; run S2's suite on macOS and on the
+5. Restart (C4): `play()` from `'pause'` stops the paused track and plays
+   from 0 (not `MIX_ResumeTrack`), dispatching `on_stop`, then `on_play`.
+6. Lifecycle (C9): `unload()` unschedules `_check_play`, clears the track's
+   stopped-callback if #9533 set one (`MIX_SetTrackStoppedCallback(track,
+   NULL, NULL)`), destroys the track and audio, then calls `super()`.
+   Count live `_SDL3AudioTrack` objects (a module-level counter in debug
+   builds of the test, or `gc.get_objects()`) after 50 cycles.
+7. Remove `sdl3` from `_KNOWN_FAILURES`; run S2's suite on macOS and on the
    iPhone (extend `ios-check` with a "behavior" scenario that runs the same
    checks in-app).
 
@@ -403,11 +461,24 @@ Branch `audio-avplayer-contract`, from `upstream/master` after #9530 merges
    that only plays m4a/aac isn't left in SoloAmbient. Reuse #9533's
    category table rather than a second copy.
 5. `play()` off the main thread, or not, as SP3 decided.
-6. Remove `avplayer` from `_KNOWN_FAILURES`; run the suite on macOS and in
+6. `pitch` (C7): set `enableRate = True` on the player before
+   `prepareToPlay` (`AVAudioPlayer` ignores `rate` otherwise), set `rate`
+   from `pitch` at load, and update it in `on_pitch`. Clamp to 0.5-2.0
+   (`AVAudioPlayer`'s range), log at debug when clamped. Speed changes,
+   pitch is kept (document in the provider docstring).
+7. Restart (C4): `play()` while playing or paused sets `currentTime = 0`
+   before `play` (`AVAudioPlayer.play` continues from the current
+   position), with `on_stop` then `on_play` through `self.stop()`.
+8. Lifecycle (C9): `unload()` stops the player, sets its `delegate` to
+   `None` (and releases the delegate object), drops the player, then calls
+   `super()`. Delegate callbacks go through `self._post()`, so one arriving
+   after `unload()` is dropped. Check after 50 cycles that delegate objects
+   are released (a `weakref` to each is dead after `gc.collect()`).
+9. Remove `avplayer` from `_KNOWN_FAILURES`; run the suite on macOS and in
    `ios-check`.
 
-PR title: "avplayer audio: pause, on_eos, errors, and the iOS session
-category".
+PR title: "avplayer audio: pause, pitch, on_eos, errors, and the iOS
+session category".
 
 ## M2. Keep #9546 current
 
@@ -423,21 +494,41 @@ Branch `audio-avplayer-streaming`, after S1 and S3.
 `AVAudioPlayer` can't open URLs. Add an `AVPlayer` path to the `avplayer`
 provider for URL sources:
 
-1. `schemes()` returns `('http', 'https')`. `load()` picks the
-   `AVAudioPlayer` path for local files and an `AVPlayer` path for URLs.
-2. The `AVPlayer` path polls from the Clock (no KVO): `currentItem.status`
-   for ready or failed (C2: return immediately, it's the only provider for
-   the scheme on Apple, and report failures through `on_error`),
-   `currentTime`, `duration` (`length` 0 for live streams), rate for
-   pause/resume. End of item through `AVPlayerItemDidPlayToEndTimeNotification`
-   or by polling `currentTime >= duration`; loop by seeking to zero.
+1. `schemes()` returns `('http', 'https')`; `avplayer` owns them on Apple
+   (C6). `load()` picks the `AVAudioPlayer` path for local files and an
+   `AVPlayer` path for URLs. As the URL's owner it returns immediately
+   (C2) and reports failures through `on_error`.
+2. The `AVPlayer` path polls from the Clock (no KVO), or uses
+   notifications where SP4 found them reliable. Every property and call:
+
+   | Kivy | `AVPlayer` |
+   |---|---|
+   | ready / failed | `currentItem.status` (`readyToPlay`, `failed`) |
+   | `length` | `currentItem.duration` in seconds; 0 while unknown and for live streams (duration indefinite) |
+   | `get_pos()` | `currentTime()`; 0 when stopped |
+   | `play()` | `seekToTime:` zero (C4 restart), then `play`, then set `rate` to the `pitch` value |
+   | `pause()` / `resume()` | `pause` / `play` plus `rate = pitch` |
+   | `stop()` | `pause`, `seekToTime:` zero |
+   | `seek(s)` | `seekToTime:toleranceBefore:toleranceAfter:` with zero tolerance; ignored for live streams (debug log) |
+   | `volume` | `volume` |
+   | `pitch` | `rate` while playing; set `currentItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmSpectral` so pitch is kept, as on the `AVAudioPlayer` path. Clamp to 0.5-2.0 for consistency with it |
+   | end of item | `AVPlayerItemDidPlayToEndTimeNotification` (or `currentTime >= duration` when polling): `loop` False calls `_do_eos()`; `loop` True seeks to zero and plays (document the gap; `AVPlayerLooper` needs `AVQueuePlayer` and is a follow-up). Live streams never end; a dropped live stream is an error |
+
 3. Errors: `currentItem.error` and `AVPlayerItemFailedToPlayToEndTime` call
    `_do_error` with the error's description (follow the wording of #9555,
-   which names the cause for video).
-4. Test with the stream list from `notes/video-providers/stream-check/` on
-   the `video-provider-notes` branch (HTTP MP3/AAC, HLS audio-only), on
-   macOS and the iPhone.
-5. Docs: which schemes each platform's provider opens (a table in the
-   module docstring, filled in by both machines' phase 6 PRs).
+   which names the cause for video). A ready stream that stalls
+   (`AVPlayerItemPlaybackStalled`) is not an error unless it fails.
+4. Lifecycle (C9): `unload()` removes every notification observer token,
+   unschedules the poll, pauses, calls `replaceCurrentItemWithPlayerItem:`
+   with `None`, drops the player, then calls `super()`. Callbacks go
+   through `self._post()`. 50 cycles against a local HTTP server: no
+   observer left registered (count the tokens) and no event after
+   `unload()`.
+5. Test with the stream list from `notes/video-providers/stream-check/` on
+   the `video-provider-notes` branch (HTTP MP3/AAC, HLS audio-only, and a
+   live stream), on macOS and the iPhone: every row of the table above,
+   plus the S2 behavior tests that apply to streams.
+6. Docs: which schemes each platform's provider opens (C6's owner table in
+   the module docstring, filled in by both machines' phase 6 PRs).
 
 PR title: "avplayer audio: play http and https streams".
