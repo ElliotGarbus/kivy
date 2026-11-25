@@ -51,7 +51,7 @@ that key, both providers keep playing in the background; with `ambient` or
 | | `sdl3` | `avplayer` |
 |---|---|---|
 | Audio session | SDL sets it when the mixer opens its device (the first `sdl3` load): category `playback` with mix-with-others and duck-others, unless `SDL_HINT_AUDIO_CATEGORY` is set (`KIVY_AUDIO_CATEGORY`, #9533). The device stays open for the app's life, so the session stays active. | Doesn't set it. If `sdl3` never opened its device, the session is iOS's default `soloambient`: silenced by the silent switch, stops other apps' audio, no background playback. Once `sdl3` has opened its device, `avplayer` follows SDL's setting. |
-| Effect of SDL's default on users | Plays with the silent switch on. Other apps' music is lowered for as long as the session is active, which is the app's whole life. Apple says to use duck-others "on a temporary basis only... not for more than a few seconds" ([duckOthers](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/duckothers)). | Same, if `sdl3` is in use. |
+| Effect of SDL's default on users | Plays with the silent switch on. Other apps' music is lowered while the session is active, which is the app's whole life. This is Kivy 2.x behavior too: SDL2 2.28.5 (kivy-ios) uses the same setting, and SDL has since 2.0.14 ([SDL #3831](https://github.com/libsdl-org/SDL/issues/3831)). SDL keeps it deliberately ([SDL #11140](https://github.com/libsdl-org/SDL/issues/11140)), and no Kivy issue reports it; the one related Kivy report, kivy-ios #234, is a user who thought audio was broken under `ambient`. Apple's guidance differs: it favors `ambient` for non-essential sound and says to duck "on a temporary basis only" ([duckOthers](https://developer.apple.com/documentation/avfaudio/avaudiosession/categoryoptions-swift.struct/duckothers)). | Same, if `sdl3` is in use. |
 | Interruptions (calls, Siri) | SDL pauses on interruption begin and resumes on end or when the app becomes active. | AVAudioPlayer pauses; `audioPlayerBeginInterruption` and `audioPlayerEndInterruption` on the delegate (S3). |
 | Latency to start a sound | One mixed CoreAudio stream. Measure. | One player per `Sound`; `prepareToPlay` reduces start latency. Measure. |
 | Formats | wav, flac, mp3, ogg Vorbis (the Xcode project enables `DECODER_WAV`, `DECODER_FLAC_DRFLAC`, `DECODER_MP3_DRMP3`, `DECODER_OGGVORBIS_STB`). | Core Audio: AAC/m4a, ALAC, mp3, wav, aiff, caf, flac. No Vorbis. |
@@ -75,13 +75,12 @@ that key, both providers keep playing in the background; with `ambient` or
   gets MediaPlayer for the music (continues in the background) and SDL3 for
   the effects (pauses). Whatever the default, document this per format.
 - **iOS.** Provider order doesn't decide background behavior; the session
-  category does. The open question there is the category default: SDL's
-  `playback` with duck-others ignores the silent switch and lowers other
-  apps' music for the app's whole life. Apple's guidance for games and most
-  apps is `ambient`; media apps use `playback` plus the `audio` background
-  mode. And when only `avplayer` plays, the session is never set at all, so
-  Kivy should apply `KIVY_AUDIO_CATEGORY` (or its default) itself, not only
-  through SDL's hint.
+  category does. Decided: keep SDL's default (`playback` with mix-with-
+  others and duck-others), unchanged from Kivy 2.x, and document
+  `KIVY_AUDIO_CATEGORY=ambient` prominently for games and apps with only UI
+  sounds. When only `avplayer` plays, the session is never set, so Kivy
+  applies the same category itself (S3), not only through SDL's hint.
+  Media apps that play in the background add the `audio` background mode.
 
 ## SP8. Measure on devices
 
@@ -97,6 +96,6 @@ Run on the Android phone (Windows machine) and the iPhone (Mac) with the
    heard, `state`, `get_pos()`, and which events fire, with the default
    lifecycle and (Android) with `SDL_HINT_ANDROID_BLOCK_ON_PAUSE=0`.
 4. `loop = True` on `short1.wav`: record any gap at the loop point.
-5. iOS: the silent switch and Music-app ducking for each
-   `KIVY_AUDIO_CATEGORY` value, with `sdl3` loaded and with only
-   `avplayer` loaded.
+5. iOS: confirm the silent switch and Music-app ducking for the default and
+   for `ambient`, with `sdl3` loaded and with only `avplayer` loaded (after
+   S3, both should match).
